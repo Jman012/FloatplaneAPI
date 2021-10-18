@@ -5854,6 +5854,7 @@
 				"operationId": "getCaptchaInfo",
 				"summary": "Get Captcha Info",
 				"description": "Gets the site keys used for Google Recaptcha V2 and V3. These are useful when providing a captcha token when logging in or signing up.",
+				"security": [],
 				"tags": [
 					"Auth"
 				],
