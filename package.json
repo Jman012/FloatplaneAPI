@@ -6,17 +6,21 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "2.4.12",
     "openapi-to-postmanv2": "2.12.0",
-    "redoc-cli": "0.13.0"
+    "redoc-cli": "0.13.0",
+    "reslate": "3.0.0-5",
+    "widdershins": "4.0.1"
   },
   "scripts": {
-    "clean": "rm -rf ./Docs",
+    "clean": "rm -rf ./Docs && rm -f floatplane-openapi-specification-trimmed.json",
     "validate": "$(npm bin)/openapi-generator validate -i floatplane-openapi-specification.json",
-    "docs-all": "npm run clean && npm run docs-oag-html2 && npm run docs-redoc && npm run docs-rapidoc && npm run docs-postman",
-    "docs-oag-html2": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification.json -o Docs/OAG-html2/ -g html2 --global-property models,supportingFiles,apis=Activation:Auth:CDN:Comment:ConnectedAccounts:Content:Creator:CreatorSubscriptionPlan:Edges:FAQ:Iframe:Livestream:LoyaltyRewards:Playlist:Socket:Subscriptions:Sync:User:WebNotification",
-    "docs-oag-dynamic-html": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification.json -o Docs/OAG-html2/ -g dynamic-html --global-property models,supportingFiles,apis=Activation:Auth:CDN:Comment:ConnectedAccounts:Content:Creator:CreatorSubscriptionPlan:Edges:FAQ:Iframe:Livestream:LoyaltyRewards:Playlist:Socket:Subscriptions:Sync:User:WebNotification",
-    "docs-redoc": "mkdir -p Docs/Redoc && $(npm bin)/redoc-cli bundle -o Docs/Redoc/redoc-static.html floatplane-openapi-specification.json",
+    "trim": "cd src && node trim.js; cd -",
+    "docs-all": "npm run clean && npm run trim && npm run docs-oag-html2 && npm run docs-oag-dynamic-html && npm run docs-redoc && npm run docs-rapidoc && npm run docs-reslate && npm run docs-postman",
+    "docs-oag-html2": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification-trimmed.json -o Docs/OAG-html2/ -g html2",
+    "docs-oag-dynamic-html": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification-trimmed.json -o Docs/OAG-dynamic-html/ -g dynamic-html",
+    "docs-redoc": "mkdir -p Docs/Redoc && $(npm bin)/redoc-cli bundle -o Docs/Redoc/redoc-static.html floatplane-openapi-specification-trimmed.json",
     "docs-rapidoc": "mkdir -p Docs/Rapidoc && cp ./src/rapidoc.html ./Docs/Rapidoc/rapidoc.html",
-    "docs-postman": "mkdir -p Docs/Postman-v2.1 && $(npm bin)/openapi2postmanv2 --spec floatplane-openapi-specification.json --output Docs/Postman-v2.1/floatplaneapi-postman2.1-collection.json --pretty -O folderStrategy=Tags,includeAuthInfoInExample=false"
+    "docs-reslate": "mkdir -p Docs/ReSlateDocs && cd Docs/ReSlateDocs && $(npm bin)/reslate init && $(npm bin)/widdershins ../../floatplane-openapi-specification-trimmed.json -o index.md && $(npm bin)/reslate build && cd -",
+    "docs-postman": "mkdir -p Docs/Postman-v2.1 && $(npm bin)/openapi2postmanv2 --spec floatplane-openapi-specification-trimmed.json --output Docs/Postman-v2.1/floatplaneapi-postman2.1-collection.json --pretty -O folderStrategy=Tags,includeAuthInfoInExample=false"
   },
   "repository": {
     "type": "git",
