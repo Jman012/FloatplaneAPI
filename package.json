@@ -12,7 +12,8 @@
   },
   "scripts": {
     "clean": "rm -rf ./Docs && rm -f floatplane-openapi-specification-trimmed.json",
-    "validate": "$(npm bin)/openapi-generator validate -i floatplane-openapi-specification.json",
+    "validate": "$(npm bin)/openapi-generator-cli validate -i floatplane-openapi-specification.json",
+    "validate-trimmed": "$(npm bin)/openapi-generator-cli validate -i floatplane-openapi-specification-trimmed.json",
     "trim": "cd src && node trim.js; cd -",
     "docs-all": "npm run clean && npm run trim && npm run docs-oag-html2 && npm run docs-oag-dynamic-html && npm run docs-redoc && npm run docs-rapidoc && npm run docs-reslate && npm run docs-postman",
     "docs-oag-html2": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification-trimmed.json -o Docs/OAG-html2/ -g html2",
