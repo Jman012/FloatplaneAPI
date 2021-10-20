@@ -1,6 +1,6 @@
 # Floatplane API Specification
 
-Visit the pre-generated documentation renders at http://jman012.github.io/FloatplaneAPIDocs
+Visit the pre-generated documentation renders at https://jman012.github.io/FloatplaneAPIDocs
 
 ---
 
@@ -20,7 +20,7 @@ openapi-generator openapi-generator generate -i floatplaneopenapi_v10.json -o Sw
 
 ## OpenAPI & Documentation Generation
 
-You can visit a live render of the documentation for this repository at http://jman012.github.io/FloatplaneAPIDocs. There are a variety of renders available, including:
+You can visit a live render of the documentation for this repository at https://jman012.github.io/FloatplaneAPIDocs. There are a variety of renders available, including:
 - OpenAPI Generator - https://openapi-generator.tech/
 - Redoc - https://redoc.ly/redoc
 - RapiDoc - https://mrin9.github.io/RapiDoc/
@@ -37,7 +37,7 @@ redoc-cli bundle -o Docs/Redoc/redoc-static.html floatplane-openapi-specificatio
 
 ### Documentation Generation
 
-In order to generate all of the documentation available at http://jman012.github.io/FloatplaneAPIDocs automatically when testing changes to the OpenAPI file,
+In order to generate all of the documentation available at https://jman012.github.io/FloatplaneAPIDocs automatically when testing changes to the OpenAPI file,
 1. Clone this repository
 2. Run `npm install`
 	1. This will install all of the necessary tooling
