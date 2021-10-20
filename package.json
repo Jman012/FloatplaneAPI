@@ -15,7 +15,7 @@
     "validate": "$(npm bin)/openapi-generator-cli validate -i floatplane-openapi-specification.json",
     "validate-trimmed": "$(npm bin)/openapi-generator-cli validate -i floatplane-openapi-specification-trimmed.json",
     "trim": "cd src && node trim.js; cd -",
-    "docs-all": "mkdir -p Docs && cp ./static/index.html ./Docs/index.html && npm run docs-trimmed && npm run docs-full && cp ./floatplane-openapi-specification.json ./floatplane-openapi-specification-trimmed.json Docs/",
+    "docs-all": "npm run clean && mkdir -p Docs && cp ./static/index.html ./Docs/index.html && npm run docs-trimmed && npm run docs-full && cp ./floatplane-openapi-specification.json ./floatplane-openapi-specification-trimmed.json Docs/",
     "docs-trimmed": "npm run trim && npm run docs-oag-html2 && npm run docs-oag-dynamic-html && npm run docs-redoc && npm run docs-rapidoc && npm run docs-reslate && npm run docs-postman",
     "docs-full": "npm run docs-oag-html2-full && npm run docs-oag-dynamic-html-full && npm run docs-redoc-full && npm run docs-rapidoc-full && npm run docs-reslate-full && npm run docs-postman-full",
     
@@ -23,14 +23,14 @@
     "docs-oag-dynamic-html": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification-trimmed.json -o Docs/OAG-dynamic-html/ -g dynamic-html",
     "docs-redoc": "mkdir -p Docs/Redoc && $(npm bin)/redoc-cli bundle -o Docs/Redoc/redoc-static.html floatplane-openapi-specification-trimmed.json",
     "docs-rapidoc": "mkdir -p Docs/Rapidoc && cp ./static/rapidoc.html ./Docs/Rapidoc/rapidoc.html",
-    "docs-reslate": "mkdir -p Docs/ReSlateDocs && cd Docs/ReSlateDocs && $(npm bin)/reslate init && $(npm bin)/widdershins ../../floatplane-openapi-specification-trimmed.json -o index.md && $(npm bin)/reslate build && mv _site site && cd -",
+    "docs-reslate": "mkdir -p Docs/ReSlateDocs && cd Docs/ReSlateDocs && $(npm bin)/reslate init && $(npm bin)/widdershins ../../floatplane-openapi-specification-trimmed.json -o index.md && $(npm bin)/reslate build && rm -rf ./site && mv ./_site ./site && cd -",
     "docs-postman": "mkdir -p Docs/Postman-v2.1 && $(npm bin)/openapi2postmanv2 --spec floatplane-openapi-specification-trimmed.json --output Docs/Postman-v2.1/floatplaneapi-postman2.1-collection.json --pretty -O folderStrategy=Tags,includeAuthInfoInExample=false",
 
     "docs-oag-html2-full": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification.json -o Docs/OAG-html2-full/ -g html2",
     "docs-oag-dynamic-html-full": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification.json -o Docs/OAG-dynamic-html-full/ -g dynamic-html",
     "docs-redoc-full": "mkdir -p Docs/Redoc-full && $(npm bin)/redoc-cli bundle -o Docs/Redoc-full/redoc-static.html floatplane-openapi-specification.json",
     "docs-rapidoc-full": "mkdir -p Docs/Rapidoc-full && cp ./static/rapidoc-full.html ./Docs/Rapidoc-full/rapidoc-full.html",
-    "docs-reslate-full": "mkdir -p Docs/ReSlateDocs-full && cd Docs/ReSlateDocs-full && $(npm bin)/reslate init && $(npm bin)/widdershins ../../floatplane-openapi-specification.json -o index.md && $(npm bin)/reslate build && mv _site site && cd -",
+    "docs-reslate-full": "mkdir -p Docs/ReSlateDocs-full && cd Docs/ReSlateDocs-full && $(npm bin)/reslate init && $(npm bin)/widdershins ../../floatplane-openapi-specification.json -o index.md && $(npm bin)/reslate build && rm -rf ./site && mv ./_site ./site && cd -",
     "docs-postman-full": "mkdir -p Docs/Postman-v2.1-full && $(npm bin)/openapi2postmanv2 --spec floatplane-openapi-specification.json --output Docs/Postman-v2.1-full/floatplaneapi-postman2.1-collection.json --pretty -O folderStrategy=Tags,includeAuthInfoInExample=false"
   },
   "repository": {
