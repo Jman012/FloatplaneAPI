@@ -17513,7 +17513,8 @@
 						"in": "query",
 						"name": "limit",
 						"schema": {
-							"type": "string"
+							"type": "integer",
+							"minimum": 1
 						},
 						"required": true,
 						"description": "The maximum number of posts to retrieve."
