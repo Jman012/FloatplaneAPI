@@ -19592,6 +19592,47 @@
 				}
 			}
 		},
+		"/api/v3/experiments/vpn/profile/ephemeral": {
+			"get": {
+				"operationId": "getUserProfileLinksEphemeral",
+				"summary": "Get User Profile Links Ephemeral",
+				"description": "TODO",
+				"tags": [
+					"Vpn"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+		
+								},
+								"example": {
+		
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/400BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/401Unauthenticated"
+					},
+					"403": {
+						"$ref": "#/components/responses/403Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/404NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/Unexpected"
+					}
+				}
+			}
+		},
 		"/api/v3/experiments/vpn/server/list": {
 			"get": {
 				"operationId": "getServerList",
