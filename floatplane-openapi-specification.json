@@ -21,219 +21,219 @@
 	"tags": [
 		{
 			"name": "Activation",
-			"description": "TODO"
+			"description": "Activate new user accounts and confirming activation via email."
 		},
 		{
 			"name": "ACP_CreatorAgreement",
-			"description": "TODO"
+			"description": "List and edit Creator<->Floatplane agreements."
 		},
 		{
 			"name": "ACP_Creator",
-			"description": "TODO"
+			"description": "Creator management for creating, editing, and inviting creators."
 		},
 		{
 			"name": "ACP_Dashboard",
-			"description": "TODO"
+			"description": "Dashboard for viewing, starting, and stopping jobs."
 		},
 		{
 			"name": "ACP_FAQ",
-			"description": "TODO"
+			"description": "Manage and edit FAQ entries. See https://www.floatplane.com/support"
 		},
 		{
 			"name": "ACP_Feature",
-			"description": "TODO"
+			"description": "Manage and edit features."
 		},
 		{
 			"name": "ACP_Moderator",
-			"description": "TODO"
+			"description": "Manage and edit moderators and global moderators."
 		},
 		{
 			"name": "ACP_User",
-			"description": "TODO"
+			"description": "Manage and edit users globally by administrators."
 		},
 		{
 			"name": "Administration",
-			"description": "TODO"
+			"description": "Manage and edit moderators and global moderators."
 		},
 		{
 			"name": "Auth",
-			"description": "TODO"
+			"description": "Sign up, login, 2FA, logout, and captchas. Additionally, login spoofing for administrators."
 		},
 		{
 			"name": "BrainTree",
-			"description": "TODO"
+			"description": "BrainTree payment integration"
 		},
 		{
 			"name": "CDN",
-			"description": "TODO"
+			"description": "Content Delivery mechanisms for Floatplane media."
 		},
 		{
 			"name": "ConnectedAccounts",
-			"description": "TODO"
+			"description": "3rd party account management, such as Discord or LTT Forums."
 		},
 		{
 			"name": "CreatorAdministration",
-			"description": "TODO"
+			"description": "Creator-specific moderator management."
 		},
 		{
 			"name": "Creator",
-			"description": "TODO"
+			"description": "Get and discover creators on the platform. Creator invitation and profile management."
 		},
 		{
 			"name": "CreatorAgreement",
-			"description": "TODO"
+			"description": "Get and agree to Creator<->Floatplane agreements."
 		},
 		{
 			"name": "CreatorPlanFeatureLevels",
-			"description": "TODO"
+			"description": "Manage features for creator subscription plans."
 		},
 		{
 			"name": "CreatorSubscriptionPlan",
-			"description": "TODO"
+			"description": "Manage creator subscription plans."
 		},
 		{
 			"name": "DiscordBot",
-			"description": "TODO"
+			"description": "Manage Discord bots."
 		},
 		{
 			"name": "Edges",
-			"description": "TODO"
+			"description": "Get edge server information for media playback."
 		},
 		{
 			"name": "FAQ",
-			"description": "TODO"
+			"description": "Get FAQs."
 		},
 		{
 			"name": "Iframe",
-			"description": "TODO"
+			"description": "Get video iframe data."
 		},
 		{
 			"name": "ImageOptimizations",
-			"description": "TODO"
+			"description": "Manage image media optimizations."
 		},
 		{
 			"name": "Livestream",
-			"description": "TODO"
+			"description": "Livestream chat and management."
 		},
 		{
 			"name": "Moderation",
-			"description": "TODO"
+			"description": "Moderation actions, for users and comments."
 		},
 		{
 			"name": "PasswordReset",
-			"description": "TODO"
+			"description": "Password management."
 		},
 		{
 			"name": "Payments",
-			"description": "TODO"
+			"description": "User payment method/address/invoice management."
 		},
 		{
 			"name": "Socket",
-			"description": "TODO"
+			"description": "Socket subscriptions and connections."
 		},
 		{
 			"name": "Stripe",
-			"description": "TODO"
+			"description": "Stripe metadata."
 		},
 		{
 			"name": "Subscriptions",
-			"description": "TODO"
+			"description": "Get user subscriptions."
 		},
 		{
 			"name": "Support",
-			"description": "TODO"
+			"description": "User support ticket management"
 		},
 		{
 			"name": "Sync",
-			"description": "TODO"
+			"description": "Sync connections."
 		},
 		{
 			"name": "Transcoding",
-			"description": "TODO"
+			"description": "Creator transcoding progress, notifications, and subscriptions."
 		},
 		{
 			"name": "User",
-			"description": "TODO"
+			"description": "User discovery and profile management."
 		},
 		{
 			"name": "VideoComments",
-			"description": "TODO"
+			"description": "Video comment viewing and posting."
 		},
 		{
 			"name": "VideoCommentInteractions",
-			"description": "TODO"
+			"description": "Video comment interaction management."
 		},
 		{
 			"name": "Media",
-			"description": "TODO"
+			"description": "Video media management."
 		},
 		{
 			"name": "Video",
-			"description": "TODO"
+			"description": "Video Dash key management."
 		},
 		{
 			"name": "Playlist",
-			"description": "TODO"
+			"description": "Get playlists."
 		},
 		{
 			"name": "VideoUpload",
-			"description": "TODO"
+			"description": "Video uploading and management."
 		},
 		{
 			"name": "WebNotification",
-			"description": "TODO"
+			"description": "Web push notification information and subscriptions."
 		},
 		{
 			"name": "Webhook",
-			"description": "TODO"
+			"description": "Webhook management."
 		},
 		{
 			"name": "ACP_Transcoding",
-			"description": "TODO"
+			"description": "Creator content uploading, status, and management."
 		},
 		{
 			"name": "CMS_BlogPost",
-			"description": "TODO"
+			"description": "CMS blog post editing and posting."
 		},
 		{
 			"name": "CMS_Content",
-			"description": "TODO"
+			"description": "CMS content editing and posting."
 		},
 		{
 			"name": "CMS_CreatorWarehouse",
-			"description": "TODO"
+			"description": "CMS Creator Warehouse management."
 		},
 		{
 			"name": "CMS_Livestream",
-			"description": "TODO"
+			"description": "CMS Livestream information."
 		},
 		{
 			"name": "CMS_CreatorSubscriptionPlan",
-			"description": "TODO"
+			"description": "CMS creator subscription plan and subscriber information."
 		},
 		{
 			"name": "Comment",
-			"description": "TODO"
+			"description": "Comment retrieval, posting, and interacting."
 		},
 		{
 			"name": "Content",
-			"description": "TODO"
+			"description": "Content retrieval and interacting."
 		},
 		{
 			"name": "ContentUpload",
-			"description": "TODO"
+			"description": "Content uploading."
 		},
 		{
 			"name": "thumbnailUpdateUnsubscribe",
-			"description": "TODO"
+			"description": "Thumnail management."
 		},
 		{
 			"name": "LoyaltyRewards",
-			"description": "TODO"
+			"description": "Loyalty rewards information and claiming."
 		},
 		{
 			"name": "Vpn",
-			"description": "TODO"
+			"description": "Experimental VPN configuration."
 		}
 	],
 	"components": {
@@ -9120,6 +9120,7 @@
 		},
 		"/api/v2/get/player/{guid}": {
 			"get": {
+				"deprecated": true,
 				"operationId": "getVideoPlayer",
 				"summary": "Get Video Player",
 				"description": "TODO",
