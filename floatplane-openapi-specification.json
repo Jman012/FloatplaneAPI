@@ -20,63 +20,79 @@
 	],
 	"tags": [
 		{
-			"name": "Activation",
+			"name": "ActivationV2",
 			"description": "Activate new user accounts and confirming activation via email."
 		},
 		{
-			"name": "ACP_CreatorAgreement",
+			"name": "ACP_CreatorAgreementV2",
 			"description": "List and edit Creator<->Floatplane agreements."
 		},
 		{
-			"name": "ACP_Creator",
-			"description": "Creator management for creating, editing, and inviting creators."
+			"name": "ACP_CreatorV2",
+			"description": "Creator management for creating and editing creators."
 		},
 		{
-			"name": "ACP_Dashboard",
+			"name": "ACP_CreatorV3",
+			"description": "Creator management for inviting creators."
+		},
+		{
+			"name": "ACP_DashboardV2",
 			"description": "Dashboard for viewing, starting, and stopping jobs."
 		},
 		{
-			"name": "ACP_FAQ",
+			"name": "ACP_FAQV2",
 			"description": "Manage and edit FAQ entries. See https://www.floatplane.com/support"
 		},
 		{
-			"name": "ACP_Feature",
+			"name": "ACP_FeatureV2",
 			"description": "Manage and edit features."
 		},
 		{
-			"name": "ACP_Moderator",
+			"name": "ACP_ModeratorV2",
 			"description": "Manage and edit moderators and global moderators."
 		},
 		{
-			"name": "ACP_User",
+			"name": "ACP_UserV2",
 			"description": "Manage and edit users globally by administrators."
 		},
 		{
-			"name": "Administration",
-			"description": "Manage and edit moderators and global moderators."
+			"name": "ACP_UserV3",
+			"description": "Manage and edit users globally by administrators."
 		},
 		{
-			"name": "Auth",
-			"description": "Sign up, login, 2FA, logout, and captchas. Additionally, login spoofing for administrators."
+			"name": "AdministrationV2",
+			"description": "Manage and edit moderators and global moderators. This entire section is deprecated."
 		},
 		{
-			"name": "BrainTree",
+			"name": "AuthV2",
+			"description": "Sign up, login, 2FA, and logout. Additionally, login spoofing for administrators."
+		},
+		{
+			"name": "AuthV3",
+			"description": "Captchas information."
+		},
+		{
+			"name": "BrainTreeV2",
 			"description": "BrainTree payment integration"
 		},
 		{
-			"name": "CDN",
+			"name": "CDNV2",
 			"description": "Content Delivery mechanisms for Floatplane media."
 		},
 		{
-			"name": "ConnectedAccounts",
+			"name": "ConnectedAccountsV2",
 			"description": "3rd party account management, such as Discord or LTT Forums."
 		},
 		{
-			"name": "CreatorAdministration",
+			"name": "CreatorAdministrationV2",
 			"description": "Creator-specific moderator management."
 		},
 		{
-			"name": "Creator",
+			"name": "CreatorV2",
+			"description": "Get and discover creators on the platform. Creator invitation and profile management."
+		},
+		{
+			"name": "CreatorV3",
 			"description": "Get and discover creators on the platform. Creator invitation and profile management."
 		},
 		{
@@ -2738,7 +2754,7 @@
 				"summary": "Confirm Email",
 				"description": "TODO",
 				"tags": [
-					"Activation"
+					"ActivationV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -2779,7 +2795,7 @@
 				"summary": "Request Activation Email",
 				"description": "TODO",
 				"tags": [
-					"Activation"
+					"ActivationV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -2820,7 +2836,7 @@
 				"summary": "List Creator Agreement",
 				"description": "TODO",
 				"tags": [
-					"ACP_CreatorAgreement"
+					"ACP_CreatorAgreementV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -2861,7 +2877,7 @@
 				"summary": "Get Creator Agreement",
 				"description": "TODO",
 				"tags": [
-					"ACP_CreatorAgreement"
+					"ACP_CreatorAgreementV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -2902,7 +2918,7 @@
 				"summary": "Edit Creator Agreement",
 				"description": "TODO",
 				"tags": [
-					"ACP_CreatorAgreement"
+					"ACP_CreatorAgreementV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -2943,7 +2959,7 @@
 				"summary": "Get Creator List",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -2984,7 +3000,7 @@
 				"summary": "Get Creator Details",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3025,7 +3041,7 @@
 				"summary": "Get Subscription Plan List",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3066,7 +3082,7 @@
 				"summary": "Check Creator Url Available",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3107,7 +3123,7 @@
 				"summary": "Get Creator Categories",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3148,7 +3164,7 @@
 				"summary": "Create Creator",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3189,7 +3205,7 @@
 				"summary": "Upload Cover",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3230,7 +3246,7 @@
 				"summary": "Get Creators Titles",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3271,7 +3287,7 @@
 				"summary": "Update Creator",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3312,7 +3328,7 @@
 				"summary": "Update Creator Subscription Plan",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3353,7 +3369,7 @@
 				"summary": "Upload Card",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3394,7 +3410,7 @@
 				"summary": "Upload Icon",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3435,7 +3451,7 @@
 				"summary": "Get Creator Invite Code List",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -3476,7 +3492,7 @@
 				"summary": "Create Creator Invite Code",
 				"description": "TODO",
 				"tags": [
-					"ACP_Creator"
+					"ACP_CreatorV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -3517,7 +3533,7 @@
 				"summary": "Get Job Status",
 				"description": "TODO",
 				"tags": [
-					"ACP_Dashboard"
+					"ACP_DashboardV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3558,7 +3574,7 @@
 				"summary": "Start Job",
 				"description": "TODO",
 				"tags": [
-					"ACP_Dashboard"
+					"ACP_DashboardV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3599,7 +3615,7 @@
 				"summary": "Stop Job",
 				"description": "TODO",
 				"tags": [
-					"ACP_Dashboard"
+					"ACP_DashboardV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3640,7 +3656,7 @@
 				"summary": "Get Faq Sections",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3681,7 +3697,7 @@
 				"summary": "Update Faq Section",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3722,7 +3738,7 @@
 				"summary": "Get Faq Section Details",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3763,7 +3779,7 @@
 				"summary": "Get Faq Article Details",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3804,7 +3820,7 @@
 				"summary": "Update Faq Article",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3845,7 +3861,7 @@
 				"summary": "Upload Faq Image",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3886,7 +3902,7 @@
 				"summary": "Get Faq Images",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3927,7 +3943,7 @@
 				"summary": "Create Faq Section",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -3968,7 +3984,7 @@
 				"summary": "Create Faq Article",
 				"description": "TODO",
 				"tags": [
-					"ACP_FAQ"
+					"ACP_FAQV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4009,7 +4025,7 @@
 				"summary": "Get Feature Configs",
 				"description": "TODO",
 				"tags": [
-					"ACP_Feature"
+					"ACP_FeatureV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4050,7 +4066,7 @@
 				"summary": "Save Feature",
 				"description": "TODO",
 				"tags": [
-					"ACP_Feature"
+					"ACP_FeatureV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4091,7 +4107,7 @@
 				"summary": "Save Feature Dependencies",
 				"description": "TODO",
 				"tags": [
-					"ACP_Feature"
+					"ACP_FeatureV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4132,7 +4148,7 @@
 				"summary": "Save Feature Category",
 				"description": "TODO",
 				"tags": [
-					"ACP_Feature"
+					"ACP_FeatureV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4173,7 +4189,7 @@
 				"summary": "Save Feature Type",
 				"description": "TODO",
 				"tags": [
-					"ACP_Feature"
+					"ACP_FeatureV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4214,7 +4230,7 @@
 				"summary": "Save Feature Resolution",
 				"description": "TODO",
 				"tags": [
-					"ACP_Feature"
+					"ACP_FeatureV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4255,7 +4271,7 @@
 				"summary": "Get Moderator List",
 				"description": "TODO",
 				"tags": [
-					"ACP_Moderator"
+					"ACP_ModeratorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4296,7 +4312,7 @@
 				"summary": "Create Moderator",
 				"description": "TODO",
 				"tags": [
-					"ACP_Moderator"
+					"ACP_ModeratorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4337,7 +4353,7 @@
 				"summary": "Update Global Moderator",
 				"description": "TODO",
 				"tags": [
-					"ACP_Moderator"
+					"ACP_ModeratorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4378,7 +4394,7 @@
 				"summary": "Remove Creator Moderator",
 				"description": "TODO",
 				"tags": [
-					"ACP_Moderator"
+					"ACP_ModeratorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4419,7 +4435,7 @@
 				"summary": "Add Creator Moderator",
 				"description": "TODO",
 				"tags": [
-					"ACP_Moderator"
+					"ACP_ModeratorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4460,7 +4476,7 @@
 				"summary": "Get Moderator Available Creators",
 				"description": "TODO",
 				"tags": [
-					"ACP_Moderator"
+					"ACP_ModeratorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4501,7 +4517,7 @@
 				"summary": "Get Moderator Creators",
 				"description": "TODO",
 				"tags": [
-					"ACP_Moderator"
+					"ACP_ModeratorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4542,7 +4558,7 @@
 				"summary": "Get User List",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4583,7 +4599,7 @@
 				"summary": "Get User Details",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4624,7 +4640,7 @@
 				"summary": "Search User For Moderation",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4661,11 +4677,12 @@
 		},
 		"/api/acp/v2/user/find": {
 			"get": {
+				"deprecated": true,
 				"operationId": "findUser",
 				"summary": "Find User",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4706,7 +4723,7 @@
 				"summary": "Create Admin",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4747,7 +4764,7 @@
 				"summary": "Add User Subscriptions",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4788,7 +4805,7 @@
 				"summary": "Check Username Available",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4829,7 +4846,7 @@
 				"summary": "Check Email Available",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4870,7 +4887,7 @@
 				"summary": "Upload Avatar",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4911,7 +4928,7 @@
 				"summary": "Update User",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4952,7 +4969,7 @@
 				"summary": "Get User Subscriptions",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -4993,7 +5010,7 @@
 				"summary": "Remove User Subscription",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5034,7 +5051,7 @@
 				"summary": "Update Administrator",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5071,11 +5088,12 @@
 		},
 		"/api/acp/v2/user/delete": {
 			"post": {
+				"deprecated": true,
 				"operationId": "deleteUser",
 				"summary": "Delete User",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5116,7 +5134,7 @@
 				"summary": "Signup",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5157,7 +5175,7 @@
 				"summary": "List User Invoices",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5198,7 +5216,7 @@
 				"summary": "Get Payment Processor Data",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5239,7 +5257,7 @@
 				"summary": "Schedule Deletion",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -5280,7 +5298,7 @@
 				"summary": "Unschedule Deletion",
 				"description": "TODO",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -5317,11 +5335,12 @@
 		},
 		"/api/acp/v3/user/sar": {
 			"get": {
+				"deprecated": true,
 				"operationId": "getSubjectAccessData",
 				"summary": "Get Subject Access Data",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"ACP_User"
+					"ACP_UserV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -5358,11 +5377,12 @@
 		},
 		"/api/v2/administration/moderators/global/add": {
 			"post": {
+				"deprecated": true,
 				"operationId": "addGlobalModerator",
 				"summary": "Add Global Moderator",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Administration"
+					"AdministrationV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5399,11 +5419,12 @@
 		},
 		"/api/v2/administration/moderators/global/remove": {
 			"post": {
+				"deprecated": true,
 				"operationId": "removeGlobalModerator",
 				"summary": "Remove Global Moderator",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Administration"
+					"AdministrationV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5440,11 +5461,12 @@
 		},
 		"/api/v2/administration/moderators/remove": {
 			"post": {
+				"deprecated": true,
 				"operationId": "removeModerator",
 				"summary": "Remove Moderator",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Administration"
+					"AdministrationV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5481,11 +5503,12 @@
 		},
 		"/api/v2/administration/moderators/get/{user}": {
 			"get": {
+				"deprecated": true,
 				"operationId": "getModerator",
 				"summary": "Get Moderator",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Administration"
+					"AdministrationV2"
 				],
 				"parameters": [
 					{
@@ -5531,11 +5554,12 @@
 		},
 		"/api/v2/administration/moderators/list": {
 			"get": {
+				"deprecated": true,
 				"operationId": "listModeratorsAdmin",
 				"summary": "List Moderators",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Administration"
+					"AdministrationV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5576,7 +5600,7 @@
 				"summary": "Login",
 				"description": "Login to Floatplane with the provided username and password, retrieving the authentication/authorization cookie from the response for subsequent requests.",
 				"tags": [
-					"Auth"
+					"AuthV2"
 				],
 				"security": [],
 				"parameters": [],
@@ -5681,7 +5705,7 @@
 				"summary": "Logout",
 				"description": "Log out of Floatplane, invalidating the authentication/authorization cookie.",
 				"tags": [
-					"Auth"
+					"AuthV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5728,7 +5752,7 @@
 				"summary": "Begin Spoofing",
 				"description": "TODO",
 				"tags": [
-					"Auth"
+					"AuthV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5769,7 +5793,7 @@
 				"summary": "End Spoofing",
 				"description": "TODO",
 				"tags": [
-					"Auth"
+					"AuthV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5810,7 +5834,7 @@
 				"summary": "Signup",
 				"description": "TODO",
 				"tags": [
-					"Auth"
+					"AuthV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -5851,7 +5875,7 @@
 				"summary": "Check For 2FA Login",
 				"description": "Complete the login process if a two-factor authentication token is required from the beginning of the login process.",
 				"tags": [
-					"Auth"
+					"AuthV2"
 				],
 				"parameters": [],
 				"requestBody": {
@@ -5949,7 +5973,7 @@
 				"description": "Gets the site keys used for Google Recaptcha V2 and V3. These are useful when providing a captcha token when logging in or signing up.",
 				"security": [],
 				"tags": [
-					"Auth"
+					"AuthV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -6016,7 +6040,7 @@
 				"summary": "Generate Client Token",
 				"description": "TODO",
 				"tags": [
-					"BrainTree"
+					"BrainTreeV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -6057,7 +6081,7 @@
 				"summary": "Get Delivery Info",
 				"description": "Given an video/audio attachment identifier, retrieves the information necessary to play, download, or livestream the video/audio at various quality levels.",
 				"tags": [
-					"CDN"
+					"CDNV2"
 				],
 				"parameters": [
 					{
@@ -6174,7 +6198,7 @@
 				"summary": "Connect",
 				"description": "TODO",
 				"tags": [
-					"ConnectedAccounts"
+					"ConnectedAccountsV2"
 				],
 				"parameters": [
 					{
@@ -6224,7 +6248,7 @@
 				"summary": "Callback",
 				"description": "TODO",
 				"tags": [
-					"ConnectedAccounts"
+					"ConnectedAccountsV2"
 				],
 				"parameters": [
 					{
@@ -6274,7 +6298,7 @@
 				"summary": "Complete",
 				"description": "TODO",
 				"tags": [
-					"ConnectedAccounts"
+					"ConnectedAccountsV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -6315,7 +6339,7 @@
 				"summary": "Refresh",
 				"description": "TODO",
 				"tags": [
-					"ConnectedAccounts"
+					"ConnectedAccountsV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -6356,7 +6380,7 @@
 				"summary": "Dissociate",
 				"description": "TODO",
 				"tags": [
-					"ConnectedAccounts"
+					"ConnectedAccountsV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -6397,7 +6421,7 @@
 				"summary": "List Connections",
 				"description": "List the available 3rd party accounts for the user's profile.",
 				"tags": [
-					"ConnectedAccounts"
+					"ConnectedAccountsV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -6465,7 +6489,7 @@
 				"summary": "Add Creator Moderator",
 				"description": "TODO",
 				"tags": [
-					"CreatorAdministration"
+					"CreatorAdministrationV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -6738,7 +6762,7 @@
 				"summary": "Get Info",
 				"description": "Retrieve detailed information on one or more creators on Floatplane.",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [
 					{
@@ -6879,7 +6903,7 @@
 				"summary": "Get Info By Name",
 				"description": "Retrieve detailed information on one or more creators on Floatplane.",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [
 					{
@@ -7039,11 +7063,12 @@
 		},
 		"/api/v2/creator/videos": {
 			"get": {
+				"deprecated": true,
 				"operationId": "listVideos",
 				"summary": "List Videos",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7080,11 +7105,12 @@
 		},
 		"/api/v2/creator/playlists": {
 			"get": {
+				"deprecated": true,
 				"operationId": "listPlaylists",
 				"summary": "List Playlists",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7121,11 +7147,12 @@
 		},
 		"/api/v2/creator/list": {
 			"get": {
+				"deprecated": true,
 				"operationId": "listCreators",
 				"summary": "List Creators",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7162,11 +7189,12 @@
 		},
 		"/api/v2/creator/discover": {
 			"get": {
+				"deprecated": true,
 				"operationId": "discoverCreatorsV2",
 				"summary": "Discover Creators",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7207,7 +7235,7 @@
 				"summary": "List Creator Categories",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7248,7 +7276,7 @@
 				"summary": "Update Social Links",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7289,7 +7317,7 @@
 				"summary": "Get Social Links",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7330,7 +7358,7 @@
 				"summary": "Update Channel Image",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7371,7 +7399,7 @@
 				"summary": "Update Channel Info",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7412,7 +7440,7 @@
 				"summary": "Get Channel Info",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV2"
 				],
 				"parameters": [],
 				"responses": {
@@ -7453,7 +7481,7 @@
 				"summary": "Get Creator",
 				"description": "Retrieve detailed information about a specific creator.",
 				"tags": [
-					"Creator"
+					"CreatorV3"
 				],
 				"parameters": [
 					{
@@ -7621,7 +7649,7 @@
 				"summary": "Get Creators",
 				"description": "Retrieve and search for all creators on Floatplane. Useful for creator discovery and filtering.",
 				"tags": [
-					"Creator"
+					"CreatorV3"
 				],
 				"parameters": [
 					{
@@ -8002,7 +8030,7 @@
 				"summary": "Get Creator By Name",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -8043,7 +8071,7 @@
 				"summary": "Discover Creators",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -8080,11 +8108,12 @@
 		},
 		"/api/v3/creator/category/list": {
 			"get": {
+				"deprecated": true,
 				"operationId": "listCreatorCategoriesV3",
 				"summary": "List Creator Categories",
-				"description": "TODO",
+				"description": "TODO - Not used in Floatplane code.",
 				"tags": [
-					"Creator"
+					"CreatorV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -8125,7 +8154,7 @@
 				"summary": "Bind Creator Invite Code",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -8166,7 +8195,7 @@
 				"summary": "Get Creator Invite Code Info",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV3"
 				],
 				"parameters": [],
 				"responses": {
@@ -8207,7 +8236,7 @@
 				"summary": "Claim Creator Invite Code",
 				"description": "TODO",
 				"tags": [
-					"Creator"
+					"CreatorV3"
 				],
 				"parameters": [],
 				"responses": {

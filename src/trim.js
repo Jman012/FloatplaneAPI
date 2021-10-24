@@ -8,7 +8,7 @@ fs.readFile("../floatplane-openapi-specification.json", "utf8", (err, data) => {
 
 		for (var path in spec.paths) {
 			for (var method in spec.paths[path]) {
-				if (spec.paths[path][method].description == "TODO") {
+				if (spec.paths[path][method].description.indexOf("TODO") == 0) {
 					console.log("Removed: " + path + " " + method);
 					delete spec.paths[path][method];
 				}
