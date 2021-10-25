@@ -88,6 +88,8 @@ When a new version of the Floatplane frontend is released (which is done silentl
 	2. The cleanup replaces references of the version numbers in, specifically, `app.js` with a common piece of text in order to avoid many false-positives in the resulting diffs.
 7. Then, manually inspect the diff of the files listed to see what has changed.
 
+The file `fp-frontend-version.txt` is a collection of recent version changes that Floatplane has made, starting with `3.5.1`. This may be updated irregularly.
+
 ---
 
 # Contributions
