@@ -1,32 +1,42 @@
 # Floatplane API Specification
 
-Visit the pre-generated documentation renders at https://jman012.github.io/FloatplaneAPIDocs
+Visit the pre-generated documentation, trimmed OpenAPI spec, and Postman collection at https://jman012.github.io/FloatplaneAPIDocs.
+
+Visit Floatplane at https://www.floatplane.com.
 
 ---
 
-An API specification of the content streaming service https://www.floatplane.com represented in the [OpenAPI 3.0.3](https://swagger.io/specification/) specification. The main file for this repository is `floatplane-openapi-specification.json`. Contained in it are definitions for all of the paths in the Floatplane API, definitions of common models between the API endpoints, descriptions of authentication and authorization mechanisms, and more.
+This repository is an API specification of the video streaming service [Floatplane](https://www.floatplane.com) using in the [OpenAPI 3.0.3](https://swagger.io/specification/) specification. The main file for this repository is `floatplane-openapi-specification.json`. Contained in it are definitions for all of the paths in the Floatplane API, definitions of common models between the API endpoints, descriptions of authentication and authorization mechanisms, and more.
 
-This repository serves as an open and central source specification for the Floatplane API, for purposes of tinkering and creating custom clients for Floatplane. At the time of writing, Floatplane has its main website, along with both Android and iOS applications. The main use case envisioned in the creation of this repository is to make it easier to create TV-first applications for, e.g., tvOS, Roku, Google TV, etc.
+This repository serves as an open and central source specification for the Floatplane API by the community, for purposes of tinkering and creating custom clients for Floatplane. At the time of writing, Floatplane has its main website, along with both Android and iOS applications. The main use case envisioned in the creation of this repository is to make it easier to create TV-first applications for, e.g., tvOS, Roku, Google TV, etc.
+
+# Automatic Generation
+
+The main purpose of this repository is to enable automatic generation of documentation and client code libraries.
 
 ## OpenAPI & Code Generation
 
-Given that the majority of this repository is in the OpenAPI specification, the `floatplane-openapi-specification.json` file can be used to automatically generate documentation, client code, and even server code of the Floatplane API. Various generators exist for different use cases. A notable open-source generator is [OpenAPI Generator](https://openapi-generator.tech/).
+The Floatplane OpenAPI specification can be used to automatically generate client code of the Floatplane API in most major programming languages. It is best advised to use the [trimmed version](https://jman012.github.io/FloatplaneAPIDocs/floatplane-openapi-specification-trimmed.json) to only generate the endpoints that have been thoroughly documented. Various generators exist for different use cases. 
+
+A notable open-source generator is [OpenAPI Generator](https://openapi-generator.tech/docs/generators) which supports 38 different languages, along with variations for different networking libraries in some languages. It additionally includes many configurations when generating clients.
+
+It would be best to keep your version of the specification, and a script to auto-generate the library with all of the correct configurations, in source control. Then, run the script to generate the code library or files, and keep those in source control as well in your project, or execute the script in your build scripts.
 
 ### Example
 
 ```sh
-openapi-generator openapi-generator generate -i floatplaneopenapi_v10.json -o Swift -g swift5 --library vapor
+openapi-generator openapi-generator generate -i floatplane-openapi-specification-trimmed.json -o Swift -g swift5 --library vapor
 ```
 
 ## OpenAPI & Documentation Generation
 
-You can visit a live render of the documentation for this repository at https://jman012.github.io/FloatplaneAPIDocs. There are a variety of renders available, including:
-- OpenAPI Generator - https://openapi-generator.tech/
-- Redoc - https://redoc.ly/redoc
-- RapiDoc - https://mrin9.github.io/RapiDoc/
-- ReSlate & Widdershins - https://github.com/Mermade/reslate - https://github.com/Mermade/widdershins
-- OpenAPI to Postman v2.1 Converter - https://github.com/postmanlabs/openapi-to-postman
+The OpenAPI specification can also be used to generate documentation. Pre-generated renders of the documentation for this repository are available at https://jman012.github.io/FloatplaneAPIDocs. There are a variety of renders available, including:
 - Swagger UI - https://github.com/swagger-api/swagger-ui
+- Redoc - https://redoc.ly/redoc
+- ReSlate & Widdershins - https://github.com/Mermade/reslate - https://github.com/Mermade/widdershins
+- RapiDoc - https://mrin9.github.io/RapiDoc/
+- OpenAPI Generator - https://openapi-generator.tech/
+- OpenAPI to Postman v2.1 Converter - https://github.com/postmanlabs/openapi-to-postman
 
 ### Example
 
@@ -34,7 +44,9 @@ You can visit a live render of the documentation for this repository at https://
 redoc-cli bundle -o Docs/Redoc/redoc-static.html floatplane-openapi-specification.json
 ```
 
-## Using This Repository
+---
+
+## Working on This Repository
 
 ### Documentation Generation
 
@@ -50,7 +62,11 @@ In order to generate all of the documentation available at https://jman012.githu
 	3. Generate documentation for the full spec into the `/Docs` folder
 	4. Copy over the spec and some other files from `/static` into the `/Docs` folder
 
-Then, open `/Docs/index.html` to view the changes.
+Then, open `/Docs/index.html` to view the changes. A Dockerfile is also available:
+
+```sh
+docker build --tag fpapidocs:latest .
+```
 
 ### Analyze difference between Floatplane frontends
 
