@@ -1256,7 +1256,7 @@
 					"profileImage"
 				]
 			},
-			"GetCaptchaInfoRequest": {
+			"GetCaptchaInfoResponse": {
 				"type": "object",
 				"properties": {
 					"v2": {
@@ -6014,7 +6014,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/GetCaptchaInfoRequest"
+									"$ref": "#/components/schemas/GetCaptchaInfoResponse"
 								},
 								"example": {
 									"v2": {
