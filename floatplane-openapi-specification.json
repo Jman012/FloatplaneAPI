@@ -317,7 +317,6 @@
 					}
 				},
 				"required": [
-					"user",
 					"needs2FA"
 				]
 			},
@@ -2648,7 +2647,7 @@
 				"type": "apiKey",
 				"in": "cookie",
 				"name": "sails.sid",
-				"description": "Authentication and authorization to Floatplane API calls is governed by the `sailes.sid` HTTP Cookie. To obtain this cookie, you must authenticate to `/api/v2/auth/login`.\n\nWhen dealing with cookies in native applications (not via a website inside of a browser), please keep in mind that some languages/libraries may keep cookies across requests by default, and some may not. For instance, in Swift the `URLSession.shared` object with default configuration will automatically track and persist cookies across requests."
+				"description": "Authentication and authorization to Floatplane API calls is governed by the `sails.sid` HTTP Cookie. To obtain this cookie, you must authenticate to `/api/v2/auth/login`.\n\nWhen dealing with cookies in native applications (not via a website inside of a browser), please keep in mind that some languages/libraries may keep cookies across requests by default, and some may not. For instance, in Swift the `URLSession.shared` object with default configuration will automatically track and persist cookies across requests."
 			}
 		},
 		"responses": {
