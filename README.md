@@ -75,7 +75,7 @@ The list of APIs was generated from the Floatplane frontend files, available at 
 When a new version of the Floatplane frontend is released (which is done silently), we can analyze the differences between the files to find new endpoints being used. To do so more easily, some tools are included:
 
 1. Clone this repository
-2. Change directory into the `/src` folder: `cd /src`
+2. Change directory into the `/src` folder: `cd src`
 3. Fetch the frontend files for the **previous** version: `./fp-frontend-fetch.sh <previous version number>`
 	1. E.g. `./fp-frontend-fetch.sh 3.5.1`
 	2. This assumes that `wget` is installed on the system
