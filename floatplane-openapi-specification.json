@@ -1124,6 +1124,77 @@
 					"levels"
 				]
 			},
+			"ContentPictureV3Response": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"guid": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"likes": {
+						"type": "integer"
+					},
+					"dislikes": {
+						"type": "integer"
+					},
+					"score": {
+						"type": "integer"
+					},
+					"isProcessing": {
+						"type": "boolean"
+					},
+					"creator": {
+						"type": "string"
+					},
+					"primaryBlogPost": {
+						"type": "string"
+					},
+					"userInteraction": {
+						"type": "array",
+						"items": {}
+					},
+					"thumbnail": {
+						"$ref": "#/components/schemas/ImageModel"
+					},
+					"isAccessible": {
+						"type": "boolean"
+					},
+					"imageFiles": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ImageModel"
+						}
+					}
+				},
+				"required": [
+					"creator",
+					"description",
+					"dislikes",
+					"guid",
+					"id",
+					"imageFiles",
+					"isAccessible",
+					"isProcessing",
+					"likes",
+					"primaryBlogPost",
+					"score",
+					"thumbnail",
+					"title",
+					"type",
+					"userInteraction"
+				]
+			},
 			"UserActivityV3Response": {
 				"type": "object",
 				"properties": {
@@ -2055,6 +2126,9 @@
 					},
 					"path": {
 						"type": "string"
+					},
+					"size": {
+						"type": "integer"
 					},
 					"childImages": {
 						"type": "array",
@@ -19141,21 +19215,57 @@
 			"get": {
 				"operationId": "getPictureContent",
 				"summary": "Get Picture Content",
-				"description": "TODO",
+				"description": "Retrieve more information on a picture attachment from a blog post in order to consume the picture content.",
 				"tags": [
 					"ContentV3"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"schema": {
+							"type": "string"
+						},
+						"required": true,
+						"description": "The ID of the picture attachment object, from the `BlogPostModelV3`."
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK",
 						"content": {
 							"application/json": {
 								"schema": {
-		
+									"$ref": "#/components/schemas/ContentPictureV3Response"
 								},
 								"example": {
-		
+									"id": "ZWKdCy8TMN",
+									"guid": "ZWKdCy8TMN",
+									"title": "\"I hate costumes\" Jonathan",
+									"type": "picture",
+									"description": "",
+									"likes": 1,
+									"dislikes": 0,
+									"score": 1,
+									"isProcessing": false,
+									"creator": "59f94c0bdd241b70349eb72b",
+									"primaryBlogPost": "PGZBzzRWpD",
+									"userInteraction": [],
+									"thumbnail": {
+										"width": 1200,
+										"height": 675,
+										"path": "https://pbs.floatplane.com/picture_thumbnails/ZWKdCy8TMN/239212458322156_1634845035660.jpeg",
+										"childImages": []
+									},
+									"isAccessible": true,
+									"imageFiles": [
+										{
+											"path": "https://pbs.floatplane.com/content_images/59f94c0bdd241b70349eb72b/465975275316873_1634845031494_1164x675.jpeg?AWSAccessKeyId=...&Expires=...&Signature=...",
+											"width": 1164,
+											"height": 675,
+											"size": 165390
+										}
+									]
 								}
 							}
 						}
