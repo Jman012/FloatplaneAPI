@@ -969,8 +969,7 @@
 						"type": "boolean"
 					},
 					"userInteraction": {
-						"type": "array",
-						"items": {}
+						"$ref": "#/components/schemas/UserInteractionModel"
 					},
 					"videoAttachments": {
 						"type": "array",
@@ -1077,8 +1076,7 @@
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"userInteraction": {
-						"type": "array",
-						"items": {}
+						"$ref": "#/components/schemas/UserInteractionModel"
 					},
 					"levels": {
 						"type": "array",
@@ -1169,8 +1167,7 @@
 						"type": "string"
 					},
 					"userInteraction": {
-						"type": "array",
-						"items": {}
+						"$ref": "#/components/schemas/UserInteractionModel"
 					},
 					"thumbnail": {
 						"$ref": "#/components/schemas/ImageModel"
@@ -1199,8 +1196,7 @@
 					"score",
 					"thumbnail",
 					"title",
-					"type",
-					"userInteraction"
+					"type"
 				]
 			},
 			"UserActivityV3Response": {
@@ -1352,16 +1348,6 @@
 					"contentType",
 					"id"
 				]
-			},
-			"ContentLikeV3Response": {
-				"type": "array",
-				"items": {
-					"type": "string",
-					"enum": [
-						"like",
-						"dislike"
-					]
-				}
 			},
 			"GetCaptchaInfoResponse": {
 				"type": "object",
@@ -2487,7 +2473,7 @@
 						}
 					},
 					"userInteraction": {
-						"type": "string"
+						"$ref": "#/components/schemas/UserInteractionModel"
 					}
 				},
 				"required": [
@@ -2561,7 +2547,7 @@
 						}
 					},
 					"userInteraction": {
-						"type": "string"
+						"$ref": "#/components/schemas/UserInteractionModel"
 					}
 				},
 				"required": [
@@ -2818,6 +2804,16 @@
 					"status",
 					"order"
 				]
+			},
+			"UserInteractionModel": {
+				"type": "array",
+				"items": {
+					"type": "string",
+					"enum": [
+						"like",
+						"dislike"
+					]
+				}
 			}
 		},
 		"securitySchemes": {
@@ -19502,7 +19498,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ContentLikeV3Response"
+									"$ref": "#/components/schemas/UserInteractionModel"
 								},
 								"example": [
 									"like"
@@ -19557,7 +19553,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ContentLikeV3Response"
+									"$ref": "#/components/schemas/UserInteractionModel"
 								},
 								"example": [
 									"dislike"
