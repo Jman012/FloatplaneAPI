@@ -880,29 +880,32 @@
 						"type": "array",
 						"description": "Information about paging: what the last ID retrieve is and if more posts can be retrieved afterward for subsequent requests.",
 						"items": {
-							"type": "object",
-							"properties": {
-								"creatorId": {
-									"type": "string"
-								},
-								"blogPostId": {
-									"type": "string"
-								},
-								"moreFetchable": {
-									"type": "boolean"
-								}
-							},
-							"required": [
-								"creatorId",
-								"blogPostId",
-								"moreFetchable"
-							]
+							"$ref": "#/components/schemas/ContentCreatorListLastItems"
 						}
 					}
 				},
 				"required": [
 					"blogPosts",
 					"lastElements"
+				]
+			},
+			"ContentCreatorListLastItems": {
+				"type": "object",
+				"properties": {
+					"creatorId": {
+						"type": "string"
+					},
+					"blogPostId": {
+						"type": "string"
+					},
+					"moreFetchable": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"creatorId",
+					"blogPostId",
+					"moreFetchable"
 				]
 			},
 			"ContentPostV3Response": {
@@ -18027,22 +18030,11 @@
 						"schema": {
 							"type": "array",
 							"items": {
-								"type": "object",
-								"properties": {
-									"creatorId": {
-										"type": "string"
-									},
-									"blogPostId": {
-										"type": "string"
-									},
-									"moreFetchable": {
-										"type": "boolean"
-									}
-								}
+								"$ref": "#/components/schemas/ContentCreatorListLastItems"
 							}
 						},
 						"required": false,
-						"description": "For pagination, this is used to determine which posts to skip. There should be one `fetchAfter` object for each creator in `ids`. The purpose of `moreFetchable` in the request is unknown.",
+						"description": "For pagination, this is used to determine which posts to skip. There should be one `fetchAfter` object for each creator in `ids`. The `moreFetchable` in the request, and all of the data, comes from the `ContentCreatorListV3Response`.",
 						"style": "form",
 						"explode": true
 					}
