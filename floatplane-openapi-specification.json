@@ -933,8 +933,7 @@
 					"tags": {
 						"type": "array",
 						"items": {
-							"type": "object",
-							"description": "TODO - Probably just a string type, but we've yet to see any tags in production."
+							"type": "string"
 						}
 					},
 					"attachmentOrder": {
@@ -1742,8 +1741,7 @@
 					"tags": {
 						"type": "array",
 						"items": {
-							"type": "object",
-							"description": "TODO - Probably just a string type, but we've yet to see any tags in production."
+							"type": "string"
 						}
 					},
 					"attachmentOrder": {
@@ -17610,7 +17608,9 @@
 										"title": "Livestream VOD – October 9, 2021 @ 07:18 – First Linux Stream",
 										"text": "<p>chat on Twitch</p>",
 										"type": "blogPost",
-										"tags": [],
+										"tags": [
+											"test"
+										],
 										"attachmentOrder": [
 											"TViGzkuIic"
 										],
@@ -18475,7 +18475,9 @@
 									"title": "Livestream VOD – October 9, 2021 @ 07:18 – First Linux Stream",
 									"text": "<p>chat on Twitch</p>",
 									"type": "blogPost",
-									"tags": [],
+									"tags": [
+										"test"
+									],
 									"attachmentOrder": [
 										"TViGzkuIic"
 									],
@@ -18630,7 +18632,9 @@
 										"title": "Livestream VOD – October 8, 2021 @ 20:26 – I Have MORE to Say About Steam Deck - WAN Show October 8, 2021",
 										"text": "<p>Honey automatically applies the best coupon codes to save you money at </p><p>different online checkouts, try it now at <a href=\"https://www.joinhoney.com/linus\">https://www.joinhoney.com/linus</a></p><p><br /></p><p>Buy a Seasonic Ultra Titanium PSU</p><p>On Amazon: <a href=\"https://geni.us/q4lnefC\">https://geni.us/q4lnefC</a></p><p>On NewEgg: <a href=\"https://lmg.gg/8KV3S\">https://lmg.gg/8KV3S</a></p><p><br /></p><p>Visit <a href=\"https://www.squarespace.com/WAN\">https://www.squarespace.com/WAN</a> and use offer code WAN for 10% off</p><p><br /></p><p>Podcast Download: TBD</p><p><br /></p><p>Check out our other Podcasts:</p><p>Carpool Critics Movie Podcast: <a href=\"https://www.youtube.com/channel/UCt-oJR5teQIjOAxCmIQvcgA\">https://www.youtube.com/channel/UCt-oJR5teQIjOAxCmIQvcgA</a></p><p><br /></p><p>Timestamps TBD</p>",
 										"type": "blogPost",
-										"tags": [],
+										"tags": [
+											"test"
+										],
 										"attachmentOrder": [
 											"psqoN3CgMH",
 											"KijsTQP8Rr"
