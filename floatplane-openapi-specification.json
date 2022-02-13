@@ -398,6 +398,9 @@
 												"token"
 											]
 										}
+									},
+									"token": {
+										"type": "string"
 									}
 								}
 							}
@@ -6310,9 +6313,17 @@
 						"schema": {
 							"type": "string"
 						},
-						"required": true,
-						"description": "The GUID of the attachment for a post, retrievable from the `videoAttachments` or `audioAttachments` object."
-
+						"required": false,
+						"description": "The GUID of the attachment for a post, retrievable from the `videoAttachments` or `audioAttachments` object. Required when `type` is `vod`, `aod`, or `download`. Note: either this or `creator` must be supplied."
+					},
+					{
+						"in": "query",
+						"name": "creator",
+						"schema": {
+							"type": "string"
+						},
+						"required": false,
+						"description": "The GUID of the creator for a livestream, retrievable from `CreatorModelV2.id`. Required when `type` is `live`. Note: either this or `guid` must be supplied."
 					}
 				],
 				"responses": {
