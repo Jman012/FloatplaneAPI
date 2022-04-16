@@ -984,7 +984,9 @@
 					},
 					"audioAttachments": {
 						"type": "array",
-						"items": {}
+						"items": {
+							"$ref": "#/components/schemas/AudioAttachmentModel"
+						}
 					},
 					"pictureAttachments": {
 						"type": "array",
@@ -2147,6 +2149,92 @@
 					"thumbnail",
 					"title",
 					"type"
+				]
+			},
+			"AudioAttachmentModel": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"guid": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"duration": {
+						"type": "integer"
+					},
+					"waveform": {
+						"type": "object",
+						"properties": {
+							"dataSetLength": {
+								"type": "integer"
+							},
+							"highestValue": {
+								"type": "integer"
+							},
+							"lowestValue": {
+								"type": "integer"
+							},
+							"data": {
+								"type": "array",
+								"items": {
+									"type": "integer"
+								}
+							}
+						},
+						"required": [
+							"data",
+							"dataSetLength",
+							"highestValue",
+							"lowestValue"
+						]
+					},
+					"creator": {
+						"type": "string"
+					},
+					"likes": {
+						"type": "integer"
+					},
+					"dislikes": {
+						"type": "integer"
+					},
+					"score": {
+						"type": "integer"
+					},
+					"isProcessing": {
+						"type": "boolean"
+					},
+					"primaryBlogPost": {
+						"type": "string"
+					},
+					"isAccessible": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"creator",
+					"description",
+					"dislikes",
+					"duration",
+					"guid",
+					"id",
+					"isAccessible",
+					"isProcessing",
+					"likes",
+					"primaryBlogPost",
+					"score",
+					"title",
+					"type",
+					"waveform"
 				]
 			},
 			"ImageModel": {
@@ -18638,7 +18726,33 @@
 											"isAccessible": true
 										}
 									],
-									"audioAttachments": [],
+									"audioAttachments": [
+										{
+											"id": "iGssjNGPSD",
+											"guid": "iGssjNGPSD",
+											"title": "Robocop FP.mp3",
+											"type": "audio",
+											"description": "",
+											"duration": 4165,
+											"waveform": {
+												"dataSetLength": 3,
+												"highestValue": 71,
+												"lowestValue": 50,
+												"data": [
+													71,
+													50,
+													69
+												]
+											},
+											"creator": "59f94c0bdd241b70349eb72b",
+											"likes": 0,
+											"dislikes": 0,
+											"score": 0,
+											"isProcessing": false,
+											"primaryBlogPost": "jVU2y9PlnG",
+											"isAccessible": true
+										}
+									],
 									"pictureAttachments": [],
 									"galleryAttachments": []
 								}
