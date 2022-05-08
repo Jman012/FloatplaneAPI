@@ -1,5 +1,7 @@
 const fs = require("fs");
 
+// Nothing to trim for either Frontend nor Chat AsyncAPI files.
+
 fs.readFile("../floatplane-openapi-specification.json", "utf8", (err, data) => {
 	if (err) {
 		console.log("Could not read ../floatplane-openapi-specification.json");

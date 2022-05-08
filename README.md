@@ -6,7 +6,7 @@ Visit Floatplane at https://www.floatplane.com.
 
 ---
 
-This repository is an API specification of the video streaming service [Floatplane](https://www.floatplane.com) using in the [OpenAPI 3.0.3](https://swagger.io/specification/) specification. The main file for this repository is `floatplane-openapi-specification.json`. Contained in it are definitions for all of the paths in the Floatplane API, definitions of common models between the API endpoints, descriptions of authentication and authorization mechanisms, and more.
+This repository is an API specification of the video streaming service [Floatplane](https://www.floatplane.com) using in the [OpenAPI 3.0.3](https://swagger.io/specification/) specification for REST and [AsyncAPI 2.4.0](https://www.asyncapi.com/) specification for asynchronous events. The main files for this repository are `floatplane-openapi-specification.json`, `floatplane-asyncapi-chat-specification.json`, and `floatplane-asyncapi-frontend-specification.json`. Contained in them are definitions for all of the paths and channels in the Floatplane API, definitions of common models between the API endpoints, descriptions of authentication and authorization mechanisms, and more.
 
 This repository serves as an open and central source specification for the Floatplane API by the community, for purposes of tinkering and creating custom clients for Floatplane. At the time of writing, Floatplane has its main website, along with both Android and iOS applications. The main use case envisioned in the creation of this repository is to make it easier to create TV-first applications for, e.g., tvOS, Roku, Google TV, etc.
 
@@ -14,11 +14,11 @@ This repository serves as an open and central source specification for the Float
 
 The main purpose of this repository is to enable automatic generation of documentation and client code libraries.
 
-## OpenAPI & Code Generation
+## OpenAPI/AsyncAPI & Code Generation
 
-The Floatplane OpenAPI specification can be used to automatically generate client code of the Floatplane API in most major programming languages. It is best advised to use the [trimmed version](https://jman012.github.io/FloatplaneAPIDocs/floatplane-openapi-specification-trimmed.json) to only generate the endpoints that have been thoroughly documented. Various generators exist for different use cases. 
+The Floatplane API specification can be used to automatically generate client code of the Floatplane API in most major programming languages. It is best advised to use the [trimmed version](https://jman012.github.io/FloatplaneAPIDocs/floatplane-openapi-specification-trimmed.json) of the REST API to only generate the endpoints that have been thoroughly documented. Various generators exist for different use cases. 
 
-A notable open-source generator is [OpenAPI Generator](https://openapi-generator.tech/docs/generators) which supports 38 different languages, along with variations for different networking libraries in some languages. It additionally includes many configurations when generating clients.
+A notable open-source generator is [OpenAPI Generator](https://openapi-generator.tech/docs/generators) which supports 38 different languages, along with variations for different networking libraries in some languages. It additionally includes many configurations when generating clients. For AsyncAPI, the [AsyncAPI Generator](https://github.com/asyncapi/generator) is recommended.
 
 It would be best to keep your version of the specification, and a script to auto-generate the library with all of the correct configurations, in source control. Then, run the script to generate the code library or files, and keep those in source control as well in your project, or execute the script in your build scripts.
 
@@ -28,20 +28,29 @@ It would be best to keep your version of the specification, and a script to auto
 openapi-generator openapi-generator generate -i floatplane-openapi-specification-trimmed.json -o Swift -g swift5 --library vapor
 ```
 
-## OpenAPI & Documentation Generation
+```sh
+ag -o FloatplaneChatAPI floatplane-asyncapi-chat-specification.json @asyncapi/nodejs-template
+```
 
-The OpenAPI specification can also be used to generate documentation. Pre-generated renders of the documentation for this repository are available at https://jman012.github.io/FloatplaneAPIDocs. There are a variety of renders available, including:
+## OpenAPI/AsyncAPI & Documentation Generation
+
+The API specifications can also be used to generate documentation. Pre-generated renders of the documentation for this repository are available at https://jman012.github.io/FloatplaneAPIDocs. There are a variety of renders available, including:
 - Swagger UI - https://github.com/swagger-api/swagger-ui
 - Redoc - https://redoc.ly/redoc
 - ReSlate & Widdershins - https://github.com/Mermade/reslate - https://github.com/Mermade/widdershins
 - RapiDoc - https://mrin9.github.io/RapiDoc/
 - OpenAPI Generator - https://openapi-generator.tech/
 - OpenAPI to Postman v2.1 Converter - https://github.com/postmanlabs/openapi-to-postman
+- AsyncAPI Generator - https://github.com/asyncapi/generator
 
 ### Example
 
 ```sh
 redoc-cli bundle -o Docs/Redoc/redoc-static.html floatplane-openapi-specification.json
+```
+
+```sh
+ag -o Docs/AsyncAPIChat floatplane-asyncapi-chat-specification.json @asyncapi/html-template
 ```
 
 ---
@@ -55,7 +64,8 @@ In order to generate all of the documentation available at https://jman012.githu
 2. Run `npm install`
 	1. This will install all of the necessary tooling
 	2. The OpenAPI Generator tooling requires Java to be installed, but will fail silently if it is not.
-3. Make changes as necessary to `floatplane-openapi-specification.json`
+	3. Note that for AsyncAPI, it depends on installing `puppeteer`. If working on an M1 Apple device, you may run into issues with this dependency. Following [this article](https://linguinecode.com/post/how-to-fix-m1-mac-puppeteer-chromium-arm64-bug) may help.
+3. Make changes as necessary to `floatplane-openapi-specification.json` or the AsyncAPI specification files
 4. Run `npm run docs-all`. This will:
 	1. Trim the spec into `floatplane-openapi-specification-trimmed.json`
 	2. Generate documentation for the trimmed spec into the `/Docs` folder

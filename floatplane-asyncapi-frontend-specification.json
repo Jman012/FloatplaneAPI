@@ -1,0 +1,434 @@
+{
+	"asyncapi": "2.4.0",
+	"info": {
+		"title": "Floatplane Async Frontend API",
+		"version": "3.8.9",
+		"description": "Homepage: [https:\/\/jman012.github.io\/FloatplaneAPIDocs](https:\/\/jman012.github.io\/FloatplaneAPIDocs)\r\n\r\nThis document describes the asynchronous\/event-driven API layer of [https:\/\/www.floatplane.com](https:\/\/www.floatplane.com), a content creation and video streaming website created by Floatplane Media Inc. and Linus Media Group, where users can support their favorite creates via paid subscriptions in order to watch their video and livestream content in higher quality and other perks.\r\n\r\nThis API is specific to the frontend activities of the Floatplane website, which is responsible for pushing new-post notifications to the client, and is meant for a connection to www.floatplane.com. If you are looking for the chat\/livestream async API layer of Floatplane (chat.floatplane.com), please visit [this document](..\/AsyncAPIChat) instead.\r\n\r\n## Implementation Notes\r\n\r\nThis document is an AsyncAPI implementation on top of a Socket.IO connection. AsyncAPI does not have any specifics for Socket.IO, and so any automatic code-generation from this document may not work 100% out-of-the-box on a WebSocket connection. At best, it will provide all of the proper models needed for the different events and messages. But it may require some glue code to get it working properly with Sails. See the below section on the difference between Socket.IO, Sails, and Floatplane for this socket connection.\r\n\r\nIt is recommended for any client implementation to use a Socket.IO reference library implementation [in your language of choice](https:\/\/github.com\/orgs\/socketio\/repositories?q=socket.io-client&type=all&language=&sort=) with this document. A version of this document for Sails would be preferred, but there is only a single client reference implementation (JavaScript), and the Sails layer on top of Socket.IO is fairly straightforward.\r\n\r\n## Technology Notes\r\n\r\nFloatplane's backend primarily uses [Sails](https:\/\/sailsjs.com\/) and the website UI uses an Angular frontend along with Sails' socket connection for low-latency request\/response and event-driven architecture. Sails is an MVC framework for making Node.js websites and APIs. Sails' socket connection is built on three tiers of technology that should be understood when implementing this API:\r\n\r\n1. [Engine.IO](https:\/\/socket.io\/docs\/v4\/how-it-works\/#engineio) ([GitHub](https:\/\/github.com\/socketio\/engine.io))\r\n\t1. This layer is responsible for abstracting the socket connection for reliability. It primarily uses WebSockets as the communication channel, but will fall back to HTTP long-polling if WebSockets are not available.\r\n\t1. It provides a rather simple protocol on top of the below items, usually prefixing a WebSocket frame with a single byte indicating the packet type.\r\n\t1. Engine.IO does have its own connection mechanism, and it would be best to have this implemented by a library rather than by hand. While it has a reference [JavaScript\/Node.JS](https:\/\/github.com\/socketio\/engine.io-client) implementation and a [Java](https:\/\/github.com\/socketio\/engine.io-client-java) implementation, it is recommended to use a Socket.io library outlined below.\r\n\t1. On the wire, you'll see connection frames with the `0` prefix, pings\/pongs as a single byte (`2`\/`3`), or messages with the `4` prefix. If you are analyzing the WebSocket frames directly, it would be beneficial to familiarize yourself with the [Engine.IO protocol](https:\/\/github.com\/socketio\/engine.io-protocol).\r\n1. [Socket.IO](https:\/\/socket.io\/)\r\n\t1. This builds on Engine.IO by adding reconnection, packet buffering, acknowledgements (request\/response), broadcasting, and multiplexing (namespaces) features.\r\n\t1. It would be useful to learn how the [Socket.IO Protocol](https:\/\/github.com\/socketio\/socket.io-protocol) is structured. In short, events are prefixed with `2`, acknowledgements are prefixed with `3` (both are after the Engine.IO prefixes\/headers), and the data of the event is stored as a JSON-encoded array of items, where the first item is always a string identifying the event name, and optional subsequent items are the arguments to the event.\r\n1. [Sails Socket Client](https:\/\/sailsjs.com\/documentation\/reference\/web-sockets\/socket-client)\r\n\t1. The Sails socket client primarily adds HTTP request\/response emulation on top of Socket.IO. For instance, it adds HTTP verbs such as `GET`, `POST`, etc. onto the socket connection, and uses Socket.IO's acknowledgements in order to send back a response body.\r\n\t1. This is implemented by emitting Socket.IO events where the event name is the HTTP verb (e.g. `\"get\"`, `\"post\"`, etc.), and the first and only argument to the Socket.IO event is a data structure with Sails-specific fields: `method`, `headers`, `url`, and `data`. The `data` field is where the application-specific data is stored in the event.\r\n\t1. The Sails response is sent back to the client as a Socket.IO acknowledgement in a similar format with the `body`, `headers`, and `statusCode` fields as the first and only argument in the ack.\r\n\t1. There is a reference Sails client library for [JavaScript](https:\/\/github.com\/balderdashy\/sails.io.js), but there is no other official reference implementation.\r\n1. Floatplane\r\n\t1. The final layer is the application Floatplane itself, which is described in this document.\r\n\r\n### Over-the-Wire Examples\r\n\r\nThe following list shows some examples of what a raw WebSocket connection might entail, and splits up the data between the various layers. This section is mostly to help with debugging raw connections, and understanding the technical stack of Floatplane.\r\n\r\n1. C->S `GET wss:\/\/www.floatplane.com\/socket.io\/?__sails_io_sdk_version=0.13.8&__sails_io_sdk_platform=browser&__sails_io_sdk_language=javascript&EIO=3&transport=websocket`\r\n\t1. The client first connects directly to the WebSocket endpoint, and receives an `HTTP 101 Switching Protocols`.\r\n\t1. This is Engine.IO only.\r\n1. S->C `0{\"sid\":\"b1VcCLtZ1SUXiYEGAB49\",\"upgrades\":[],\"pingInterval\":25000,\"pingTimeout\":60000}`\r\n\t1. The WebSocket connection is established and the server sends the open packet.\r\n\t1. `0`: Engine.IO open header.\r\n\t1. `{\"sid\":\"b1VcCLtZ1SUXiYEGAB49\",\"upgrades\":[],\"pingInterval\":25000,\"pingTimeout\":60000}`: Engine.IO open payload.\r\n\t1. Note that if using a proper Engine.IO or Socket.IO implementation, you will not need to see or handle this in your code.\r\n\t1. This is Engine.IO only.\r\n1. S->C `40`\r\n\t1. The server automatically connects the client to the Socket.IO default namespace (`\/`).\r\n\t1. `4`: Engine.IO message header.\r\n\t1. `0`: Socket.IO connect header.\r\n\t1. Note that the namespace `\/` is implied but not included in this message due to the Socket.IO protocol marking is as optional. The non-encoded message for this in Socket.IO would look like `{\"type\": 0,\"nsp\": \"\/admin\",\"data\": {}}`.\r\n\t1. Note that if using a proper Socket.IO library implementation, you will not need to see or handle this in your code.\r\n\t1. This is Engine.IO and Socket.IO only. \r\n1. C->S: `420[\"post\",{\"method\":\"post\",\"headers\":{},\"data\":{},\"url\":\"\/api\/v3\/socket\/connect\"}]`\r\n\t1. The client posts to the socket connect URL in Sails, in order for Floatplane to connect and listen for events.\r\n\t1. `4`: Engine.IO message header.\r\n\t1. `20`: Socket.IO header.\r\n\t\t1. `2`: Marks that this message is an Event.\r\n\t\t1. `0`: Id parameter. Needed for the following acknowledgement.\r\n\t1. `[\"post\",{\"method\":\"post\",\"headers\":{},\"data\":{},\"url\":\"\/api\/v3\/socket\/connect\"}]`: Socket.IO event data.\r\n\t\t1. `\"post\"`: Socket.IO event name.\r\n\t\t\t1. This event name is reserved and used by Sails.\r\n\t\t1. `{\"method\":\"post\",\"headers\":{},\"data\":{},\"url\":\"\/api\/v3\/socket\/connect\"}`: Socket.IO event argument for the Sails `\"post\"` event.\r\n\t\t\t1. `\"method\":\"post,\"url\":\"\/api\/v3\/socket\/connect\"`: This Sails POST request is destined for the `\/api\/v3\/socket\/connect` endpoint.\r\n\t\t\t1. `\"data\":{}`: Sails request body.\r\n\t\t\t\t1. `{}`: No Floatplane data in the request.\r\n1. S->C: `430[{\"body\":{\"message\":\"User sync setup.\"},\"headers\":{},\"statusCode\":200}]`\r\n\t1. The Floatplane server responds to the POST request in Sails, telling the Floatplane client that it is connected.\r\n\t1. `4`: Engine.IO message header.\r\n\t1. `30`: Socket.IO header.\r\n\t\t1. `3`: Marks that this message is an Acknowledgement\r\n\t\t1. `0`: Id parameter. Marks that it is acknowledging event number 0.\r\n\t1. `[{\"body\":{\"message\":\"User sync setup.\"},\"headers\":{},\"statusCode\":200}]`: Socket.IO acknowledgement data.\r\n\t\t1. `{\"body\":{\"message\":\"User sync setup.\"},\"headers\":{},\"statusCode\":200}`: The only argument in the Socket.IO ack\r\n\t\t\t1. `\"statusCode\":200`: Sails HTTP response status code.\r\n\t\t\t1. `\"body\":{\"message\":\"User sync setup.\"}`: Sails HTTP response body.\r\n\t\t\t\t1. `{\"message\":\"User sync setup.\"}`: Floatplane connection response.\r\n1. S->C: `421[\"syncEvent\",{\"event\": \"creatorNotification\",\"data\": {\"id\": \"CONTENT_POST_RELEASE:yQDi4v3EMc\",\"eventType\": \"CONTENT_POST_RELEASE\",...}}]`\r\n\t1. The Floatplane server sends an event to the client about a new post notification.\r\n\t1. `4`: Engine.IO message header.\r\n\t1. `2`: Socket.IO event header.\r\n\t1. `[\"syncEvent\",{\"event\": \"creatorNotification\",\"data\": {\"id\": \"CONTENT_POST_RELEASE:yQDi4v3EMc\",\"eventType\": \"CONTENT_POST_RELEASE\",...}}]`: Socket.IO event data.\r\n\t\t1. `\"syncEvent\"`: Socket.IO event name.\r\n\t\t\t1. This name is used by the Floatplane application. The server is using the Sails socket to emit the event, but does not add anything to the request. It is basically emitting directly on the socket from Socket.IO.\r\n\t\t1. `{\"event\": \"creatorNotification\",\"data\": {\"id\": \"CONTENT_POST_RELEASE:yQDi4v3EMc\",\"eventType\": \"CONTENT_POST_RELEASE\",...}}`: Socket.IO event argument for the `\"syncEvent\"` event.\r\n\t\t\t1. This is structured entirely by Floatplane.",
+		"license": {
+			"name": "MIT",
+			"url": "https://github.com/Jman012/FloatplaneAPI/blob/main/LICENSE"
+		},
+		"contact": {
+			"name": "James Linnell",
+			"url": "https://github.com/Jman012/FloatplaneAPI/"
+		}
+	},
+	"servers": {
+		"website": {
+			"url": "www.floatplane.com/socket.io/?__sails_io_sdk_version={sailsVersion}&__sails_io_sdk_platform={sailsPlatform}&__sails_io_sdk_language={sailsVersion}&EIO=3&transport=websocket",
+			"protocol": "wss",
+			"description": "TODO",
+			"variables": {
+				"sailsVersion": {
+					"default": "0.13.8",
+					"description": "TODO",
+					"examples": [
+						"0.13.8"
+					]
+				},
+				"sailsPlatform": {
+					"default": "browser",
+					"description": "TODO",
+					"examples": [
+						"browser"
+					]
+				},
+				"sailsLanguage": {
+					"default": "javascript",
+					"description": "TODO",
+					"examples": [
+						"javascript",
+						"java",
+						"swift"
+					]
+				}
+			}
+		}
+	},
+	"channels": {
+		"/": {
+			"description": "Socket.IO and Sails groups messages and events into different namespaces, with `/` being the default namespace. Multiple kinds of messages can be sent in a single namespace, with Sails having its own mechanisms to differentiate message types.",
+			"publish": {
+				"message": {
+					"oneOf": [
+						{
+							"$ref": "#/components/messages/SailsPost"
+						}
+					]
+				}
+			},
+			"subscribe": {
+				"message": {
+					"oneOf": [
+						{
+							"$ref": "#/components/messages/SyncEvent"
+						}
+					]
+				}
+			},
+			"bindings": {
+				"ws": {
+					"method": "GET",
+					"headers": {
+						"description": "The `sails.sid` cookie must be sent upon connecting to the socket for authentication with the server.",
+						"type": "object",
+						"properties": {
+							"Cookies": "string"
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"messages": {
+			"SailsPost": {
+				"name": "post",
+				"summary": "",
+				"description": "",
+				"payload": {
+					"oneOf": [
+						{
+							"$ref": "#/components/schemas/SailsConnect"
+						}
+					]
+				},
+				"x-ack": {
+					"args": {
+						"oneOf": [
+							{
+								"$ref": "#/components/schemas/SailsConnected"
+							}
+						]
+					}
+				}
+			},
+			"SyncEvent": {
+				"name": "syncEvent",
+				"summary": "",
+				"description": "",
+				"payload": {
+					"oneOf": [
+						{
+							"$ref": "#/components/schemas/CreatorNotification"
+						},
+						{
+							"$ref": "#/components/schemas/PostRelease"
+						},
+						{
+							"$ref": "#/components/schemas/CreatorMenuUpdate"
+						}
+					]
+				}
+			}
+		},
+		"schemas": {
+			"SailsConnect": {
+				"type": "object",
+				"properties": {
+					"method": {
+						"const": "post"
+					},
+					"headers": {
+						"type": "object"
+					},
+					"data": {
+						"type": "object"
+					},
+					"url": {
+						"const": "/api/v3/socket/connect"
+					}
+				}
+			},
+			"SailsConnected": {
+				"type": "object",
+				"properties": {
+					"body": {
+						"type": "object",
+						"properties": {
+							"message": {
+								"type": "string"
+							}
+						}
+					},
+					"headers": {
+						"type": "object"
+					},
+					"statusCode": {
+						"type": "integer"
+					}
+				}
+			},
+			"CreatorNotification": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"event": {
+						"const": "creatorNotification"
+					},
+					"data": {
+						"$ref": "#/components/schemas/NotificationData"
+					}
+				}
+			},
+			"PostRelease": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"event": {
+						"const": "postRelease"
+					},
+					"data": {
+						"$ref": "#/components/schemas/NotificationData"
+					}
+				}
+			},
+			"NotificationData": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"eventType": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"creator": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"icon": {
+						"type": "string",
+						"format": "uri",
+						"qt-uri-protocols": [
+							"https"
+						],
+						"qt-uri-extensions": [
+							".jpeg"
+						]
+					},
+					"thumbnail": {
+						"type": "string",
+						"format": "uri"
+					},
+					"target": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"url": {
+								"type": "string"
+							},
+							"matchScheme": {
+								"type": "string"
+							},
+							"match": {
+								"type": "string"
+							},
+							"foregroundDiscardOnMatch": {
+								"type": "boolean"
+							},
+							"matchPortion": {
+								"type": "string"
+							}
+						}
+					},
+					"foregroundVisible": {
+						"type": "string"
+					},
+					"video": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"creator": {
+								"type": "string"
+							},
+							"guid": {
+								"type": "string"
+							}
+						}
+					},
+					"post": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"creator": {
+								"type": "string"
+							},
+							"guid": {
+								"type": "string"
+							},
+							"id": {
+								"type": "string"
+							},
+							"text": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"CreatorMenuUpdate": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"event": {
+						"const": "creatorMenuUpdate"
+					},
+					"data": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"guid": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							},
+							"text": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"tags": {
+								"type": "array",
+								"items": {}
+							},
+							"attachmentOrder": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"metadata": {
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"hasVideo": {
+										"type": "boolean"
+									},
+									"videoCount": {
+										"type": "integer"
+									},
+									"videoDuration": {
+										"type": "integer"
+									},
+									"hasAudio": {
+										"type": "boolean"
+									},
+									"audioCount": {
+										"type": "integer"
+									},
+									"audioDuration": {
+										"type": "integer"
+									},
+									"hasPicture": {
+										"type": "boolean"
+									},
+									"pictureCount": {
+										"type": "integer"
+									},
+									"hasGallery": {
+										"type": "boolean"
+									},
+									"galleryCount": {
+										"type": "integer"
+									},
+									"isFeatured": {
+										"type": "boolean"
+									}
+								}
+							},
+							"releaseDate": {
+								"type": "string",
+								"format": "date-time"
+							},
+							"likes": {
+								"type": "integer"
+							},
+							"dislikes": {
+								"type": "integer"
+							},
+							"score": {
+								"type": "integer"
+							},
+							"comments": {
+								"type": "integer"
+							},
+							"creator": {
+								"type": "string"
+							},
+							"wasReleasedSilently": {
+								"type": "boolean"
+							},
+							"thumbnail": {
+								"$ref": "#/components/schemas/ImageModel"
+							}
+						}
+					}
+				}
+			},
+			"ImageModel": {
+				"type": "object",
+				"properties": {
+					"width": {
+						"type": "integer"
+					},
+					"height": {
+						"type": "integer"
+					},
+					"path": {
+						"type": "string"
+					},
+					"size": {
+						"type": "integer"
+					},
+					"childImages": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ChildImageModel"
+						}
+					}
+				},
+				"required": [
+					"width",
+					"height",
+					"path"
+				]
+			},
+			"ChildImageModel": {
+				"type": "object",
+				"properties": {
+					"width": {
+						"type": "integer"
+					},
+					"height": {
+						"type": "integer"
+					},
+					"path": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"width",
+					"height",
+					"path"
+				]
+			}
+		}
+	}
+}

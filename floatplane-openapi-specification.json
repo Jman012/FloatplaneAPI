@@ -1,12 +1,16 @@
 {
 	"openapi": "3.0.3",
 	"info": {
-		"title": "Floatplane API",
+		"title": "Floatplane REST API",
 		"version": "3.8.9",
-		"description": "Homepage: [https:\/\/jman012.github.io\/FloatplaneAPIDocs](https:\/\/jman012.github.io\/FloatplaneAPIDocs)\r\n\r\nThis document describes the API layer of [https:\/\/www.floatplane.com](https:\/\/www.floatplane.com), a content creation and video streaming website created by Floatplane Media Inc. and Linus Media Group, where users can support their favorite creates via paid subscriptions in order to watch their video and livestream content in higher quality and other perks.\r\n\r\nWhile this document contains stubs for all of the Floatplane APIs for this version, many are not filled out because they are related only to content creation, moderation, or administration and are not needed for regular use. These have \"TODO\" as the description, and are automatically removed before document generation. If you are viewing the \"Trimmed\" version of this document, they have been removed for brevity.\r\n\r\n## API Object Organization\r\n\r\n- **Users** and **Creators** exist on Floatplane at the highest level\r\n\t- The highest-level object in Floatplane is the Creator. This is an entity, such as Linus Tech Tips, that produces media for Users.\r\n- A Creator owns one or more **Subscription Plans**\r\n- A User can view a Creator's Content if they are subscribed to them\r\n- A Creator publishes **Content**, in the form of **Blog Posts**\r\n\t- Content is produced by Creators, and show up for subscribed Users to view when it is released. A piece of Content is meant to be generic, and may contain different types of sub-Content. Currently, the only type is a Blog Post.\r\n\t- A Blog Post is the main type of Content that a Creator produces. Blog Posts are how a Creator can share text and\/or media attachments with their subscribers.\r\n- A Blog Post is comprised of one or more of: video, audio, picture, or gallery **Attachments**\r\n\t- A media Attachment may be: video, audio, picture, gallery. Attachments are a part of Blog Posts, and are in a particular order.\r\n- A Creator may also have a single **Livestream**\r\n\r\n## API Flow\r\n\r\nAs of Floatplane version 3.5.1, these are the recommended endpoints to use for normal operations.\r\n\r\n1. Login\r\n\t1. `\/api\/v3\/auth\/captcha\/info` - Get captcha information\r\n\t1. `\/api\/v2\/auth\/login` - Login with username, password, and optional captcha token\r\n\t1. `\/api\/v2\/auth\/checkFor2faLogin` - Optionally provide 2FA token to complete login\r\n\t1. `\/api\/v2\/auth\/logout` - Logout at a later point in time\r\n1. Home page\r\n\t1. `\/api\/v3\/user\/subscriptions` - Get the user's active subscriptions\r\n\t1. `\/api\/v3\/content\/creator\/list` - Using the subscriptions, show a home page with content from all subscriptions\r\n\t\t1. Supply all creator identifiers from the subscriptions\r\n\t\t1. This should be paginated\r\n\t1. `\/api\/v2\/creator\/info` - Also show a list of creators that the user can select\r\n\t\t1. Note that this can search and return multiple creators. The V3 version only works for a single creator at a time.\r\n1. Creator page\r\n\t1. `\/api\/v3\/creator\/info` - Get more details for the creator to display, including if livestreams are available\r\n\t1. `\/api\/v3\/content\/creator` - Show recent content by the creator\r\n\t1. `\/api\/v2\/plan\/info` - Show available plans the user can subscribe to for the creator\r\n1. Content page\r\n\t1. `\/api\/v3\/content\/post` - Show more detailed information about a piece of content, including text description, available attachments, metadata, interactions, etc.\r\n\t1. `\/api\/v3\/content\/related` - List some related content for the user to watch next\r\n\t1. `\/api\/v3\/comment` - Load comments for the content for the user to read\r\n\t\t1. There are several more comment APIs to post, like, dislike, etc.\r\n\t1. `\/api\/v2\/user\/ban\/status` - Determine if the user is banned from this creator\r\n\t1. `\/api\/v3\/content\/{video|audio|picture|gallery}` - Load the attached media for the post. This is usually video, but audio, pictures, and galleries are also available.\r\n\t1. `\/api\/v2\/cdn\/delivery` - For video and audio, this is required to get the information to stream or download the content in media players\r\n1. Livestream\r\n\t1. `\/api\/v2\/cdn\/delivery` - Using the type \"livestream\" to load the livestream media in a media player\r\n\t1. `wss:\/\/chat.floatplane.com\/sails.io\/?...` - To connect to the livestream chat over websocket. TODO: Map out the WebSocket API.\r\n1. User Profile\r\n\t1. `\/api\/v3\/user\/self` - Display username, name, email, and profile pictures\r\n\r\n## API Organization\r\n\r\nThe organization of APIs into categories in this document are reflected from the internal organization of the Floatplane website bundled code, from `frontend.floatplane.com\/{version}\/vendor.js`. This is in order to use the best organization from the original developers' point of view.\r\n\r\nFor instance, Floatplane's authentication endpoints are organized into `Auth.v2.login(...)`, `Auth.v2.logout()`, and `Auth.v3.getCaptchaInfo()`. A limitation in OpenAPI is the lack of nested tagging\/structure, so this document splits `Auth` into `AuthV2` and `AuthV3` to emulate the nested structure.\r\n\r\n## Notes\r\n\r\nNote that the Floatplane API does support the use of [ETags](https:\/\/developer.mozilla.org\/en-US\/docs\/Web\/HTTP\/Headers\/ETag) for retrieving some information, such as retrieving information about creators, users, etc. Expect an HTTP 304 if the content has not changed, and to re-use cached responses. This is useful to ease the strain on Floatplane's API server.\r\n\r\nThe date-time format used by Floatplane API is not standard ISO 8601 format. The dates\/times given by Floatplane include milliseconds. Depending on your code generator, you may need to override the date-time format to something similar to `yyyy-MM-dd'T'HH:mm:ss.SSSZ`, for both encoding and decoding.",
+		"description": "Homepage: [https:\/\/jman012.github.io\/FloatplaneAPIDocs](https:\/\/jman012.github.io\/FloatplaneAPIDocs)\r\n\r\nThis document describes the REST API layer of [https:\/\/www.floatplane.com](https:\/\/www.floatplane.com), a content creation and video streaming website created by Floatplane Media Inc. and Linus Media Group, where users can support their favorite creates via paid subscriptions in order to watch their video and livestream content in higher quality and other perks.\r\n\r\nWhile this document contains stubs for all of the Floatplane APIs for this version, many are not filled out because they are related only to content creation, moderation, or administration and are not needed for regular use. These have \"TODO\" as the description, and are automatically removed before document generation. If you are viewing the \"Trimmed\" version of this document, they have been removed for brevity.\r\n\r\n## API Object Organization\r\n\r\n- **Users** and **Creators** exist on Floatplane at the highest level\r\n\t- The highest-level object in Floatplane is the Creator. This is an entity, such as Linus Tech Tips, that produces media for Users.\r\n- A Creator owns one or more **Subscription Plans**\r\n- A User can view a Creator's Content if they are subscribed to them\r\n- A Creator publishes **Content**, in the form of **Blog Posts**\r\n\t- Content is produced by Creators, and show up for subscribed Users to view when it is released. A piece of Content is meant to be generic, and may contain different types of sub-Content. Currently, the only type is a Blog Post.\r\n\t- A Blog Post is the main type of Content that a Creator produces. Blog Posts are how a Creator can share text and\/or media attachments with their subscribers.\r\n- A Blog Post is comprised of one or more of: video, audio, picture, or gallery **Attachments**\r\n\t- A media Attachment may be: video, audio, picture, gallery. Attachments are a part of Blog Posts, and are in a particular order.\r\n- A Creator may also have a single **Livestream**\r\n\r\n## API Flow\r\n\r\nAs of Floatplane version 3.5.1, these are the recommended endpoints to use for normal operations.\r\n\r\n1. Login\r\n\t1. `\/api\/v3\/auth\/captcha\/info` - Get captcha information\r\n\t1. `\/api\/v2\/auth\/login` - Login with username, password, and optional captcha token\r\n\t1. `\/api\/v2\/auth\/checkFor2faLogin` - Optionally provide 2FA token to complete login\r\n\t1. `\/api\/v2\/auth\/logout` - Logout at a later point in time\r\n1. Home page\r\n\t1. `\/api\/v3\/user\/subscriptions` - Get the user's active subscriptions\r\n\t1. `\/api\/v3\/content\/creator\/list` - Using the subscriptions, show a home page with content from all subscriptions\r\n\t\t1. Supply all creator identifiers from the subscriptions\r\n\t\t1. This should be paginated\r\n\t1. `\/api\/v2\/creator\/info` - Also show a list of creators that the user can select\r\n\t\t1. Note that this can search and return multiple creators. The V3 version only works for a single creator at a time.\r\n1. Creator page\r\n\t1. `\/api\/v3\/creator\/info` - Get more details for the creator to display, including if livestreams are available\r\n\t1. `\/api\/v3\/content\/creator` - Show recent content by the creator\r\n\t1. `\/api\/v2\/plan\/info` - Show available plans the user can subscribe to for the creator\r\n1. Content page\r\n\t1. `\/api\/v3\/content\/post` - Show more detailed information about a piece of content, including text description, available attachments, metadata, interactions, etc.\r\n\t1. `\/api\/v3\/content\/related` - List some related content for the user to watch next\r\n\t1. `\/api\/v3\/comment` - Load comments for the content for the user to read\r\n\t\t1. There are several more comment APIs to post, like, dislike, etc.\r\n\t1. `\/api\/v2\/user\/ban\/status` - Determine if the user is banned from this creator\r\n\t1. `\/api\/v3\/content\/{video|audio|picture|gallery}` - Load the attached media for the post. This is usually video, but audio, pictures, and galleries are also available.\r\n\t1. `\/api\/v2\/cdn\/delivery` - For video and audio, this is required to get the information to stream or download the content in media players\r\n1. Livestream\r\n\t1. `\/api\/v2\/cdn\/delivery` - Using the type \"livestream\" to load the livestream media in a media player\r\n\t1. `wss:\/\/chat.floatplane.com\/sails.io\/?...` - To connect to the livestream chat over websocket. TODO: Map out the WebSocket API.\r\n1. User Profile\r\n\t1. `\/api\/v3\/user\/self` - Display username, name, email, and profile pictures\r\n\r\n## API Organization\r\n\r\nThe organization of APIs into categories in this document are reflected from the internal organization of the Floatplane website bundled code, from `frontend.floatplane.com\/{version}\/vendor.js`. This is in order to use the best organization from the original developers' point of view.\r\n\r\nFor instance, Floatplane's authentication endpoints are organized into `Auth.v2.login(...)`, `Auth.v2.logout()`, and `Auth.v3.getCaptchaInfo()`. A limitation in OpenAPI is the lack of nested tagging\/structure, so this document splits `Auth` into `AuthV2` and `AuthV3` to emulate the nested structure.\r\n\r\n## Notes\r\n\r\nNote that the Floatplane API does support the use of [ETags](https:\/\/developer.mozilla.org\/en-US\/docs\/Web\/HTTP\/Headers\/ETag) for retrieving some information, such as retrieving information about creators, users, etc. Expect an HTTP 304 if the content has not changed, and to re-use cached responses. This is useful to ease the strain on Floatplane's API server.\r\n\r\nThe date-time format used by Floatplane API is not standard ISO 8601 format. The dates\/times given by Floatplane include milliseconds. Depending on your code generator, you may need to override the date-time format to something similar to `yyyy-MM-dd'T'HH:mm:ss.SSSZ`, for both encoding and decoding.",
 		"license": {
 			"name": "MIT",
 			"url": "https://github.com/Jman012/FloatplaneAPI/blob/main/LICENSE"
+		},
+		"contact": {
+			"name": "James Linnell",
+			"url": "https://github.com/Jman012/FloatplaneAPI/"
 		}
 	},
 	"servers": [
@@ -2656,7 +2660,7 @@
 					"dislikes",
 					"score",
 					"interactionCounts"
-				]	
+				]
 			},
 			"UserNotificationModel": {
 				"type": "object",
@@ -3060,10 +3064,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3101,10 +3105,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3142,10 +3146,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3183,10 +3187,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3224,10 +3228,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3265,10 +3269,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3306,10 +3310,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3347,10 +3351,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3388,10 +3392,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3429,10 +3433,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3470,10 +3474,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3511,10 +3515,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3552,10 +3556,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3593,10 +3597,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3634,10 +3638,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3675,10 +3679,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3716,10 +3720,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3757,10 +3761,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3798,10 +3802,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3839,10 +3843,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3880,10 +3884,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3921,10 +3925,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -3962,10 +3966,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4003,10 +4007,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4044,10 +4048,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4085,10 +4089,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4126,10 +4130,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4167,10 +4171,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4208,10 +4212,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4249,10 +4253,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4290,10 +4294,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4331,10 +4335,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4372,10 +4376,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4413,10 +4417,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4454,10 +4458,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4495,10 +4499,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4536,10 +4540,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4578,10 +4582,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4620,10 +4624,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4662,10 +4666,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4713,10 +4717,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4755,10 +4759,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4796,10 +4800,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4837,10 +4841,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4878,10 +4882,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4919,10 +4923,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -4960,10 +4964,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5001,10 +5005,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5042,10 +5046,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5083,10 +5087,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5124,10 +5128,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5165,10 +5169,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5207,10 +5211,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5248,10 +5252,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5289,10 +5293,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5330,10 +5334,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5371,10 +5375,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5412,10 +5416,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5453,10 +5457,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5494,10 +5498,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5535,10 +5539,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5576,10 +5580,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5618,10 +5622,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5659,10 +5663,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5700,10 +5704,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5741,10 +5745,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5782,10 +5786,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5823,10 +5827,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -5865,10 +5869,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6058,10 +6062,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6099,10 +6103,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6140,10 +6144,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6346,10 +6350,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6521,10 +6525,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6571,10 +6575,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6612,10 +6616,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6653,10 +6657,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6694,10 +6698,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6803,10 +6807,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6853,10 +6857,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6894,10 +6898,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6944,10 +6948,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -6985,10 +6989,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7035,10 +7039,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7382,10 +7386,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7424,10 +7428,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7466,10 +7470,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7508,10 +7512,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7549,10 +7553,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7590,10 +7594,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7631,10 +7635,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7672,10 +7676,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7713,10 +7717,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -7754,10 +7758,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8344,10 +8348,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8385,10 +8389,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8427,10 +8431,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8468,10 +8472,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8509,10 +8513,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8550,10 +8554,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8591,10 +8595,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8632,10 +8636,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8673,10 +8677,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8714,10 +8718,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8755,10 +8759,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8796,10 +8800,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8837,10 +8841,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -8879,10 +8883,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9068,10 +9072,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9110,10 +9114,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9151,10 +9155,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9192,10 +9196,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9233,10 +9237,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9274,10 +9278,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9315,10 +9319,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9356,10 +9360,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9397,10 +9401,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9439,10 +9443,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9480,10 +9484,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9619,10 +9623,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9661,10 +9665,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9702,10 +9706,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9743,10 +9747,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9784,10 +9788,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9825,10 +9829,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9867,10 +9871,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9909,10 +9913,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9951,10 +9955,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -9993,10 +9997,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10035,10 +10039,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10077,10 +10081,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10119,10 +10123,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10161,10 +10165,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10203,10 +10207,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10244,10 +10248,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10285,10 +10289,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10326,10 +10330,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10367,10 +10371,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10408,10 +10412,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10449,10 +10453,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10490,10 +10494,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10531,10 +10535,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10572,10 +10576,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10613,10 +10617,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10654,10 +10658,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10695,10 +10699,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10791,10 +10795,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10832,10 +10836,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10873,10 +10877,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10914,10 +10918,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10955,10 +10959,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -10996,10 +11000,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11090,10 +11094,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11131,10 +11135,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11172,10 +11176,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11213,10 +11217,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11264,10 +11268,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11323,10 +11327,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11460,10 +11464,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11511,10 +11515,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11552,10 +11556,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11593,10 +11597,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11634,10 +11638,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11676,10 +11680,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11718,10 +11722,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11841,10 +11845,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11882,10 +11886,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11923,10 +11927,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -11965,10 +11969,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12007,10 +12011,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12049,10 +12053,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12091,10 +12095,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12133,10 +12137,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12174,10 +12178,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12216,10 +12220,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12258,10 +12262,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12382,10 +12386,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12507,10 +12511,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12548,10 +12552,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12589,10 +12593,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12630,10 +12634,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12671,10 +12675,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12712,10 +12716,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12754,10 +12758,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12796,10 +12800,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12836,10 +12840,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12877,10 +12881,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -12960,10 +12964,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13001,10 +13005,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13042,10 +13046,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13083,10 +13087,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13124,10 +13128,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13165,10 +13169,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13207,10 +13211,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13247,10 +13251,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13454,10 +13458,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13558,10 +13562,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13599,10 +13603,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13641,10 +13645,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13760,7 +13764,7 @@
 							},
 							"example": {
 								"creator": "59f94c0bdd241b70349eb72b",
-								"property": "contentFirebase", 
+								"property": "contentFirebase",
 								"newValue": false
 							}
 						}
@@ -13812,10 +13816,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13854,10 +13858,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13896,10 +13900,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13938,10 +13942,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -13980,10 +13984,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14021,10 +14025,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14063,10 +14067,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14105,10 +14109,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14147,10 +14151,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14189,10 +14193,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14231,10 +14235,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14273,10 +14277,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14313,10 +14317,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14355,10 +14359,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14397,10 +14401,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14439,10 +14443,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14479,10 +14483,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14521,10 +14525,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14563,10 +14567,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14605,10 +14609,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14647,10 +14651,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14698,10 +14702,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14740,10 +14744,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14782,10 +14786,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14824,10 +14828,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14866,10 +14870,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14908,10 +14912,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14950,10 +14954,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -14991,10 +14995,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15032,10 +15036,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15073,10 +15077,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15114,10 +15118,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15155,10 +15159,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15194,10 +15198,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15235,10 +15239,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15276,10 +15280,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15315,10 +15319,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15356,10 +15360,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15397,10 +15401,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15438,10 +15442,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15479,10 +15483,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15520,10 +15524,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15559,10 +15563,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15600,10 +15604,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15639,10 +15643,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15680,10 +15684,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15719,10 +15723,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15760,10 +15764,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15801,10 +15805,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15842,10 +15846,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15883,10 +15887,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15924,10 +15928,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -15965,10 +15969,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16006,10 +16010,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16047,10 +16051,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16088,10 +16092,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16129,10 +16133,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16170,10 +16174,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16211,10 +16215,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16252,10 +16256,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16293,10 +16297,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16334,10 +16338,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16376,10 +16380,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16417,10 +16421,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16458,10 +16462,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16499,10 +16503,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16540,10 +16544,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16581,10 +16585,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16622,10 +16626,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16663,10 +16667,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16704,10 +16708,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16745,10 +16749,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16786,10 +16790,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16827,10 +16831,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16868,10 +16872,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16909,10 +16913,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16950,10 +16954,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -16991,10 +16995,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -17032,10 +17036,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -17073,10 +17077,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -17114,10 +17118,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -17155,10 +17159,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -17653,7 +17657,7 @@
 							"type": "integer"
 						},
 						"required": false,
-						"description": "The number of posts to skip. Usually a multiple of `limit`, to get the next \"page\" of results."	
+						"description": "The number of posts to skip. Usually a multiple of `limit`, to get the next \"page\" of results."
 					},
 					{
 						"in": "query",
@@ -19472,10 +19476,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -19590,10 +19594,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -19632,10 +19636,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -19784,10 +19788,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -19825,10 +19829,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -19864,10 +19868,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -19905,10 +19909,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -19946,10 +19950,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -19987,10 +19991,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20029,10 +20033,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20071,10 +20075,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20113,10 +20117,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20196,10 +20200,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20237,10 +20241,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20276,10 +20280,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20317,10 +20321,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20358,10 +20362,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
@@ -20399,10 +20403,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-		
+
 								},
 								"example": {
-		
+
 								}
 							}
 						}
