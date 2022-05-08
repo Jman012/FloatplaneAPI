@@ -17,7 +17,8 @@
     "validate": "$(npm bin)/openapi-generator-cli validate -i floatplane-openapi-specification.json",
     "validate-trimmed": "$(npm bin)/openapi-generator-cli validate -i floatplane-openapi-specification-trimmed.json",
     "trim": "cd src && node trim.js; cd -",
-    "docs-all": "npm run validate && npm run clean && mkdir -p Docs && cp ./static/index.html ./Docs/index.html && npm run docs-trimmed && npm run docs-full && cp ./floatplane-openapi-specification.json ./floatplane-openapi-specification-trimmed.json Docs/",
+    "docs-all": "npm run validate && npm run clean && mkdir -p Docs && cp ./static/index.html ./Docs/index.html && npm run docs-trimmed && npm run docs-full && npm run docs-copy",
+    "docs-copy": "cp ./floatplane-openapi-specification.json ./floatplane-openapi-specification-trimmed.json Docs/ && cp ./floatplane-asyncapi-frontend-specification.json Docs/ && cp ./floatplane-asyncapi-chat-specification.json Docs/",
     "docs-trimmed": "npm run trim && npm run docs-oag-html2 && npm run docs-oag-dynamic-html && npm run docs-redoc && npm run docs-rapidoc && npm run docs-reslate && npm run docs-postman && npm run docs-swaggerui && npm run docs-async-frontend && npm run docs-async-chat",
     "docs-full": "npm run docs-oag-html2-full && npm run docs-oag-dynamic-html-full && npm run docs-redoc-full && npm run docs-rapidoc-full && npm run docs-reslate-full && npm run docs-postman-full && npm run docs-swaggerui-full && npm run docs-async-frontend-full && npm run docs-async-chat-full",
 
