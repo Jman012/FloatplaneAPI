@@ -92,6 +92,16 @@
 						}
 					]
 				},
+				"examples": [
+					{
+						"payload": {
+							"method": "post",
+							"headers": {},
+							"data": {},
+							"url": "/api/v3/socket/connect"
+						}
+					}
+				],
 				"x-ack": {
 					"args": {
 						"oneOf": [
@@ -99,7 +109,20 @@
 								"$ref": "#/components/schemas/SailsConnected"
 							}
 						]
-					}
+					},
+					"examples": [
+						{
+							"args": {
+								"payload": {
+									"body": {
+										"message": "User sync setup."
+									},
+									"headers": {},
+									"statusCode": 200
+								}
+							}
+						}
+					]
 				}
 			},
 			"SyncEvent": {
@@ -118,7 +141,130 @@
 							"$ref": "#/components/schemas/CreatorMenuUpdate"
 						}
 					]
-				}
+				},
+				"examples": [
+					{
+						"payload": {
+							"event": "creatorNotification",
+							"data": {
+								"id": "CONTENT_POST_RELEASE:yQDi4v3EMc",
+								"eventType": "CONTENT_POST_RELEASE",
+								"title": "New post from LinusTechTips",
+								"message": "Reacting to OLD Computer Magazines!",
+								"creator": "59f94c0bdd241b70349eb72b",
+								"content": "yQDi4v3EMc",
+								"icon": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205.jpeg",
+								"thumbnail": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946.jpeg",
+								"target": {
+									"url": "/post/yQDi4v3EMc",
+									"matchScheme": "contains",
+									"match": "yQDi4v3EMc",
+									"foregroundDiscardOnMatch": true,
+									"matchPortion": "path"
+								},
+								"foregroundVisible": "yes",
+								"video": {
+									"creator": "59f94c0bdd241b70349eb72b",
+									"guid": "yQDi4v3EMc"
+								},
+								"post": {
+									"creator": "59f94c0bdd241b70349eb72b",
+									"guid": "yQDi4v3EMc",
+									"id": "yQDi4v3EMc",
+									"text": "<p>Join us on a trip down memory lane where Linus looks at some of the greatest and latest PC tech circa 2004. These old issues of Maximum PC are filled with tons of hilarious takes, forgotten products, and beloved childhood favourites!</p>",
+									"title": "Reacting to OLD Computer Magazines!"
+								}
+							}
+						}
+					},
+					{
+						"payload": {
+							"event": "postRelease",
+							"data": {
+								"id": "CONTENT_POST_RELEASE:yQDi4v3EMc",
+								"eventType": "CONTENT_POST_RELEASE",
+								"title": "New post from LinusTechTips",
+								"message": "Reacting to OLD Computer Magazines!",
+								"creator": "59f94c0bdd241b70349eb72b",
+								"content": "yQDi4v3EMc",
+								"icon": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205.jpeg",
+								"thumbnail": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946.jpeg",
+								"target": {
+									"url": "/post/yQDi4v3EMc",
+									"matchScheme": "contains",
+									"match": "yQDi4v3EMc",
+									"foregroundDiscardOnMatch": true,
+									"matchPortion": "path"
+								},
+								"foregroundVisible": "yes",
+								"video": {
+									"creator": "59f94c0bdd241b70349eb72b",
+									"guid": "yQDi4v3EMc"
+								},
+								"post": {
+									"creator": "59f94c0bdd241b70349eb72b",
+									"guid": "yQDi4v3EMc",
+									"id": "yQDi4v3EMc",
+									"text": "<p>Join us on a trip down memory lane where Linus looks at some of the greatest and latest PC tech circa 2004. These old issues of Maximum PC are filled with tons of hilarious takes, forgotten products, and beloved childhood favourites!</p>",
+									"title": "Reacting to OLD Computer Magazines!"
+								}
+							}
+						}
+					},
+					{
+						"payload": {
+		"event": "creatorMenuUpdate",
+		"data": {
+			"id": "yQDi4v3EMc",
+			"guid": "yQDi4v3EMc",
+			"title": "Reacting to OLD Computer Magazines!",
+			"text": "<p>Join us on a trip down memory lane where Linus looks at some of the greatest and latest PC tech circa 2004. These old issues of Maximum PC are filled with tons of hilarious takes, forgotten products, and beloved childhood favourites!</p>",
+			"type": "blogPost",
+			"tags": [],
+			"attachmentOrder": [
+				"lb7QsgcEtc"
+			],
+			"metadata": {
+				"hasVideo": true,
+				"videoCount": 1,
+				"videoDuration": 1096,
+				"hasAudio": false,
+				"audioCount": 0,
+				"audioDuration": 0,
+				"hasPicture": false,
+				"pictureCount": 0,
+				"hasGallery": false,
+				"galleryCount": 0,
+				"isFeatured": false
+			},
+			"releaseDate": "2022-05-02T19:44:00.043Z",
+			"likes": 0,
+			"dislikes": 0,
+			"score": 0,
+			"comments": 0,
+			"creator": "59f94c0bdd241b70349eb72b",
+			"wasReleasedSilently": false,
+			"thumbnail": {
+				"width": 1920,
+				"height": 1080,
+				"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946.jpeg",
+				"childImages": [
+					{
+						"width": 400,
+						"height": 225,
+						"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946_400x225.jpeg"
+					},
+					{
+						"width": 1200,
+						"height": 675,
+						"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946_1200x675.jpeg"
+					}
+				]
+			}
+		}
+	}
+					}
+				]
 			}
 		},
 		"schemas": {
@@ -128,29 +274,34 @@
 			},
 			"SailsStatusCode": {
 				"type": "integer",
-				"description": "These will be the same as HTTP response status codes.",
+				"description": "These are the same as HTTP response status codes.",
 				"minimum": 200,
 				"maximum": 599
 			},
 			"SailsConnect": {
 				"type": "object",
+				"description": "Connect to Floatplane (after a socket connection has been made) in order to receive sync events, such as new post notifications.",
 				"properties": {
 					"method": {
-						"const": "post"
+						"const": "post",
+						"description": "This endpoint expects a POST."
 					},
 					"headers": {
 						"$ref": "#/components/schemas/SailsHeaders"
 					},
 					"data": {
-						"type": "object"
+						"type": "object",
+						"description": "No payload necessary."
 					},
 					"url": {
-						"const": "/api/v3/socket/connect"
+						"const": "/api/v3/socket/connect",
+						"description": "The required endpoint for this event."
 					}
 				}
 			},
 			"SailsConnected": {
 				"type": "object",
+				"description": "The response received from connecting to Floatplane for sync events. Once this is successfully received, sync events may appear on the socket asynchronously.",
 				"properties": {
 					"body": {
 						"type": "object",
@@ -170,6 +321,7 @@
 			},
 			"CreatorNotification": {
 				"type": "object",
+				"description": "This event is sent usually for new post notifications, where `eventType` is `CONTENT_POST_RELEASE`, along with information on which creator released a new post, and information on the post itself.",
 				"additionalProperties": false,
 				"properties": {
 					"event": {
@@ -182,6 +334,7 @@
 			},
 			"PostRelease": {
 				"type": "object",
+				"description": "This event is sent usually for new post notifications, where `eventType` is `CONTENT_POST_RELEASE`, along with information on which creator released a new post, and information on the post itself. This sync event type seems to be deprecated, as the Floatplane website uses the above `creatorNotification` instead of this `postRelease`. For `CONTENT_POST_RELEASE`, these two have the same schema.",
 				"additionalProperties": false,
 				"properties": {
 					"event": {
@@ -197,32 +350,35 @@
 				"additionalProperties": false,
 				"properties": {
 					"id": {
-						"type": "string"
+						"type": "string",
+						"description": "Usually of the format `{eventType}:{content}`."
 					},
 					"eventType": {
-						"type": "string"
+						"type": "string",
+						"enum": [
+							"CONTENT_POST_RELEASE"
+						],
+						"description": "This is usually just the `CONTENT_POST_RELEASE` enumeration. Other enumerations are unknown at this time."
 					},
 					"title": {
-						"type": "string"
+						"type": "string",
+						"description": "Notification title."
 					},
 					"message": {
-						"type": "string"
+						"type": "string",
+						"description": "Notification message/body."
 					},
 					"creator": {
-						"type": "string"
+						"type": "string",
+						"description": "The identifier of the creator the notification is from."
 					},
 					"content": {
-						"type": "string"
+						"type": "string",
+						"description": "Usually the id of the blog post, when `eventType` is `CONTENT_POST_RELEASE`."
 					},
 					"icon": {
 						"type": "string",
-						"format": "uri",
-						"qt-uri-protocols": [
-							"https"
-						],
-						"qt-uri-extensions": [
-							".jpeg"
-						]
+						"format": "uri"
 					},
 					"thumbnail": {
 						"type": "string",
@@ -230,13 +386,22 @@
 					},
 					"target": {
 						"type": "object",
+						"description": "If the `target.matchPortion` of the browser's current href matches the `target.match` variable via the `target.matchScheme`, and if `target.foregroundDiscardOnMatch`, then do not show this notification because the user has already seen it.",
 						"additionalProperties": false,
 						"properties": {
 							"url": {
-								"type": "string"
+								"type": "string",
+								"description": "Unused in Floatplane code."
 							},
 							"matchScheme": {
-								"type": "string"
+								"type": "string",
+								"description": "This is usually `contains`.",
+								"enum": [
+									"contains",
+									"startsWith",
+									"endsWith",
+									"equals"
+								]
 							},
 							"match": {
 								"type": "string"
@@ -245,7 +410,13 @@
 								"type": "boolean"
 							},
 							"matchPortion": {
-								"type": "string"
+								"type": "string",
+								"description": "This is usually `path` instead of `url`.",
+								"default": "path",
+								"enum": [
+									"path",
+									"url"
+								]
 							}
 						}
 					},
@@ -289,6 +460,7 @@
 			},
 			"CreatorMenuUpdate": {
 				"type": "object",
+				"description": "Does not appear to be used in Floatplane code. This model is similar to ContentPostV3Response in the REST API, but without attachment details. Its purpose is to help dynamically insert a single post into the list of posts on the screen, instead of making the client re-pull the 20 latest posts.",
 				"additionalProperties": false,
 				"properties": {
 					"event": {
