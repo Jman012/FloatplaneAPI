@@ -17,10 +17,11 @@
     "validate": "$(npm bin)/openapi-generator-cli validate -i floatplane-openapi-specification.json",
     "validate-trimmed": "$(npm bin)/openapi-generator-cli validate -i floatplane-openapi-specification-trimmed.json",
     "trim": "cd src && node trim.js; cd -",
-    "docs-all": "npm run validate && npm run clean && mkdir -p Docs && cp ./static/index.html ./Docs/index.html && npm run docs-trimmed && npm run docs-full && npm run docs-copy",
+    "docs-all": "npm run validate && npm run clean && mkdir -p Docs && cp ./static/index.html ./Docs/index.html && npm run docs-trimmed && npm run docs-full && npm run docs-async && npm run docs-copy",
     "docs-copy": "cp ./floatplane-openapi-specification.json ./floatplane-openapi-specification-trimmed.json Docs/ && cp ./floatplane-asyncapi-frontend-specification.json Docs/ && cp ./floatplane-asyncapi-chat-specification.json Docs/",
-    "docs-trimmed": "npm run trim && npm run docs-oag-html2 && npm run docs-oag-dynamic-html && npm run docs-redoc && npm run docs-rapidoc && npm run docs-reslate && npm run docs-postman && npm run docs-swaggerui && npm run docs-async-frontend && npm run docs-async-chat",
-    "docs-full": "npm run docs-oag-html2-full && npm run docs-oag-dynamic-html-full && npm run docs-redoc-full && npm run docs-rapidoc-full && npm run docs-reslate-full && npm run docs-postman-full && npm run docs-swaggerui-full && npm run docs-async-frontend-full && npm run docs-async-chat-full",
+    "docs-trimmed": "npm run trim && npm run docs-oag-html2 && npm run docs-oag-dynamic-html && npm run docs-redoc && npm run docs-rapidoc && npm run docs-reslate && npm run docs-postman && npm run docs-swaggerui",
+    "docs-full": "npm run docs-oag-html2-full && npm run docs-oag-dynamic-html-full && npm run docs-redoc-full && npm run docs-rapidoc-full && npm run docs-reslate-full && npm run docs-postman-full && npm run docs-swaggerui-full",
+    "docs-async": "npm run docs-async-frontend && npm run docs-async-chat",
 
     "docs-oag-html2": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification-trimmed.json -o Docs/OAG-html2/ -g html2",
     "docs-oag-dynamic-html": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification-trimmed.json -o Docs/OAG-dynamic-html/ -g dynamic-html",
@@ -29,8 +30,6 @@
     "docs-reslate": "mkdir -p Docs/ReSlateDocs && cd Docs/ReSlateDocs && $(npm bin)/reslate init && $(npm bin)/widdershins ../../floatplane-openapi-specification-trimmed.json -o index.md && $(npm bin)/reslate build && rm -rf ./site && mv ./_site ./site && cd -",
     "docs-postman": "mkdir -p Docs/Postman-v2.1 && $(npm bin)/openapi2postmanv2 --spec floatplane-openapi-specification-trimmed.json --output Docs/Postman-v2.1/floatplaneapi-postman2.1-collection.json --pretty -O folderStrategy=Tags,includeAuthInfoInExample=false",
     "docs-swaggerui": "mkdir -p Docs/SwaggerUI && cp static/SwaggerUI/* Docs/SwaggerUI && sed -i.bak -e 's/floatplane-openapi-specification.json/floatplane-openapi-specification-trimmed.json/g' Docs/SwaggerUI/index.html",
-    "docs-async-frontend": "$(npm bin)/ag -o Docs/AsyncAPIFrontend floatplane-asyncapi-frontend-specification.json @asyncapi/html-template",
-    "docs-async-chat": "$(npm bin)/ag -o Docs/AsyncAPIChat floatplane-asyncapi-chat-specification.json @asyncapi/html-template",
 
     "docs-oag-html2-full": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification.json -o Docs/OAG-html2-full/ -g html2",
     "docs-oag-dynamic-html-full": "$(npm bin)/openapi-generator-cli generate -i floatplane-openapi-specification.json -o Docs/OAG-dynamic-html-full/ -g dynamic-html",
@@ -39,8 +38,9 @@
     "docs-reslate-full": "mkdir -p Docs/ReSlateDocs-full && cd Docs/ReSlateDocs-full && $(npm bin)/reslate init && $(npm bin)/widdershins ../../floatplane-openapi-specification.json -o index.md && $(npm bin)/reslate build && rm -rf ./site && mv ./_site ./site && cd -",
     "docs-postman-full": "mkdir -p Docs/Postman-v2.1-full && $(npm bin)/openapi2postmanv2 --spec floatplane-openapi-specification.json --output Docs/Postman-v2.1-full/floatplaneapi-postman2.1-collection.json --pretty -O folderStrategy=Tags,includeAuthInfoInExample=false",
     "docs-swaggerui-full": "mkdir -p Docs/SwaggerUI-full && cp static/SwaggerUI/* Docs/SwaggerUI-full",
-    "docs-async-frontend-full": "$(npm bin)/ag -o Docs/AsyncAPIFrontend-full floatplane-asyncapi-frontend-specification.json @asyncapi/html-template",
-    "docs-async-chat-full": "$(npm bin)/ag -o Docs/AsyncAPIChat-full floatplane-asyncapi-chat-specification.json @asyncapi/html-template"
+
+    "docs-async-frontend": "$(npm bin)/ag -o Docs/AsyncAPIFrontend floatplane-asyncapi-frontend-specification.json @asyncapi/html-template",
+    "docs-async-chat": "$(npm bin)/ag -o Docs/AsyncAPIChat floatplane-asyncapi-chat-specification.json @asyncapi/html-template"
   },
   "repository": {
     "type": "git",
