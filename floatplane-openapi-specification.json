@@ -682,7 +682,6 @@
 								"paymentID",
 								"currency",
 								"trialPeriod",
-								"allowGrandfatheredAccess",
 								"logo",
 								"creator",
 								"discordServers",
@@ -1973,7 +1972,6 @@
 					"currency",
 					"interval",
 					"featured",
-					"allowGrandfatheredAccess",
 					"discordServers",
 					"discordRoles"
 				]
@@ -2789,7 +2787,6 @@
 							"currency",
 							"interval",
 							"featured",
-							"allowGrandfatheredAccess",
 							"discordServers",
 							"discordRoles"
 						]
