@@ -2319,12 +2319,7 @@
 							"thumbnail": {
 								"$ref": "#/components/schemas/ImageModel"
 							}
-						},
-						"required": [
-							"title",
-							"description",
-							"thumbnail"
-						]
+						}
 					}
 				},
 				"required": [
