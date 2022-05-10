@@ -44,9 +44,6 @@
 			}
 		}
 	},
-	"tags": [
-
-	],
 	"channels": {
 		"/": {
 			"description": "Socket.IO and Sails groups messages and events into different namespaces, with `/` being the default namespace. Multiple kinds of messages can be sent in a single namespace, with Sails having its own mechanisms to differentiate message types.",
@@ -101,6 +98,29 @@
 						}
 					]
 				},
+				"examples": [
+					{
+						"payload": {
+							"method": "get",
+							"headers": {},
+							"data": {
+								"channel": "/live/5c13f3c006f1be15e08e05c0",
+								"message": null
+							},
+							"url": "/RadioMessage/joinLivestreamRadioFrequency"
+						}
+					},
+					{
+						"payload": {
+							"method": "get",
+							"headers": {},
+							"data": {
+								"channel": "/live/5c13f3c006f1be15e08e05c0"
+							},
+							"url": "/RadioMessage/getChatUserList/"
+						}
+					}
+				],
 				"x-ack": {
 					"args": {
 						"oneOf": [
@@ -111,7 +131,49 @@
 								"$ref": "#/components/schemas/ChatUserList"
 							}
 						]
-					}
+					},
+					"examples": [
+						{
+							"args": {
+								"payload": {
+									"body": {
+										"success": true,
+										"emotes": [
+											{
+												"code": "meow",
+												"image": "https://pbs.floatplanecdn.com/emotes/global/430846941512581_1549005125768.png"
+											},
+											{
+												"code": "wan",
+												"image": "https://pbs.floatplanecdn.com/emotes/global/128262935123759_1549055965843.png"
+											},
+											{
+												"code": "soontm",
+												"image": "https://pbs.floatplanecdn.com/emotes/global/424666970631704_1549055985375.png"
+											}
+										]
+									},
+									"headers": {},
+									"statusCode": 200
+								}
+							}
+						},
+						{
+							"arg": {
+								"payload": {
+									"body": {
+										"success": true,
+										"pilots": [],
+										"passengers": [
+											"username1"
+										]
+									},
+									"headers": {},
+									"statusCode": 200
+								}
+							}
+						}
+					]
 				}
 			},
 			"SailsPost": {
@@ -128,6 +190,30 @@
 						}
 					]
 				},
+				"examples": [
+					{
+						"payload": {
+							"method": "post",
+							"headers": {},
+							"data": {
+								"channel": "/live/5c13f3c006f1be15e08e05c0",
+								"message": "test"
+							},
+							"url": "/RadioMessage/sendLivestreamRadioChatter/"
+						}
+					},
+					{
+						"payload": {
+							"method": "post",
+							"headers": {},
+							"data": {
+								"channel": "/live/5c13f3c006f1be15e08e05c0",
+								"message": "bye!"
+							},
+							"url": "/RadioMessage/leaveLivestreamRadioFrequency"
+						}
+					}
+				],
 				"x-ack": {
 					"args": {
 						"oneOf": [
@@ -138,7 +224,36 @@
 								"$ref": "#/components/schemas/LeftLivestreamRadioFrequency"
 							}
 						]
-					}
+					},
+					"examples": [
+						{
+							"args": {
+								"payload": {
+									"body": {
+										"id": "cl30pgqfr01x301eh212rdr8q",
+										"userGUID": "5fb69b4f8573b6cd8cc7f3b0",
+										"username": "jamamp",
+										"channel": "/live/5c13f3c006f1be15e08e05c0",
+										"message": "test",
+										"userType": "Normal",
+										"emotes": [],
+										"success": true
+									},
+									"headers": {},
+									"statusCode": 200
+								}
+							}
+						},
+						{
+							"args": {
+								"payload": {
+									"body": "Not Found",
+									"headers": {},
+									"statusCode": 404
+								}
+							}
+						}
+					]
 				}
 			},
 			"RadioChatter": {
@@ -147,7 +262,21 @@
 				"description": "These events are primarily incoming chats from others in the livestream chat room, specifying who sent the chat, the message of the chat, and other meta data.",
 				"payload": {
 					"$ref": "#/components/schemas/RadioChatter"
-				}
+				},
+				"examples": [
+					{
+						"payload": {
+							"id": "cl30pgqfr01x301eh212rdr8q",
+							"userGUID": "5fb69b4f8573b6cd8cc7f3b0",
+							"username": "jamamp",
+							"channel": "/live/5c13f3c006f1be15e08e05c0",
+							"message": "test",
+							"userType": "Normal",
+							"emotes": [],
+							"success": true
+						}
+					}
+				]
 			}
 		},
 		"schemas": {
@@ -163,6 +292,7 @@
 			},
 			"JoinLivestreamRadioFrequency": {
 				"type": "object",
+				"description": "Join a livestream chat channel in order to receive chat messages (via the `radioChatter` event) from others in the room.",
 				"properties": {
 					"method": {
 						"const": "get",
@@ -175,10 +305,12 @@
 						"type": "object",
 						"properties": {
 							"channel": {
-								"type": "string"
+								"type": "string",
+								"description": "Which livestream channel to join. Of the format `/live/{livestreamId}`. The `livestreamId` comes from the `liveStream` object on the creator's info in the REST API."
 							},
 							"message": {
-								"type": "object"
+								"type": "object",
+								"description": "When joining, this is usually `null`."
 							}
 						}
 					},
@@ -190,6 +322,7 @@
 			},
 			"JoinedLivestreamRadioFrequency": {
 				"type": "object",
+				"description": "Indicates that the channel has been joined successfully, as well as sending the current emotes configured for the livestream.",
 				"properties": {
 					"body": {
 						"type": "object",
@@ -201,6 +334,7 @@
 								"type": "array",
 								"items": {
 									"type": "object",
+									"description": "When the user types this `code` in their message, surrounded by two colons (`:`), that portion of the message should be replaced with the `image` property in the UI.",
 									"properties": {
 										"code": {
 											"type": "string"
@@ -224,6 +358,7 @@
 			},
 			"LeaveLivestreamRadioFrequency": {
 				"type": "object",
+				"description": "Tells the server that this socket should no longer receive `radioChatter` events from the previously-joined channel.",
 				"properties": {
 					"method": {
 						"const": "post",
@@ -236,7 +371,8 @@
 								"type": "string"
 							},
 							"message": {
-								"const": "bye!"
+								"type": "string",
+								"description": "This message does not appear to be relayed to others in the chat."
 							}
 						}
 					},
@@ -264,6 +400,7 @@
 			},
 			"GetChatUserList": {
 				"type": "object",
+				"description": "Returns a list of users currently in the channel/livestream/chat room, in order to display a full list in the UI.",
 				"properties": {
 					"method": {
 						"const": "get",
@@ -276,7 +413,8 @@
 						"type": "object",
 						"properties": {
 							"channel": {
-								"type": "string"
+								"type": "string",
+								"description": "Which livestream channel to query. Of the format `/live/{livestreamId}`."
 							}
 						}
 					},
@@ -296,7 +434,10 @@
 								"type": "boolean"
 							},
 							"pilots": {
-								"type": "array"
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
 							},
 							"passengers": {
 								"type": "array",
@@ -316,6 +457,7 @@
 			},
 			"SendLivestreamRadioChatter": {
 				"type": "object",
+				"description": "Sends a chat message to the specified livestream channel for other users to see. Note that sending a chat message will both receive a Sails HTTP response as well as a `radioChatter` event from yourself.",
 				"properties": {
 					"method": {
 						"const": "post",
@@ -328,7 +470,8 @@
 						"type": "object",
 						"properties": {
 							"channel": {
-								"type": "string"
+								"type": "string",
+								"description": "Which livestream channel to send a chat to. Of the format `/live/{livestreamId}`."
 							},
 							"message": {
 								"type": "string"

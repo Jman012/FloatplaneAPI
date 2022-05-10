@@ -900,7 +900,7 @@
 					},
 					"blogPostId": {
 						"type": "string",
-						"description": "This may be `null` if no blog posts for this creator appeared yet on this page of blog posts."
+						"description": "This may be returned as `null` if no blog posts for this creator appeared yet on this page of blog posts. However, Floatplane will complain if this is sent with a `null` value."
 					},
 					"moreFetchable": {
 						"type": "boolean"
