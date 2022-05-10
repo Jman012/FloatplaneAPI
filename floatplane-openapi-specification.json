@@ -899,7 +899,8 @@
 						"type": "string"
 					},
 					"blogPostId": {
-						"type": "string"
+						"type": "string",
+						"description": "This may be `null` if no blog posts for this creator appeared yet on this page of blog posts."
 					},
 					"moreFetchable": {
 						"type": "boolean"
@@ -907,7 +908,6 @@
 				},
 				"required": [
 					"creatorId",
-					"blogPostId",
 					"moreFetchable"
 				]
 			},
