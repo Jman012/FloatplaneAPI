@@ -338,6 +338,7 @@
 				"properties": {
 					"cdn": {
 						"type": "string",
+						"format": "uri",
 						"description": "The domain of the CDN server to use."
 					},
 					"strategy": {
@@ -1263,6 +1264,7 @@
 					"properties": {
 						"url": {
 							"type": "string",
+							"format": "uri",
 							"description": "The URL the user has configured for this link."
 						},
 						"type": {
@@ -2249,7 +2251,8 @@
 						"type": "integer"
 					},
 					"path": {
-						"type": "string"
+						"type": "string",
+						"format": "uri"
 					},
 					"size": {
 						"type": "integer"
@@ -2277,7 +2280,8 @@
 						"type": "integer"
 					},
 					"path": {
-						"type": "string"
+						"type": "string",
+						"format": "uri"
 					}
 				},
 				"required": [
@@ -2335,19 +2339,24 @@
 				"type": "object",
 				"properties": {
 					"instagram": {
-						"type": "string"
+						"type": "string",
+						"format": "uri"
 					},
 					"twitter": {
-						"type": "string"
+						"type": "string",
+						"format": "uri"
 					},
 					"website": {
-						"type": "string"
+						"type": "string",
+						"format": "uri"
 					},
 					"facebook": {
-						"type": "string"
+						"type": "string",
+						"format": "uri"
 					},
 					"youtube": {
-						"type": "string"
+						"type": "string",
+						"format": "uri"
 					}
 				}
 			},
@@ -2364,7 +2373,8 @@
 						"type": "string"
 					},
 					"inviteLink": {
-						"type": "string"
+						"type": "string",
+						"format": "uri"
 					},
 					"inviteMode": {
 						"type": "string"
