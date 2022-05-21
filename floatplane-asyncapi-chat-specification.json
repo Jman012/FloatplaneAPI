@@ -559,9 +559,9 @@
 			},
 			"EmoteList": {
 				"type": "array",
+				"description": "When the user types this `code` in their message, surrounded by two colons (`:`), that portion of the message should be replaced with the `image` property in the UI.",
 				"items": {
 					"type": "object",
-					"description": "When the user types this `code` in their message, surrounded by two colons (`:`), that portion of the message should be replaced with the `image` property in the UI.",
 					"properties": {
 						"code": {
 							"type": "string"
