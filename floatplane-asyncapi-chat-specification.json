@@ -309,10 +309,13 @@
 								"description": "Which livestream channel to join. Of the format `/live/{livestreamId}`. The `livestreamId` comes from the `liveStream` object on the creator's info in the REST API."
 							},
 							"message": {
-								"type": "object",
+								"type": "string",
 								"description": "When joining, this is usually `null`."
 							}
-						}
+						},
+						"required": [
+							"channel"
+						]
 					},
 					"url": {
 						"const": "/RadioMessage/joinLivestreamRadioFrequency",
@@ -331,21 +334,13 @@
 								"type": "boolean"
 							},
 							"emotes": {
-								"type": "array",
-								"items": {
-									"type": "object",
-									"description": "When the user types this `code` in their message, surrounded by two colons (`:`), that portion of the message should be replaced with the `image` property in the UI.",
-									"properties": {
-										"code": {
-											"type": "string"
-										},
-										"image": {
-											"type": "string"
-										}
-									}
-								}
+								"$ref": "#/components/schemas/EmoteList"
 							}
-						}
+						},
+						"required": [
+							"success",
+							"emotes"
+						]
 					},
 					"headers": {
 						"$ref": "#/components/schemas/SailsHeaders"
@@ -368,13 +363,17 @@
 						"type": "object",
 						"properties": {
 							"channel": {
-								"type": "string"
+								"type": "string",
+								"description": "Which livestream channel to leave. Of the format `/live/{livestreamId}`."
 							},
 							"message": {
 								"type": "string",
 								"description": "This message does not appear to be relayed to others in the chat."
 							}
-						}
+						},
+						"required": [
+							"channel"
+						]
 					},
 					"headers": {
 						"$ref": "#/components/schemas/SailsHeaders"
@@ -416,7 +415,10 @@
 								"type": "string",
 								"description": "Which livestream channel to query. Of the format `/live/{livestreamId}`."
 							}
-						}
+						},
+						"required": [
+							"channel"
+						]
 					},
 					"url": {
 						"const": "/RadioMessage/getChatUserList/",
@@ -445,7 +447,12 @@
 									"type": "string"
 								}
 							}
-						}
+						},
+						"required": [
+							"success",
+							"pilots",
+							"passengers"
+						]
 					},
 					"headers": {
 						"$ref": "#/components/schemas/SailsHeaders"
@@ -474,9 +481,14 @@
 								"description": "Which livestream channel to send a chat to. Of the format `/live/{livestreamId}`."
 							},
 							"message": {
-								"type": "string"
+								"type": "string",
+								"description": "Message contents. May contain emotes, a word surrounded by colons. In order to send a valid emote, it should be an emote code that is returned in the `JoinedLivestreamRadioFrequency` response."
 							}
-						}
+						},
+						"required": [
+							"channel",
+							"message"
+						]
 					},
 					"url": {
 						"const": "/RadioMessage/sendLivestreamRadioChatter/",
@@ -502,28 +514,67 @@
 				"type": "object",
 				"properties": {
 					"id": {
-						"type": "string"
+						"type": "string",
+						"description": "Identifier of the chat message itself. Should be unique per radio chatter."
 					},
 					"userGUID": {
-						"type": "string"
+						"type": "string",
+						"description": "Identifier of the user sending the message."
 					},
 					"username": {
-						"type": "string"
+						"type": "string",
+						"description": "Display name of the user sending the message."
 					},
 					"channel": {
-						"type": "string"
+						"type": "string",
+						"description": "Which livestream the radio chatter is from. Of the format `/live/{livestreamId}`."
 					},
 					"message": {
-						"type": "string"
+						"type": "string",
+						"description": "Message contents. May contain emotes, a word surrounded by colons. If the emote is valid for the user, the emote code and image path are included in `emotes` below."
 					},
 					"userType": {
 						"type": "string",
 						"enum": [
-							"Normal"
+							"Normal",
+							"Moderator"
 						]
+					},
+					"emotes": {
+						"$ref": "#/components/schemas/EmoteList"
+					},
+					"success": {
+						"type": "boolean",
+						"description": "Included in `radioChatter` events and is usually `true`, but mainly useful in `SentLivestreamRadioChatter` responses to indicate if sending the message was successful. An example of why it might not work is using an invalid emote, or some system problem."
 					}
 				},
-				"additionalProperties": false
+				"required": [
+					"id",
+					"userGUID",
+					"username",
+					"channel",
+					"message",
+					"usertype"
+				]
+			},
+			"EmoteList": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"description": "When the user types this `code` in their message, surrounded by two colons (`:`), that portion of the message should be replaced with the `image` property in the UI.",
+					"properties": {
+						"code": {
+							"type": "string"
+						},
+						"image": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"code",
+						"image"
+					]
+				}
 			}
 		}
 	}

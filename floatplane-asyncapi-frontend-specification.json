@@ -213,56 +213,56 @@
 					},
 					{
 						"payload": {
-		"event": "creatorMenuUpdate",
-		"data": {
-			"id": "yQDi4v3EMc",
-			"guid": "yQDi4v3EMc",
-			"title": "Reacting to OLD Computer Magazines!",
-			"text": "<p>Join us on a trip down memory lane where Linus looks at some of the greatest and latest PC tech circa 2004. These old issues of Maximum PC are filled with tons of hilarious takes, forgotten products, and beloved childhood favourites!</p>",
-			"type": "blogPost",
-			"tags": [],
-			"attachmentOrder": [
-				"lb7QsgcEtc"
-			],
-			"metadata": {
-				"hasVideo": true,
-				"videoCount": 1,
-				"videoDuration": 1096,
-				"hasAudio": false,
-				"audioCount": 0,
-				"audioDuration": 0,
-				"hasPicture": false,
-				"pictureCount": 0,
-				"hasGallery": false,
-				"galleryCount": 0,
-				"isFeatured": false
-			},
-			"releaseDate": "2022-05-02T19:44:00.043Z",
-			"likes": 0,
-			"dislikes": 0,
-			"score": 0,
-			"comments": 0,
-			"creator": "59f94c0bdd241b70349eb72b",
-			"wasReleasedSilently": false,
-			"thumbnail": {
-				"width": 1920,
-				"height": 1080,
-				"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946.jpeg",
-				"childImages": [
-					{
-						"width": 400,
-						"height": 225,
-						"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946_400x225.jpeg"
-					},
-					{
-						"width": 1200,
-						"height": 675,
-						"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946_1200x675.jpeg"
-					}
-				]
-			}
-		}
-	}
+							"event": "creatorMenuUpdate",
+							"data": {
+								"id": "yQDi4v3EMc",
+								"guid": "yQDi4v3EMc",
+								"title": "Reacting to OLD Computer Magazines!",
+								"text": "<p>Join us on a trip down memory lane where Linus looks at some of the greatest and latest PC tech circa 2004. These old issues of Maximum PC are filled with tons of hilarious takes, forgotten products, and beloved childhood favourites!</p>",
+								"type": "blogPost",
+								"tags": [],
+								"attachmentOrder": [
+									"lb7QsgcEtc"
+								],
+								"metadata": {
+									"hasVideo": true,
+									"videoCount": 1,
+									"videoDuration": 1096,
+									"hasAudio": false,
+									"audioCount": 0,
+									"audioDuration": 0,
+									"hasPicture": false,
+									"pictureCount": 0,
+									"hasGallery": false,
+									"galleryCount": 0,
+									"isFeatured": false
+								},
+								"releaseDate": "2022-05-02T19:44:00.043Z",
+								"likes": 0,
+								"dislikes": 0,
+								"score": 0,
+								"comments": 0,
+								"creator": "59f94c0bdd241b70349eb72b",
+								"wasReleasedSilently": false,
+								"thumbnail": {
+									"width": 1920,
+									"height": 1080,
+									"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946.jpeg",
+									"childImages": [
+										{
+											"width": 400,
+											"height": 225,
+											"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946_400x225.jpeg"
+										},
+										{
+											"width": 1200,
+											"height": 675,
+											"path": "https://pbs.floatplane.com/blogPost_thumbnails/yQDi4v3EMc/682332670704114_1651513307946_1200x675.jpeg"
+										}
+									]
+								}
+							}
+						}
 					}
 				]
 			}
@@ -347,7 +347,7 @@
 			},
 			"NotificationData": {
 				"type": "object",
-				"additionalProperties": false,
+				"description": "Contains data necessary to both show the notifiction in a user interface as well as technical details on what is being notified. Currently, this is used for notifying about new posts being released and the beginning of livestreams. Not all fields are present for all kinds of event types (for instance, livestream notifications do not have `video` or `content` objects, among others.",
 				"properties": {
 					"id": {
 						"type": "string",
@@ -356,9 +356,10 @@
 					"eventType": {
 						"type": "string",
 						"enum": [
-							"CONTENT_POST_RELEASE"
+							"CONTENT_POST_RELEASE",
+							"CONTENT_LIVESTREAM_START"
 						],
-						"description": "This is usually just the `CONTENT_POST_RELEASE` enumeration. Other enumerations are unknown at this time."
+						"description": "The `CONTENT_POST_RELEASE` enumeration indicates a new post has been released. The `CONTENT_LIVESTREAM_START` enumeration indicates that a livestream has been started by the creator. Other enumerations are unknown at this time."
 					},
 					"title": {
 						"type": "string",
@@ -418,10 +419,21 @@
 									"url"
 								]
 							}
-						}
+						},
+						"required": [
+							"url",
+							"matchScheme",
+							"match",
+							"foregroundDiscardOnMatch",
+							"matchPortion"
+						]
 					},
 					"foregroundVisible": {
-						"type": "string"
+						"type": "string",
+						"enum": [
+							"yes",
+							"no"
+						]
 					},
 					"video": {
 						"type": "object",
@@ -433,7 +445,11 @@
 							"guid": {
 								"type": "string"
 							}
-						}
+						},
+						"required": [
+							"creator",
+							"guid"
+						]
 					},
 					"post": {
 						"type": "object",
@@ -456,7 +472,12 @@
 							}
 						}
 					}
-				}
+				},
+				"required": [
+					"id",
+					"eventType",
+					"creator"
+				]
 			},
 			"CreatorMenuUpdate": {
 				"type": "object",
