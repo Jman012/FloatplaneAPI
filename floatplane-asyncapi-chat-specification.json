@@ -46,7 +46,7 @@
 	},
 	"channels": {
 		"/": {
-			"description": "Socket.IO and Sails groups messages and events into different namespaces, with `/` being the default namespace. Multiple kinds of messages can be sent in a single namespace, with Sails having its own mechanisms to differentiate message types.",
+			"description": "Socket.IO and Sails groups messages and events into different namespaces, with `/` being the default namespace. Multiple kinds of messages can be sent in a single namespace, with Socket.IO having its own mechanisms to differentiate message types. Floatplane only uses the root Socket.IO namespace (`/`).",
 			"publish": {
 				"message": {
 					"oneOf": [
@@ -72,10 +72,13 @@
 				"ws": {
 					"method": "GET",
 					"headers": {
-						"description": "The `sails.sid` cookie must be sent upon connecting to the socket for authentication with the server.",
+						"description": "The `sails.sid` cookie must be sent upon connecting to the socket for authentication with the server. This is the authentication cookie from the Floatplane website used to identify the user.",
 						"type": "object",
 						"properties": {
-							"Cookies": "string"
+							"Cookies": {
+								"type": "string",
+								"description": "Should contain a value for `sails.sid`."
+							}
 						}
 					}
 				}
@@ -86,8 +89,10 @@
 		"messages": {
 			"SailsGet": {
 				"name": "get",
+				"title": "Sails HTTP GET",
 				"summary": "HTTP GET via Sails socket connection",
 				"description": "This one asynchronous Sails/Socket.IO event may contain different Floatplane events in the payload, and contain different Floatplane events in the response/acknowledgement (depending on the request).",
+				"contentType": "application/json",
 				"payload": {
 					"oneOf": [
 						{
@@ -100,6 +105,8 @@
 				},
 				"examples": [
 					{
+						"name": "JoinLivestreamRadioFrequency",
+						"summary": "Connecting to a Floatplane livestream via a Sails HTTP GET.",
 						"payload": {
 							"method": "get",
 							"headers": {},
@@ -111,6 +118,8 @@
 						}
 					},
 					{
+						"name": "GetChatUserList",
+						"summary": "Retrieve the user list in a livestream chat via a Sails HTTP GET.",
 						"payload": {
 							"method": "get",
 							"headers": {},
@@ -134,43 +143,43 @@
 					},
 					"examples": [
 						{
-							"args": {
-								"payload": {
-									"body": {
-										"success": true,
-										"emotes": [
-											{
-												"code": "meow",
-												"image": "https://pbs.floatplanecdn.com/emotes/global/430846941512581_1549005125768.png"
-											},
-											{
-												"code": "wan",
-												"image": "https://pbs.floatplanecdn.com/emotes/global/128262935123759_1549055965843.png"
-											},
-											{
-												"code": "soontm",
-												"image": "https://pbs.floatplanecdn.com/emotes/global/424666970631704_1549055985375.png"
-											}
-										]
-									},
-									"headers": {},
-									"statusCode": 200
-								}
+							"name": "JoinedLivestreamRadioFrequency",
+							"summary": "Successful response from a `JoinLivestreamRadioFrequency` message.",
+							"payload": {
+								"body": {
+									"success": true,
+									"emotes": [
+										{
+											"code": "meow",
+											"image": "https://pbs.floatplanecdn.com/emotes/global/430846941512581_1549005125768.png"
+										},
+										{
+											"code": "wan",
+											"image": "https://pbs.floatplanecdn.com/emotes/global/128262935123759_1549055965843.png"
+										},
+										{
+											"code": "soontm",
+											"image": "https://pbs.floatplanecdn.com/emotes/global/424666970631704_1549055985375.png"
+										}
+									]
+								},
+								"headers": {},
+								"statusCode": 200
 							}
 						},
 						{
-							"arg": {
-								"payload": {
-									"body": {
-										"success": true,
-										"pilots": [],
-										"passengers": [
-											"username1"
-										]
-									},
-									"headers": {},
-									"statusCode": 200
-								}
+							"name": "ChatUserList",
+							"summary": "Successful response from a `GetChatUserList` message.",
+							"payload": {
+								"body": {
+									"success": true,
+									"pilots": [],
+									"passengers": [
+										"username1"
+									]
+								},
+								"headers": {},
+								"statusCode": 200
 							}
 						}
 					]
@@ -178,8 +187,10 @@
 			},
 			"SailsPost": {
 				"name": "post",
+				"title": "Sails HTTP POST",
 				"summary": "HTTP POST via Sails socket connection",
 				"description": "This one asynchronous Sails/Socket.IO event may contain different Floatplane events in the payload, and contain different Floatplane events in the response/acknowledgement (depending on the request).",
+				"contentType": "application/json",
 				"payload": {
 					"oneOf": [
 						{
@@ -192,6 +203,8 @@
 				},
 				"examples": [
 					{
+						"name": "SendLivestreamRadioChatter",
+						"summary": "Send a livestream chat message via a Sails HTTP POST.",
 						"payload": {
 							"method": "post",
 							"headers": {},
@@ -203,6 +216,8 @@
 						}
 					},
 					{
+						"name": "LeaveLivestreamRadioFrequency",
+						"summary": "Leave a Floatplane livestream via a Sails HTTP POST.",
 						"payload": {
 							"method": "post",
 							"headers": {},
@@ -227,30 +242,30 @@
 					},
 					"examples": [
 						{
-							"args": {
-								"payload": {
-									"body": {
-										"id": "cl30pgqfr01x301eh212rdr8q",
-										"userGUID": "5fb69b4f8573b6cd8cc7f3b0",
-										"username": "jamamp",
-										"channel": "/live/5c13f3c006f1be15e08e05c0",
-										"message": "test",
-										"userType": "Normal",
-										"emotes": [],
-										"success": true
-									},
-									"headers": {},
-									"statusCode": 200
-								}
+							"name": "SentLivestreamRadioChatter",
+							"summary": "Successful response from a `SendLivestreamRadioChatter` message.",
+							"payload": {
+								"body": {
+									"id": "cl30pgqfr01x301eh212rdr8q",
+									"userGUID": "5fb69b4f8573b6cd8cc7f3b0",
+									"username": "jamamp",
+									"channel": "/live/5c13f3c006f1be15e08e05c0",
+									"message": "test",
+									"userType": "Normal",
+									"emotes": [],
+									"success": true
+								},
+								"headers": {},
+								"statusCode": 200
 							}
 						},
 						{
-							"args": {
-								"payload": {
-									"body": "Not Found",
-									"headers": {},
-									"statusCode": 404
-								}
+							"name": "LeftLivestreamRadioFrequency",
+							"summary": "Response from a `LeaveLivestreamRadioFrequency` message. Note that Floatplane currently sends a 404 back, so this might be bugged on their end.",
+							"payload": {
+								"body": "Not Found",
+								"headers": {},
+								"statusCode": 404
 							}
 						}
 					]
@@ -258,8 +273,10 @@
 			},
 			"RadioChatter": {
 				"name": "radioChatter",
+				"title": "Floatplane Livestream Radio Chatter",
 				"summary": "A radio chatter event arrives from Floatplane after joining a livestream via `/RadioMessage/joinLivestreamRadioFrequency`.",
 				"description": "These events are primarily incoming chats from others in the livestream chat room, specifying who sent the chat, the message of the chat, and other meta data.",
+				"contentType": "application/json",
 				"payload": {
 					"$ref": "#/components/schemas/RadioChatter"
 				},
@@ -282,7 +299,8 @@
 		"schemas": {
 			"SailsHeaders": {
 				"type": "object",
-				"description": "Headers by Sails are not being used by Floatplane. Not much is known of this structure at this time."
+				"description": "Headers by Sails are not being used by Floatplane. Not much is known of this structure at this time.",
+				"additionalProperties": true
 			},
 			"SailsStatusCode": {
 				"type": "integer",
@@ -313,6 +331,7 @@
 								"description": "When joining, this is usually `null`."
 							}
 						},
+						"additionalProperties": false,
 						"required": [
 							"channel"
 						]
@@ -321,7 +340,8 @@
 						"const": "/RadioMessage/joinLivestreamRadioFrequency",
 						"description": "The required endpoint for this event."
 					}
-				}
+				},
+				"additionalProperties": false
 			},
 			"JoinedLivestreamRadioFrequency": {
 				"type": "object",
@@ -371,6 +391,7 @@
 								"description": "This message does not appear to be relayed to others in the chat."
 							}
 						},
+						"additionalProperties": false,
 						"required": [
 							"channel"
 						]
@@ -381,7 +402,8 @@
 					"statusCode": {
 						"$ref": "#/components/schemas/SailsStatusCode"
 					}
-				}
+				},
+				"additionalProperties": false
 			},
 			"LeftLivestreamRadioFrequency": {
 				"type": "object",
@@ -416,6 +438,7 @@
 								"description": "Which livestream channel to query. Of the format `/live/{livestreamId}`."
 							}
 						},
+						"additionalProperties": false,
 						"required": [
 							"channel"
 						]
@@ -424,7 +447,8 @@
 						"const": "/RadioMessage/getChatUserList/",
 						"description": "The required endpoint for this event."
 					}
-				}
+				},
+				"additionalProperties": false
 			},
 			"ChatUserList": {
 				"type": "object",
@@ -485,6 +509,7 @@
 								"description": "Message contents. May contain emotes, a word surrounded by colons. In order to send a valid emote, it should be an emote code that is returned in the `JoinedLivestreamRadioFrequency` response."
 							}
 						},
+						"additionalProperties": false,
 						"required": [
 							"channel",
 							"message"
@@ -494,7 +519,8 @@
 						"const": "/RadioMessage/sendLivestreamRadioChatter/",
 						"description": "The required endpoint for this event."
 					}
-				}
+				},
+				"additionalProperties": false
 			},
 			"SentLivestreamRadioChatter": {
 				"type": "object",

@@ -46,7 +46,7 @@
 	},
 	"channels": {
 		"/": {
-			"description": "Floatplane only uses the default Socket.IO namespace of `/` (root).",
+			"description": "Socket.IO and Sails groups messages and events into different namespaces, with `/` being the default namespace. Multiple kinds of messages can be sent in a single namespace, with Socket.IO having its own mechanisms to differentiate message types. Floatplane only uses the root Socket.IO namespace (`/`).",
 			"publish": {
 				"message": {
 					"oneOf": [
@@ -69,10 +69,13 @@
 				"ws": {
 					"method": "GET",
 					"headers": {
-						"description": "The `sails.sid` cookie must be sent upon connecting to the socket for authentication with the server.",
+						"description": "The `sails.sid` cookie must be sent upon connecting to the socket for authentication with the server. This is the authentication cookie from the Floatplane website used to identify the user.",
 						"type": "object",
 						"properties": {
-							"Cookies": "string"
+							"Cookies": {
+								"type": "string",
+								"description": "Should contain a value for `sails.sid`."
+							}
 						}
 					}
 				}
@@ -83,8 +86,10 @@
 		"messages": {
 			"SailsPost": {
 				"name": "post",
+				"title": "Sails HTTP POST",
 				"summary": "HTTP POST via Sails socket connection",
 				"description": "This one asynchronous Sails/Socket.IO event may contain different Floatplane events in the payload, and contain different Floatplane events in the response/acknowledgement (depending on the request).",
+				"contentType": "application/json",
 				"payload": {
 					"oneOf": [
 						{
@@ -94,6 +99,8 @@
 				},
 				"examples": [
 					{
+						"name": "SailsConnect",
+						"summary": "Connecting to Floatplane sync events via a Sails HTTP POST.",
 						"payload": {
 							"method": "post",
 							"headers": {},
@@ -112,14 +119,14 @@
 					},
 					"examples": [
 						{
-							"args": {
-								"payload": {
-									"body": {
-										"message": "User sync setup."
-									},
-									"headers": {},
-									"statusCode": 200
-								}
+							"name": "SailsConnected",
+							"summary": "Successful response from a `SailsConnect` message.",
+							"payload": {
+								"body": {
+									"message": "User sync setup."
+								},
+								"headers": {},
+								"statusCode": 200
 							}
 						}
 					]
@@ -127,8 +134,10 @@
 			},
 			"SyncEvent": {
 				"name": "syncEvent",
+				"title": "Floatplane Sync Event",
 				"summary": "A sync event arrives from the Floatplane server after registrating with the connect event (`/api/v3/socket/connect`).",
 				"description": "The sync event is another wrapper over Socket.IO, where the actual event type is embedded within the Socket.IO event payload. Most kinds of sync events are notifications of new blog posts on Floatplane from a subscribed creator.",
+				"contentType": "application/json",
 				"payload": {
 					"oneOf": [
 						{
@@ -144,6 +153,8 @@
 				},
 				"examples": [
 					{
+						"name": "CreatorNotification Sync Event: Content Post Release",
+						"summary": "Floatplane sent a sync event for a content post release via the `creatorNotification` event.",
 						"payload": {
 							"event": "creatorNotification",
 							"data": {
@@ -178,6 +189,8 @@
 						}
 					},
 					{
+						"name": "CreatorNotification Sync Event: Content Livestream Start",
+						"summary": "Floatplane sent a sync event for a content livestream start via the `creatorNotification` event.",
 						"payload": {
 							"event": "creatorNotification",
 							"data": {
@@ -200,6 +213,8 @@
 						}
 					},
 					{
+						"name": "PostRelease Sync Event: Content Post Release",
+						"summary": "Floatplane sent a sync event for a content post release via the `postRelease` event.",
 						"payload": {
 							"event": "postRelease",
 							"data": {
@@ -234,6 +249,8 @@
 						}
 					},
 					{
+						"name": "CreatorMenuUpdate Sync Event",
+						"summary": "Floatplane sent a sync event for a creator menu update.",
 						"payload": {
 							"event": "creatorMenuUpdate",
 							"data": {
@@ -292,7 +309,8 @@
 		"schemas": {
 			"SailsHeaders": {
 				"type": "object",
-				"description": "Headers by Sails are not being used by Floatplane. Not much is known of this structure at this time."
+				"description": "Headers by Sails are not being used by Floatplane. Not much is known of this structure at this time.",
+				"additionalProperties": true
 			},
 			"SailsStatusCode": {
 				"type": "integer",
@@ -313,13 +331,15 @@
 					},
 					"data": {
 						"type": "object",
-						"description": "No payload necessary."
+						"description": "No payload necessary.",
+						"additionalProperties": false
 					},
 					"url": {
 						"const": "/api/v3/socket/connect",
 						"description": "The required endpoint for this event."
 					}
-				}
+				},
+				"additionalProperties": false
 			},
 			"SailsConnected": {
 				"type": "object",
@@ -344,7 +364,6 @@
 			"CreatorNotification": {
 				"type": "object",
 				"description": "This event is sent usually for new post notifications, where `eventType` is `CONTENT_POST_RELEASE`, along with information on which creator released a new post, and information on the post itself.",
-				"additionalProperties": false,
 				"properties": {
 					"event": {
 						"const": "creatorNotification"
@@ -357,7 +376,6 @@
 			"PostRelease": {
 				"type": "object",
 				"description": "This event is sent usually for new post notifications, where `eventType` is `CONTENT_POST_RELEASE`, along with information on which creator released a new post, and information on the post itself. This sync event type seems to be deprecated, as the Floatplane website uses the above `creatorNotification` instead of this `postRelease`. For `CONTENT_POST_RELEASE`, these two have the same schema.",
-				"additionalProperties": false,
 				"properties": {
 					"event": {
 						"const": "postRelease"
@@ -410,7 +428,6 @@
 					"target": {
 						"type": "object",
 						"description": "If the `target.matchPortion` of the browser's current href matches the `target.match` variable via the `target.matchScheme`, and if `target.foregroundDiscardOnMatch`, then do not show this notification because the user has already seen it.",
-						"additionalProperties": false,
 						"properties": {
 							"url": {
 								"type": "string",
@@ -459,7 +476,6 @@
 					},
 					"video": {
 						"type": "object",
-						"additionalProperties": false,
 						"properties": {
 							"creator": {
 								"type": "string"
@@ -475,7 +491,6 @@
 					},
 					"post": {
 						"type": "object",
-						"additionalProperties": false,
 						"properties": {
 							"creator": {
 								"type": "string"
@@ -504,14 +519,12 @@
 			"CreatorMenuUpdate": {
 				"type": "object",
 				"description": "Does not appear to be used in Floatplane code. This model is similar to ContentPostV3Response in the REST API, but without attachment details. Its purpose is to help dynamically insert a single post into the list of posts on the screen, instead of making the client re-pull the 20 latest posts.",
-				"additionalProperties": false,
 				"properties": {
 					"event": {
 						"const": "creatorMenuUpdate"
 					},
 					"data": {
 						"type": "object",
-						"additionalProperties": false,
 						"properties": {
 							"id": {
 								"type": "string"
@@ -540,7 +553,6 @@
 							},
 							"metadata": {
 								"type": "object",
-								"additionalProperties": false,
 								"properties": {
 									"hasVideo": {
 										"type": "boolean"
