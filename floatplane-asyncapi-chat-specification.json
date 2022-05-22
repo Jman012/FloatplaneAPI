@@ -580,7 +580,7 @@
 					"username",
 					"channel",
 					"message",
-					"usertype"
+					"userType"
 				]
 			},
 			"EmoteList": {
