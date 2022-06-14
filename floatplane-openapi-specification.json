@@ -975,7 +975,8 @@
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"isAccessible": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "If false, the post should be marked as locked and not viewable by the user."
 					},
 					"userInteraction": {
 						"$ref": "#/components/schemas/UserInteractionModel"
@@ -1020,11 +1021,7 @@
 					"creator",
 					"wasReleasedSilently",
 					"thumbnail",
-					"isAccessible",
-					"videoAttachments",
-					"audioAttachments",
-					"pictureAttachments",
-					"galleryAttachments"
+					"isAccessible"
 				]
 			},
 			"ContentVideoV3Response": {
@@ -1075,7 +1072,8 @@
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"isAccessible": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "If false, the post should be marked as locked and not viewable by the user."
 					},
 					"blogPosts": {
 						"type": "array",
@@ -1184,7 +1182,8 @@
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"isAccessible": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "If false, the post should be marked as locked and not viewable by the user."
 					},
 					"imageFiles": {
 						"type": "array",
@@ -1869,7 +1868,8 @@
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"isAccessible": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "If false, the post should be marked as locked and not viewable by the user."
 					},
 					"videoAttachments": {
 						"type": "array",
@@ -1913,11 +1913,7 @@
 					"creator",
 					"wasReleasedSilently",
 					"thumbnail",
-					"isAccessible",
-					"videoAttachments",
-					"audioAttachments",
-					"pictureAttachments",
-					"galleryAttachments"
+					"isAccessible"
 				]
 			},
 			"SubscriptionPlanModel": {
@@ -2075,7 +2071,8 @@
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"isAccessible": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "If false, the post should be marked as locked and not viewable by the user."
 					}
 				},
 				"required": [
@@ -2135,7 +2132,8 @@
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"isAccessible": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "If false, the post should be marked as locked and not viewable by the user."
 					}
 				},
 				"required": [
@@ -2220,7 +2218,8 @@
 						"type": "string"
 					},
 					"isAccessible": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "If false, the post should be marked as locked and not viewable by the user."
 					}
 				},
 				"required": [
