@@ -1856,8 +1856,7 @@
 							"subscriptionPlans",
 							"discoverable",
 							"subscriberCountDisplay",
-							"incomeDisplay",
-							"card"
+							"incomeDisplay"
 						]
 					},
 					"wasReleasedSilently": {
