@@ -18977,7 +18977,6 @@
 		},
 		"/api/v3/poll/live/joinroom": {
 			"post": {
-				"deprecated": true,
 				"operationId": "joinLiveRoom",
 				"summary": "Poll Join Live Room",
 				"description": "Used in Socket.IO/WebSocket connections. See the AsyncAPI documentation for more information. This should not be used on a raw HTTP connection.",
@@ -19015,7 +19014,6 @@
 		},
 		"/api/v3/poll/live/joinLiveRoomModerator": {
 			"post": {
-				"deprecated": true,
 				"operationId": "joinLiveRoomModerator",
 				"summary": "Poll Join Live Room Moderator",
 				"description": "TODO - Used in Socket.IO/WebSocket connections. See the AsyncAPI documentation for more information. This should not be used on a raw HTTP connection.",
@@ -19053,7 +19051,6 @@
 		},
 		"/api/v3/poll/live/leaveLiveRoom": {
 			"post": {
-				"deprecated": true,
 				"operationId": "leaveLiveRoom",
 				"summary": "Poll Leave Live Room",
 				"description": "Used in Socket.IO/WebSocket connections. See the AsyncAPI documentation for more information. This should not be used on a raw HTTP connection.",
@@ -19091,7 +19088,6 @@
 		},
 		"/api/v3/poll/live/leaveLiveRoomModerator": {
 			"post": {
-				"deprecated": true,
 				"operationId": "leaveLiveRoomModerator",
 				"summary": "Poll Leave Live Room Moderator",
 				"description": "TODO - Used in Socket.IO/WebSocket connections. See the AsyncAPI documentation for more information. This should not be used on a raw HTTP connection.",
@@ -19129,7 +19125,6 @@
 		},
 		"/api/v3/poll/votePoll": {
 			"post": {
-				"deprecated": true,
 				"operationId": "votePoll",
 				"summary": "Vote Poll",
 				"description": "Vote on an option of a poll. Voting a second time or attempting to change a choice may result in an error.",
@@ -19153,6 +19148,10 @@
 										"description": "The index of the options of the poll for which to vote. This should not be outside the bounds of the poll options."
 									}
 								}
+							},
+							"example": {
+								"pollId": "62c8c1dd968bc0899bbb4b92",
+								"optionIndex": 1
 							}
 						}
 					}
@@ -19187,7 +19186,6 @@
 		},
 		"/api/v3/poll/cms/list": {
 			"get": {
-				"deprecated": true,
 				"operationId": "cmsListPolls",
 				"summary": "CMS List Polls",
 				"description": "TODO",
@@ -19255,7 +19253,6 @@
 		},
 		"/api/v3/poll/live/create": {
 			"post": {
-				"deprecated": true,
 				"operationId": "createLivePoll",
 				"summary": "Create Live Poll",
 				"description": "TODO",
@@ -19324,7 +19321,6 @@
 		},
 		"/api/v3/poll/close": {
 			"post": {
-				"deprecated": true,
 				"operationId": "closePoll",
 				"summary": "Close Poll",
 				"description": "TODO",
@@ -19377,7 +19373,6 @@
 		},
 		"/api/v3/redirect-yt-latest/{channelKey}": {
 			"post": {
-				"deprecated": true,
 				"operationId": "redirectYTLatest",
 				"summary": "Redirect to YouTube Latest Video",
 				"description": "Redirects (HTTP 302) the user to the latest LMG video for a given LMG channel key. For example, visiting this URL with a `channelKey` of `sc`, it will take you directly to the latest Short Circuit video on YouTube. Unknown if this works for non-LMG creators for their channels. Not used in Floatplane code.",
