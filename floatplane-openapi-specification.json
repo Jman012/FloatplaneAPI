@@ -2914,6 +2914,92 @@
 						"dislike"
 					]
 				}
+			},
+			"EdgesModel": {
+				"type": "object",
+				"properties": {
+					"edges": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/EdgeModel"
+						}
+					},
+					"client": {
+						"type": "object",
+						"properties": {
+							"ip": {
+								"type": "string"
+							},
+							"country_code": {
+								"type": "string"
+							},
+							"country_name": {
+								"type": "string"
+							},
+							"region_code": {
+								"type": "string"
+							},
+							"region_name": {
+								"type": "string"
+							},
+							"city": {
+								"type": "string"
+							},
+							"zip_code": {
+								"type": "string"
+							},
+							"time_zone": {
+								"type": "string"
+							},
+							"latitude": {
+								"type": "number"
+							},
+							"longitude": {
+								"type": "number"
+							},
+							"metro_code": {
+								"type": "number"
+							}
+						}
+					}
+				}
+			},
+			"EdgeModel": {
+				"type": "object",
+				"properties": {
+					"hostname": {
+						"type": "string"
+					},
+					"queryPort": {
+						"type": "integer"
+					},
+					"bandwidth": {
+						"type": "integer"
+					},
+					"allowDownload": {
+						"type": "boolean"
+					},
+					"allowStreaming": {
+						"type": "boolean"
+					},
+					"datacenter": {
+						"type": "object",
+						"properties": {
+							"countryCode": {
+								"type": "string"
+							},
+							"regionCode": {
+								"type": "string"
+							},
+							"latitude": {
+								"type": "number"
+							},
+							"longitude": {
+								"type": "number"
+							}
+						}
+					}
+				}
 			}
 		},
 		"securitySchemes": {
@@ -8965,10 +9051,11 @@
 		},
 		"/api/v2/edges": {
 			"get": {
+				"deprecated": true,
 				"security": [],
 				"operationId": "getEdges",
 				"summary": "Get Edges",
-				"description": "TODO",
+				"description": "Retrieve a list of edge servers from which to stream or download videos. This is deprecated, and using the CDN endpoint is recommended as a replacement.",
 				"tags": [
 					"EdgesV2"
 				],
@@ -8978,8 +9065,105 @@
 						"description": "OK",
 						"content": {
 							"application/json": {
-								"schema": {},
-								"example": {}
+								"schema": {
+									"$ref": "#/components/schemas/EdgesModel"
+								},
+								"example": {
+									"edges": [
+										{
+											"hostname": "edge01-na.floatplane.com",
+											"queryPort": 8090,
+											"bandwidth": 1000000000,
+											"allowDownload": true,
+											"allowStreaming": true,
+											"datacenter": {
+												"countryCode": "CA",
+												"regionCode": "QC",
+												"latitude": 45.3168,
+												"longitude": -73.8659
+											}
+										},
+										{
+											"hostname": "edge02-na.floatplane.com",
+											"queryPort": 8090,
+											"bandwidth": 500000000,
+											"allowDownload": true,
+											"allowStreaming": true,
+											"datacenter": {
+												"countryCode": "CA",
+												"regionCode": "QC",
+												"latitude": 45.3168,
+												"longitude": -73.8659
+											}
+										},
+										{
+											"hostname": "edge01-eu.floatplane.com",
+											"queryPort": 8090,
+											"bandwidth": 1000000000,
+											"allowDownload": false,
+											"allowStreaming": true,
+											"datacenter": {
+												"countryCode": "FR",
+												"regionCode": "A",
+												"latitude": 48.5873,
+												"longitude": 7.79821
+											}
+										},
+										{
+											"hostname": "edge01-au.floatplane.com",
+											"queryPort": 8090,
+											"bandwidth": 250000000,
+											"allowDownload": false,
+											"allowStreaming": true,
+											"datacenter": {
+												"countryCode": "AU",
+												"regionCode": "NSW",
+												"latitude": -33.8401,
+												"longitude": 151.209
+											}
+										},
+										{
+											"hostname": "edge1-na-south.floatplane.com",
+											"queryPort": 0,
+											"bandwidth": 1000000000,
+											"allowDownload": false,
+											"allowStreaming": true,
+											"datacenter": {
+												"countryCode": "US",
+												"regionCode": "FL",
+												"latitude": 25.8124,
+												"longitude": -80.2401
+											}
+										},
+										{
+											"hostname": "edge1-na-sv.floatplane.com",
+											"queryPort": 0,
+											"bandwidth": 1000000000,
+											"allowDownload": false,
+											"allowStreaming": true,
+											"datacenter": {
+												"countryCode": "US",
+												"regionCode": "CA",
+												"latitude": 37.3387,
+												"longitude": -121.8914
+											}
+										},
+										{
+											"hostname": "edge03-na.floatplane.com",
+											"queryPort": 0,
+											"bandwidth": 3000000000,
+											"allowDownload": false,
+											"allowStreaming": true,
+											"datacenter": {
+												"countryCode": "CA",
+												"regionCode": "QC",
+												"latitude": 45.3168,
+												"longitude": -73.8659
+											}
+										}
+									],
+									"client": {}
+								}
 							}
 						}
 					},
@@ -9003,6 +9187,7 @@
 		},
 		"/api/v2/video/url": {
 			"get": {
+				"deprecated": true,
 				"operationId": "getVideoUrl",
 				"summary": "Get Video Url",
 				"description": "TODO",
