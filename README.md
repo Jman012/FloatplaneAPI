@@ -100,6 +100,30 @@ When a new version of the Floatplane frontend is released (which is done silentl
 
 The file `fp-frontend-version.txt` is a collection of recent version changes that Floatplane has made, starting with `3.5.1`. This may be updated irregularly.
 
+### Integration Testing
+
+After making changes to the `floatplane-openapi-specification.json`, run `npm run test` in order to run integration tests with the Floatplane API. This ensures that the specification and its models are aligned with the API correctly.
+
+Integration tests will test for:
+- Expected HTTP 200 responses for valid requests
+- Expected HTTP 400/401/403/404 responses for invalid requests
+- A strict match between the response data from FP and the response schema/model in the specification:
+	- Case-sensitive property matching
+	- Case-sensitive enumeration matching
+	- No missing properties in the schema (if new properties begin appearing in FP response objects we want to begin tracking them)
+	- No extraneous properties in schema (if a property isn't in the FP response then it shouldn't be in the schema)
+	- Exact type matching (a string with a number in it should not be equivalent to a number)
+
+Write integration/unit tests in the `tests/FloatplaneAPIClientCSharpTester` C# project.
+
+#### Structure
+
+All integration test code is in `tests/`. The trimmed specification is generated and validated. A C# (csharp) client is generated with OpenAPI Generator with strict settings (see `tests/generate-csharp.sh`) into the git-ignored `tests/FloatplaneAPIClientCSharp` folder with a static project GUID. This contains all of the Models and APIs in normal code generation. The unit test project resides in VCS in `tests/FloatplaneAPIClientCSharpTester` and already links to the client project in the other folder.
+
+The FloatplaneAPIClientCSharpTester was generated using `tests/regenerate-csharp-test-library.sh` file. This also uses the OpenAPI Generator to generate the skeleton with API unit tests (no Model unit tests). It then removes the client library and re-links project references to the main client in `tests/FloatplaneAPIClientCSharp`. After this, it can be built tests can be run. 
+
+Note that re-generating this unit test project will wipe out existing unit tests. This will be useful to add new endpoint API tests when new APIs are introduced by Floatplane, but you should use VCS change tracking to re-do the existing unit tests.
+
 ---
 
 # Contributions
