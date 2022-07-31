@@ -1195,7 +1195,7 @@
 					"imageFiles": {
 						"type": "array",
 						"items": {
-							"$ref": "#/components/schemas/ImageModel"
+							"$ref": "#/components/schemas/ImageFileModel"
 						}
 					}
 				},
@@ -2257,9 +2257,6 @@
 						"type": "string",
 						"format": "uri"
 					},
-					"size": {
-						"type": "integer"
-					},
 					"childImages": {
 						"type": "array",
 						"items": {
@@ -2291,6 +2288,30 @@
 					"width",
 					"height",
 					"path"
+				]
+			},
+			"ImageFileModel": {
+				"type": "object",
+				"properties": {
+					"path": {
+						"type": "string",
+						"format": "uri"
+					},
+					"width": {
+						"type": "integer"
+					},
+					"height": {
+						"type": "integer"
+					},
+					"size": {
+						"type": "integer"
+					}
+				},
+				"required": [
+					"path",
+					"width",
+					"height",
+					"size"
 				]
 			},
 			"LiveStreamModel": {

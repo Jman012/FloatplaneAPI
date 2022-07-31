@@ -104,6 +104,8 @@ The file `fp-frontend-version.txt` is a collection of recent version changes tha
 
 After making changes to the `floatplane-openapi-specification.json`, run `npm run test` in order to run integration tests with the Floatplane API. This ensures that the specification and its models are aligned with the API correctly.
 
+The environment variable "sailssid" needs to be set to the value of the `sails.sid` HTTP Cookie for authentication in order for integration tests to run.
+
 Integration tests will test for:
 - Expected HTTP 200 responses for valid requests
 - Expected HTTP 400/401/403/404 responses for invalid requests

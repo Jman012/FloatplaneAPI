@@ -1,0 +1,53 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"build",
+				"${workspaceFolder}/tests/FloatplaneAPIClientCSharpTester/src/FloatplaneAPIClientCSharp.Test/FloatplaneAPIClientCSharp.Test.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "publish",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"${workspaceFolder}/tests/FloatplaneAPIClientCSharpTester/src/FloatplaneAPIClientCSharp.Test/FloatplaneAPIClientCSharp.Test.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "watch",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"watch",
+				"run",
+				"--project",
+				"${workspaceFolder}/tests/FloatplaneAPIClientCSharpTester/src/FloatplaneAPIClientCSharp.Test/FloatplaneAPIClientCSharp.Test.csproj"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "test",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"test",
+				"${workspaceFolder}/tests/FloatplaneAPIClientCSharpTester/src/FloatplaneAPIClientCSharp.Test/FloatplaneAPIClientCSharp.Test.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"problemMatcher": "$msCompile"
+		}
+	]
+}

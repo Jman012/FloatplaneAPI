@@ -14,5 +14,6 @@ dotnet sln add ../FloatplaneAPIClientCSharp/src/FloatplaneAPIClientCSharp/Floatp
 rm -rf src/FloatplaneAPIClientCSharp
 pushd src/FloatplaneAPIClientCSharp.Test
 dotnet add reference ../../../FloatplaneAPIClientCSharp/src/FloatplaneAPIClientCSharp/FloatplaneAPIClientCSharp.csproj
+dotnet remove reference ../FloatplaneAPIClientCSharp/FloatplaneAPIClientCSharp.csproj
 popd
 popd
