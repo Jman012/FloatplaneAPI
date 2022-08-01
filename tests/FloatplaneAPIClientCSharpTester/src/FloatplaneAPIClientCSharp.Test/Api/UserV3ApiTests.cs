@@ -58,10 +58,11 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetActivityFeedV3Test()
 		{
-			// TODO uncomment below to test the method and replace null with proper value
-			//string id = null;
-			//var response = instance.GetActivityFeedV3(id);
-			//Assert.IsType<UserActivityV3Response>(response);
+			string id = ApiTestSampleData.SampleUserId;
+			var response = instance.GetActivityFeedV3WithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<UserActivityV3Response>(response.Data);
+			Assert.NotEmpty(response.Data?.Activity);
 		}
 
 		/// <summary>
@@ -70,10 +71,11 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetExternalLinksV3Test()
 		{
-			// TODO uncomment below to test the method and replace null with proper value
-			//string id = null;
-			//var response = instance.GetExternalLinksV3(id);
-			//Assert.IsType<Dictionary<string, UserLinksV3ResponseValue>>(response);
+			string id = ApiTestSampleData.SampleUserId;
+			var response = instance.GetExternalLinksV3WithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<Dictionary<string, UserLinksV3ResponseValue>>(response.Data);
+			Assert.NotEmpty(response.Data);
 		}
 
 		/// <summary>
@@ -82,8 +84,9 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetSelfTest()
 		{
-			var response = instance.GetSelf();
-			Assert.IsType<UserSelfV3Response>(response);
+			var response = instance.GetSelfWithHttpInfo();
+			Assert.Null(response.ErrorText);
+			Assert.IsType<UserSelfV3Response>(response.Data);
 		}
 
 		/// <summary>
@@ -92,9 +95,9 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetUserNotificationSettingsV3Test()
 		{
-			// TODO uncomment below to test the method and replace null with proper value
-			//var response = instance.GetUserNotificationSettingsV3();
-			//Assert.IsType<List<UserNotificationModel>>(response);
+			var response = instance.GetUserNotificationSettingsV3WithHttpInfo();
+			Assert.Null(response.ErrorText);
+			Assert.IsType<List<UserNotificationModel>>(response.Data);
 		}
 
 		/// <summary>

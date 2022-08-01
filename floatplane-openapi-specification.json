@@ -974,7 +974,7 @@
 						"type": "integer"
 					},
 					"creator": {
-						"$ref": "#/components/schemas/CreatorModelV2"
+						"$ref": "#/components/schemas/CreatorModelV2Extended"
 					},
 					"wasReleasedSilently": {
 						"type": "boolean"
@@ -1627,15 +1627,6 @@
 					},
 					"incomeDisplay": {
 						"type": "boolean"
-					},
-					"socialLinks": {
-						"$ref": "#/components/schemas/SocialLinksModel"
-					},
-					"discordServers": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/DiscordServerModel"
-						}
 					}
 				},
 				"required": [
@@ -1650,6 +1641,31 @@
 					"discoverable",
 					"subscriberCountDisplay",
 					"incomeDisplay"
+				]
+			},
+			"CreatorModelV2Extended": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/CreatorModelV2"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"socialLinks": {
+								"$ref": "#/components/schemas/SocialLinksModel"
+							},
+							"discordServers": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/DiscordServerModel"
+								}
+							}
+						},
+						"required": [
+							"socialLinks",
+							"discordServers"
+						]
+					}
 				]
 			},
 			"CreatorModelV3": {
@@ -2361,27 +2377,9 @@
 			},
 			"SocialLinksModel": {
 				"type": "object",
-				"properties": {
-					"instagram": {
-						"type": "string",
-						"format": "uri"
-					},
-					"twitter": {
-						"type": "string",
-						"format": "uri"
-					},
-					"website": {
-						"type": "string",
-						"format": "uri"
-					},
-					"facebook": {
-						"type": "string",
-						"format": "uri"
-					},
-					"youtube": {
-						"type": "string",
-						"format": "uri"
-					}
+				"additionalProperties": {
+					"type": "string",
+					"format": "uri"
 				}
 			},
 			"DiscordServerModel": {
@@ -2947,41 +2945,7 @@
 					},
 					"client": {
 						"type": "object",
-						"properties": {
-							"ip": {
-								"type": "string"
-							},
-							"country_code": {
-								"type": "string"
-							},
-							"country_name": {
-								"type": "string"
-							},
-							"region_code": {
-								"type": "string"
-							},
-							"region_name": {
-								"type": "string"
-							},
-							"city": {
-								"type": "string"
-							},
-							"zip_code": {
-								"type": "string"
-							},
-							"time_zone": {
-								"type": "string"
-							},
-							"latitude": {
-								"type": "number"
-							},
-							"longitude": {
-								"type": "number"
-							},
-							"metro_code": {
-								"type": "number"
-							}
-						}
+						"additionalProperties": true
 					}
 				}
 			},
@@ -2995,7 +2959,8 @@
 						"type": "integer"
 					},
 					"bandwidth": {
-						"type": "integer"
+						"type": "integer",
+						"format": "int64"
 					},
 					"allowDownload": {
 						"type": "boolean"
@@ -7014,7 +6979,7 @@
 								"schema": {
 									"type": "array",
 									"items": {
-										"$ref": "#/components/schemas/CreatorModelV2"
+										"$ref": "#/components/schemas/CreatorModelV2Extended"
 									}
 								},
 								"example": [
