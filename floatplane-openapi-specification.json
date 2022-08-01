@@ -459,7 +459,8 @@
 								},
 								"dateDue": {
 									"type": "string",
-									"format": "date-time"
+									"format": "date-time",
+									"nullable": true
 								},
 								"periodStart": {
 									"type": "string",
@@ -471,7 +472,8 @@
 								},
 								"nextPaymentAttempt": {
 									"type": "string",
-									"format": "date-time"
+									"format": "date-time",
+									"nullable": true
 								},
 								"paid": {
 									"type": "boolean"
@@ -496,11 +498,13 @@
 											},
 											"periodStart": {
 												"type": "string",
-												"format": "date-time"
+												"format": "date-time",
+												"nullable": true
 											},
 											"periodEnd": {
 												"type": "string",
-												"format": "date-time"
+												"format": "date-time",
+												"nullable": true
 											},
 											"value": {
 												"type": "number"
@@ -618,7 +622,8 @@
 								},
 								"updatedAt": {
 									"type": "string",
-									"format": "date-time"
+									"format": "date-time",
+									"nullable": true
 								},
 								"id": {
 									"type": "string"
@@ -719,7 +724,14 @@
 									"type": "string"
 								},
 								"user": {
-									"$ref": "#/components/schemas/UserModel"
+									"oneOf": [
+										{
+											"$ref": "#/components/schemas/UserModel"
+										},
+										{
+											"$ref": "#/components/schemas/UserSelfModel"
+										}
+									]
 								}
 							},
 							"required": [
@@ -2645,7 +2657,8 @@
 					},
 					"editDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date-time",
+						"nullable": true
 					},
 					"likes": {
 						"type": "integer"
@@ -2702,7 +2715,8 @@
 							},
 							"updatedAt": {
 								"type": "string",
-								"format": "date-time"
+								"format": "date-time",
+								"nullable": true
 							},
 							"id": {
 								"type": "string"
@@ -2749,7 +2763,8 @@
 					},
 					"endDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date-time",
+						"nullable": true
 					},
 					"paymentID": {
 						"type": "integer"
@@ -2845,7 +2860,8 @@
 								},
 								"updatedAt": {
 									"type": "string",
-									"format": "date-time"
+									"format": "date-time",
+									"nullable": true
 								},
 								"id": {
 									"type": "string"
@@ -2892,7 +2908,8 @@
 					},
 					"updatedAt": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date-time",
+						"nullable": true
 					},
 					"id": {
 						"type": "string"

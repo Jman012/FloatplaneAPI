@@ -58,8 +58,10 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetFaqSectionsTest()
 		{
-			var response = instance.GetFaqSections();
-			Assert.IsType<List<FaqSectionModel>>(response);
+			var response = instance.GetFaqSectionsWithHttpInfo();
+			Assert.Null(response.ErrorText);
+			Assert.IsType<List<FaqSectionModel>>(response.Data);
+			Assert.True(response.Data?.Any());
 		}
 	}
 }
