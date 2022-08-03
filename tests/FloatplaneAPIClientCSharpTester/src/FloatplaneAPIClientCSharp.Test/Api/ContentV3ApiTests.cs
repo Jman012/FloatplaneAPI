@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using RestSharp;
 using Xunit;
+using Xunit.Extensions;
 
 using FloatplaneAPIClientCSharp.Client;
 using FloatplaneAPIClientCSharp.Api;
@@ -35,18 +36,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		{
 			instance = new ContentV3Api();
 			ApiTestHelper.SetStrictSerializerSettings(instance, instance.Client);
-
-			// (instance.Client as ApiClient).RequestInterceptor = (request) =>
-			// {
-			// 	if (request.Resource == "/api/v3/content/creator/list")
-			// 	{
-			// 		var parameter = request.Parameters.FirstOrDefault(r => r.Name == "ids");
-			// 		if (parameter != null)
-			// 		{
-			// 			parameter.Name = "ids[0]";
-			// 		}
-			// 	}
-			// };
 		}
 
 		public void Dispose()
@@ -82,10 +71,15 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetBlogPostTest()
 		{
-			// TODO uncomment below to test the method and replace null with proper value
-			//string id = null;
-			//var response = instance.GetBlogPost(id);
-			//Assert.IsType<ContentPostV3Response>(response);
+			IReadOnlyList<string> ids = ApiTestSampleData.AllPosts;
+			foreach (var id in ids)
+			{
+				var response = instance.GetBlogPostWithHttpInfo(id);
+				Assert.Null(response.ErrorText);
+				Assert.IsType<ContentPostV3Response>(response.Data);
+				Assert.Equal(response.Data?.Id, id);
+			}
+
 		}
 
 		/// <summary>
@@ -154,10 +148,17 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetPictureContentTest()
 		{
-			// TODO uncomment below to test the method and replace null with proper value
-			//string id = null;
-			//var response = instance.GetPictureContent(id);
-			//Assert.IsType<ContentPictureV3Response>(response);
+			string id = ApiTestSampleData.Picture_New;
+			var response = instance.GetPictureContentWithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<ContentPictureV3Response>(response.Data);
+			Assert.Equal(response.Data?.Id, id);
+
+			id = ApiTestSampleData.Picture_Old;
+			response = instance.GetPictureContentWithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<ContentPictureV3Response>(response.Data);
+			Assert.Equal(response.Data?.Id, id);
 		}
 
 		/// <summary>
@@ -166,10 +167,11 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetRelatedBlogPostsTest()
 		{
-			// TODO uncomment below to test the method and replace null with proper value
-			//string id = null;
-			//var response = instance.GetRelatedBlogPosts(id);
-			//Assert.IsType<List<BlogPostModelV3>>(response);
+			string id = ApiTestSampleData.Post_Video_New;
+			var response = instance.GetRelatedBlogPostsWithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<List<BlogPostModelV3>>(response.Data);
+			Assert.True(response.Data?.Any());
 		}
 
 		/// <summary>
@@ -178,10 +180,17 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetVideoContentTest()
 		{
-			// TODO uncomment below to test the method and replace null with proper value
-			//string id = null;
-			//var response = instance.GetVideoContent(id);
-			//Assert.IsType<ContentVideoV3Response>(response);
+			string id = ApiTestSampleData.Video_New;
+			var response = instance.GetVideoContentWithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<ContentVideoV3Response>(response.Data);
+			Assert.Equal(response.Data?.Id, id);
+
+			id = ApiTestSampleData.Video_Old;
+			response = instance.GetVideoContentWithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<ContentVideoV3Response>(response.Data);
+			Assert.Equal(response.Data?.Id, id);
 		}
 
 		/// <summary>

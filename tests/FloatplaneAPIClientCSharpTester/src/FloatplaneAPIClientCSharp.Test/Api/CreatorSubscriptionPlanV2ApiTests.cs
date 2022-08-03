@@ -34,6 +34,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		public CreatorSubscriptionPlanV2ApiTests()
 		{
 			instance = new CreatorSubscriptionPlanV2Api();
+			ApiTestHelper.SetStrictSerializerSettings(instance, instance.Client);
 		}
 
 		public void Dispose()
