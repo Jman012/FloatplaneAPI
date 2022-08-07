@@ -7,8 +7,16 @@ namespace FloatplaneAPIClientCSharp
 	internal class ApiTestSampleData
 	{
 		public static readonly string SampleUserId = "5fb69b4f8573b6cd8cc7f3b0"; // Jamamp
-		public static readonly string LttCreatorId = "59f94c0bdd241b70349eb72b"; // LinusTechTips
-		public static readonly string LttCreatorName = "linustechtips"; // LinusTechTips
+		/// LinusTechTips. The account used for integration tests is assumed to have a subscription.
+		public static readonly string LttCreatorId = "59f94c0bdd241b70349eb72b";
+		/// LinusTechTips
+		public static readonly string LttCreatorName = "linustechtips";
+		/// Shank Mods. The account used for integration tests is assumed to NOT have a subscription. This is used for HTTP 403 triggers.
+		public static readonly string ShankModsCreatorId = "626ad21aa2ffab0c7d8f69ac";
+		/// Shank Mods. This is used for HTTP 403 triggers.
+		public static readonly string ShankModsCreatorName = "ShankMods";
+		/// A catch-all identifier for tests which want to trigger an HTTP 404 response.
+		public static readonly string NonExistentIdentifer = "thisdoesnotexist";
 
 		/**
 		 * Recent post that is video-only

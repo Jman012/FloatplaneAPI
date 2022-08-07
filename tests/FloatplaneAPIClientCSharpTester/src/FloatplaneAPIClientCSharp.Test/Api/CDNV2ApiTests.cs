@@ -16,8 +16,7 @@ using Xunit;
 
 using FloatplaneAPIClientCSharp.Client;
 using FloatplaneAPIClientCSharp.Api;
-// uncomment below to import models
-//using FloatplaneAPIClientCSharp.Model;
+using FloatplaneAPIClientCSharp.Model;
 
 namespace FloatplaneAPIClientCSharp.Test.Api
 {
@@ -54,17 +53,51 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test GetDeliveryInfo
+		/// Test GetDeliveryInfo - Vod
 		/// </summary>
 		[Fact]
-		public void GetDeliveryInfoTest()
+		public void GetDeliveryInfoVodTest()
 		{
-			// TODO uncomment below to test the method and replace null with proper value
-			//string type = null;
-			//string? guid = null;
-			//string? creator = null;
-			//var response = instance.GetDeliveryInfo(type, guid, creator);
-			//Assert.IsType<CdnDeliveryV2Response>(response);
+			string type = "vod";
+			string? guid = ApiTestSampleData.Video_New;
+			string? creator = ApiTestSampleData.LttCreatorId;
+			var response = instance.GetDeliveryInfoWithHttpInfo(type, guid, creator);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<CdnDeliveryV2Response>(response.Data);
+			Assert.IsType<CdnDeliveryV2VodResponse>(response.Data?.ActualInstance);
+			Assert.NotEmpty(response.Data.GetCdnDeliveryV2VodResponse().Cdn);
+		}
+
+		/// <summary>
+		/// Test GetDeliveryInfo - Download
+		/// </summary>
+		[Fact]
+		public void GetDeliveryInfoDownloadTest()
+		{
+			string type = "download";
+			string? guid = ApiTestSampleData.Video_New;
+			string? creator = ApiTestSampleData.LttCreatorId;
+			var response = instance.GetDeliveryInfoWithHttpInfo(type, guid, creator);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<CdnDeliveryV2Response>(response.Data);
+			Assert.IsType<CdnDeliveryV2DownloadResponse>(response.Data?.ActualInstance);
+			Assert.NotEmpty(response.Data.GetCdnDeliveryV2DownloadResponse().Edges);
+		}
+
+		/// <summary>
+		/// Test GetDeliveryInfo - Livestream
+		/// </summary>
+		[Fact]
+		public void GetDeliveryInfoLivestreamTest()
+		{
+			string type = "live";
+			string? guid = ApiTestSampleData.Video_New;
+			string? creator = ApiTestSampleData.LttCreatorId;
+			var response = instance.GetDeliveryInfoWithHttpInfo(type, guid, creator);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<CdnDeliveryV2Response>(response.Data);
+			Assert.IsType<CdnDeliveryV2LivestreamResponse>(response.Data?.ActualInstance);
+			Assert.NotEmpty(response.Data.GetCdnDeliveryV2LivestreamResponse().Cdn);
 		}
 	}
 }

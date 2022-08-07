@@ -341,16 +341,54 @@
 					}
 				}
 			},
-			"CdnDeliveryV2Response": {
+			"CdnDeliveryV2QualityLevelModel": {
+				"type": "object",
+				"description": "Represents a quality of video to download/stream.",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Used to identify this level of quality, and to refer to the `qualityLevelParams` object below by the property key."
+					},
+					"width": {
+						"type": "integer",
+						"description": "The video quality's resolution's width in pixels."
+					},
+					"height": {
+						"type": "integer",
+						"description": "The video quality resolution's height in pixels."
+					},
+					"label": {
+						"type": "string",
+						"description": "The display-friendly version of `name`."
+					},
+					"order": {
+						"type": "integer",
+						"description": "The display order to be shown to the user."
+					}
+				},
+				"required": [
+					"name",
+					"width",
+					"height",
+					"label",
+					"order"
+				]
+			},
+			"CdnDeliveryV2VodResponse": {
 				"type": "object",
 				"properties": {
 					"cdn": {
 						"type": "string",
 						"format": "uri",
-						"description": "The domain of the CDN server to use."
+						"description": "The domain of the CDN server to use. Combine with data from the `resource` object to create a full URL."
 					},
 					"strategy": {
-						"type": "string"
+						"type": "string",
+						"description": "Which download/streaming strategy to use. If `cdn`, then a `cdn` property will be included with the response. Otherwise, if set to `client`, then a `client` property will be included with the response. The cdn or client property should be combined with the `resource` property to perform the download/stream.",
+						"enum": [
+							"cdn",
+							"client"
+						]
 					},
 					"resource": {
 						"type": "object",
@@ -365,41 +403,12 @@
 									"qualityLevels": {
 										"type": "array",
 										"items": {
-											"type": "object",
-											"description": "Represents a quality of video to download",
-											"properties": {
-												"name": {
-													"type": "string",
-													"description": "Used to identify this level of quality, and to refer to the `qualityLevelParams` object below by the property key."
-												},
-												"width": {
-													"type": "integer",
-													"description": "The video quality's resolution's width in pixels."
-												},
-												"height": {
-													"type": "integer",
-													"description": "The video quality resolution's height in pixels."
-												},
-												"label": {
-													"type": "string",
-													"description": "The display-friendly version of `name`."
-												},
-												"order": {
-													"type": "integer",
-													"description": "The display order to be shown to the user."
-												}
-											},
-											"required": [
-												"name",
-												"width",
-												"height",
-												"label",
-												"order"
-											]
+											"$ref": "#/components/schemas/CdnDeliveryV2QualityLevelModel"
 										}
 									},
 									"qualityLevelParams": {
 										"type": "object",
+										"description": "For each `qualityLevel` above, there will be an entry in this map where the property name matches the `qulityLevel[].name` containing a token to apply to the URL.",
 										"additionalProperties": {
 											"type": "object",
 											"properties": {
@@ -411,15 +420,16 @@
 												"token"
 											]
 										}
-									},
-									"token": {
-										"type": "string"
 									}
-								}
+								},
+								"required": [
+									"qualityLevels",
+									"qualityLevelParams"
+								]
 							}
 						},
 						"required": [
-							"url",
+							"uri",
 							"data"
 						]
 					}
@@ -428,6 +438,121 @@
 					"cdn",
 					"strategy",
 					"resource"
+				]
+			},
+			"CdnDeliveryV2DownloadResponse": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/EdgesModel"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"strategy": {
+								"type": "string",
+								"description": "Which download/streaming strategy to use. If `cdn`, then a `cdn` property will be included with the response. Otherwise, if set to `client`, then a `client` property will be included with the response. The cdn or client property should be combined with the `resource` property to perform the download/stream.",
+								"enum": [
+									"cdn",
+									"client"
+								]
+							},
+							"resource": {
+								"type": "object",
+								"properties": {
+									"uri": {
+										"type": "string",
+										"description": "The path to attach to the `cdn` property above. Replace the items surrounded by curly braces (`{`, `}`) with the appropriate values from the `data` property, depending on chosen resolution. First, choose the `qualityLevel`, then use the given token from the `qualityLevelParam` for that `qualityLevel`'s `name`."
+									},
+									"data": {
+										"type": "object",
+										"properties": {
+											"qualityLevels": {
+												"type": "array",
+												"items": {
+													"$ref": "#/components/schemas/CdnDeliveryV2QualityLevelModel"
+												}
+											},
+											"token": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"qualityLevels",
+											"token"
+										]
+									}
+								},
+								"required": [
+									"uri",
+									"data"
+								]
+							}
+						},
+						"required": [
+							"strategy",
+							"resource"
+						]
+					}
+				]
+			},
+			"CdnDeliveryV2LivestreamResponse": {
+				"type": "object",
+				"properties": {
+					"cdn": {
+						"type": "string",
+						"format": "uri",
+						"description": "The domain of the CDN server to use. Combine with data from the `resource` object to create a full URL."
+					},
+					"strategy": {
+						"type": "string",
+						"description": "Which download/streaming strategy to use. If `cdn`, then a `cdn` property will be included with the response. Otherwise, if set to `client`, then a `client` property will be included with the response. The cdn or client property should be combined with the `resource` property to perform the download/stream.",
+						"enum": [
+							"cdn",
+							"client"
+						]
+					},
+					"resource": {
+						"type": "object",
+						"properties": {
+							"uri": {
+								"type": "string",
+								"description": "The path to attach to the `cdn` property above. Replace the items surrounded by curly braces (`{`, `}`) with the appropriate values from the `data` property."
+							},
+							"data": {
+								"type": "object",
+								"properties": {
+									"token": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"token"
+								]
+							}
+						},
+						"required": [
+							"uri",
+							"data"
+						]
+					}
+				},
+				"required": [
+					"cdn",
+					"strategy",
+					"resource"
+				]
+			},
+			"CdnDeliveryV2Response": {
+				"oneOf": [
+					{
+						"$ref": "#/components/schemas/CdnDeliveryV2VodResponse"
+					},
+					{
+						"$ref": "#/components/schemas/CdnDeliveryV2DownloadResponse"
+					},
+					{
+						"$ref": "#/components/schemas/CdnDeliveryV2LivestreamResponse"
+					}
 				]
 			},
 			"PaymentInvoiceListV2Response": {
@@ -1757,7 +1882,7 @@
 					"socialLinks"
 				]
 			},
-			"BlogPostModelV3": {
+			"BlogPostModelV3Base": {
 				"type": "object",
 				"properties": {
 					"id": {
@@ -1904,30 +2029,6 @@
 					"isAccessible": {
 						"type": "boolean",
 						"description": "If false, the post should be marked as locked and not viewable by the user."
-					},
-					"videoAttachments": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					},
-					"audioAttachments": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					},
-					"pictureAttachments": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					},
-					"galleryAttachments": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
 					}
 				},
 				"required": [
@@ -1947,6 +2048,48 @@
 					"creator",
 					"wasReleasedSilently",
 					"isAccessible"
+				]
+			},
+			"BlogPostModelV3": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/BlogPostModelV3Base"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"videoAttachments": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"audioAttachments": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"pictureAttachments": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"galleryAttachments": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							}
+						},
+						"required": [
+							"videoAttachments",
+							"audioAttachments",
+							"pictureAttachments",
+							"galleryAttachments"
+						]
+					}
 				]
 			},
 			"SubscriptionPlanModel": {
@@ -17966,7 +18109,7 @@
 								"schema": {
 									"type": "array",
 									"items": {
-										"$ref": "#/components/schemas/BlogPostModelV3"
+										"$ref": "#/components/schemas/BlogPostModelV3Base"
 									}
 								},
 								"example": [

@@ -170,7 +170,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			string id = ApiTestSampleData.Post_Video_New;
 			var response = instance.GetRelatedBlogPostsWithHttpInfo(id);
 			Assert.Null(response.ErrorText);
-			Assert.IsType<List<BlogPostModelV3>>(response.Data);
+			Assert.IsType<List<BlogPostModelV3Base>>(response.Data);
 			Assert.True(response.Data?.Any());
 		}
 

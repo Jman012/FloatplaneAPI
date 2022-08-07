@@ -51,20 +51,28 @@ namespace FloatplaneAPIClientCSharp.Test
 
 		public static void SetStrictSerializerSettings(IApiAccessor api, ISynchronousClient client)
 		{
+			// Get the ApiClient for modifications below.
 			var apiClient = client as ApiClient;
 			if (apiClient == null)
 			{
 				throw new Exception("The client is not an ApiClient");
 			}
 
+			// Set the strict serializer for all operations.
 			apiClient.SerializerSettings = ApiTestHelper.StrictSerializerSettings;
 
+			// Set the `sails.sid` Cookie for authenticated requests from the environment.
 			var sailsSid = System.Environment.GetEnvironmentVariable("sailssid");
 			if (string.IsNullOrEmpty(sailsSid))
 			{
 				throw new Exception("The `sailssid` environment variable is not set.");
 			}
 			api.Configuration.ApiKey["sails.sid"] = sailsSid;
+
+			// Set the User-Agent header to identify traffic.
+			// The CFNetwork at the tail end of the user agent is to mark this traffic as coming
+			// from non-browser clients, and bypass some captcha checks.
+			api.Configuration.DefaultHeaders["User-Agent"] = "Floatplane API Docs Integration and Regression Tests, CFNetwork";
 		}
 	}
 
