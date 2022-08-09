@@ -79,7 +79,19 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 				Assert.IsType<ContentPostV3Response>(response.Data);
 				Assert.Equal(response.Data?.Id, id);
 			}
+		}
 
+		[Fact]
+		public void GetBlogPostNotExistentTest()
+		{
+			string id = ApiTestSampleData.NonExistentIdentifer;
+			var apiException = Assert.Throws<ApiException>(() => {
+				var response = instance.GetBlogPostWithHttpInfo(id);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal(apiException.ErrorCode, (int)System.Net.HttpStatusCode.Forbidden);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}
 
 		/// <summary>

@@ -76,64 +76,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			public string ExtraneousModelProperty { get; set; }
 		}
 
-		// internal class UserSelfV3ResponseWithExtraModelProperty
-		// {
-		// 	/// <summary>
-		// 	/// Initializes a new instance of the <see cref="UserSelfV3ResponseWithExtraModelProperty" /> class.
-		// 	/// </summary>
-		// 	[JsonConstructorAttribute]
-		// 	protected UserSelfV3ResponseWithExtraModelProperty() { }
-
-		// 	/// <summary>
-		// 	/// Extraneous model property that isn't in JSON
-		// 	/// </summary>
-		// 	[DataMember(Name = "extraneousModelProperty", IsRequired = true, EmitDefaultValue = true)]
-		// 	public string ExtraneousModelProperty { get; set; }
-
-		// 	/// <summary>
-		// 	/// Gets or Sets Id
-		// 	/// </summary>
-
-		// 	[DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
-		// 	public string Id { get; set; }
-
-		// 	/// <summary>
-		// 	/// Gets or Sets Username
-		// 	/// </summary>
-		// 	[DataMember(Name = "username", IsRequired = true, EmitDefaultValue = true)]
-		// 	public string Username { get; set; }
-
-		// 	/// <summary>
-		// 	/// Gets or Sets ProfileImage
-		// 	/// </summary>
-		// 	[DataMember(Name = "profileImage", IsRequired = true, EmitDefaultValue = true)]
-		// 	public ImageModel ProfileImage { get; set; }
-
-		// 	/// <summary>
-		// 	/// Gets or Sets Email
-		// 	/// </summary>
-		// 	[DataMember(Name = "email", EmitDefaultValue = true)]
-		// 	public string Email { get; set; }
-
-		// 	/// <summary>
-		// 	/// Gets or Sets DisplayName
-		// 	/// </summary>
-		// 	[DataMember(Name = "displayName", EmitDefaultValue = true)]
-		// 	public string DisplayName { get; set; }
-
-		// 	/// <summary>
-		// 	/// Gets or Sets Creators
-		// 	/// </summary>
-		// 	[DataMember(Name = "creators", EmitDefaultValue = true)]
-		// 	public List<Object> Creators { get; set; }
-
-		// 	/// <summary>
-		// 	/// Gets or Sets ScheduledDeletionDate
-		// 	/// </summary>
-		// 	[DataMember(Name = "scheduledDeletionDate", EmitDefaultValue = true)]
-		// 	public string ScheduledDeletionDate { get; set; }
-		// }
-
 		internal class UserSelfV3ResponseWithMissingIdProperty
 		{
 			/// <summary>
