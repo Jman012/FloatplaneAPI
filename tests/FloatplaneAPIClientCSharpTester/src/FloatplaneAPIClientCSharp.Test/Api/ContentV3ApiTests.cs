@@ -77,19 +77,19 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 				var response = instance.GetBlogPostWithHttpInfo(id);
 				Assert.Null(response.ErrorText);
 				Assert.IsType<ContentPostV3Response>(response.Data);
-				Assert.Equal(response.Data?.Id, id);
+				Assert.Equal(id, response.Data?.Id);
 			}
 		}
 
 		[Fact]
 		public void GetBlogPostNotExistentTest()
 		{
-			string id = ApiTestSampleData.NonExistentIdentifer;
 			var apiException = Assert.Throws<ApiException>(() => {
+				string id = ApiTestSampleData.NonExistentIdentifer;
 				var response = instance.GetBlogPostWithHttpInfo(id);
 			});
 			Assert.NotNull(apiException.ErrorContent);
-			Assert.Equal(apiException.ErrorCode, (int)System.Net.HttpStatusCode.Forbidden);
+			Assert.Equal((int)System.Net.HttpStatusCode.Forbidden, apiException.ErrorCode);
 
 			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}
@@ -108,6 +108,22 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.Null(response.ErrorText);
 			Assert.IsType<Dictionary<string, int>>(response.Data);
 			Assert.True(response.Data?.Any());
+		}
+
+		[Fact]
+		public void GetContentTagsNonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				List<string> creatorIds = new List<string>()
+				{
+					ApiTestSampleData.NonExistentIdentifer,
+				};
+				var response = instance.GetContentTagsWithHttpInfo(creatorIds);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}
 
 		/// <summary>
@@ -136,6 +152,32 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.True(response.Data?.Any());
 		}
 
+		[Fact]
+		public void GetCreatorBlogPostsNonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string id = ApiTestSampleData.NonExistentIdentifer;
+				int? limit = null;
+				int? fetchAfter = null;
+				string? search = null;
+				List<string>? tags = null;
+				bool? hasVideo = null;
+				bool? hasAudio = null;
+				bool? hasPicture = null;
+				bool? hasText = null;
+				string? sort = null;
+				int? fromDuration = null;
+				int? toDuration = null;
+				DateTimeOffset? fromDate = null;
+				DateTimeOffset? toDate = null;
+				var response = instance.GetCreatorBlogPostsWithHttpInfo(id, limit, fetchAfter, search, tags, hasVideo, hasAudio, hasPicture, hasText, sort, fromDuration, toDuration, fromDate, toDate);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
+		}
+
 		/// <summary>
 		/// Test GetMultiCreatorBlogPosts
 		/// </summary>
@@ -154,6 +196,24 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.True(response.Data?.BlogPosts.Any());
 		}
 
+		[Fact]
+		public void GetMultiCreatorBlogPostsNonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				List<string> ids = new List<string>()
+				{
+					ApiTestSampleData.NonExistentIdentifer,
+				};
+				int limit = 20;
+				List<ContentCreatorListLastItems>? fetchAfter = null;
+				var response = instance.GetMultiCreatorBlogPostsWithHttpInfo(ids, limit, fetchAfter);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
+		}
+
 		/// <summary>
 		/// Test GetPictureContent
 		/// </summary>
@@ -164,13 +224,26 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			var response = instance.GetPictureContentWithHttpInfo(id);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<ContentPictureV3Response>(response.Data);
-			Assert.Equal(response.Data?.Id, id);
+			Assert.Equal(id, response.Data?.Id);
 
 			id = ApiTestSampleData.Picture_Old;
 			response = instance.GetPictureContentWithHttpInfo(id);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<ContentPictureV3Response>(response.Data);
-			Assert.Equal(response.Data?.Id, id);
+			Assert.Equal(id, response.Data?.Id);
+		}
+
+		[Fact]
+		public void GetPictureContentNonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string id = ApiTestSampleData.NonExistentIdentifer;
+				var response = instance.GetPictureContentWithHttpInfo(id);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.Forbidden, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}
 
 		/// <summary>
@@ -186,6 +259,19 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.True(response.Data?.Any());
 		}
 
+		[Fact]
+		public void GetRelatedBlogPostsNonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string id = ApiTestSampleData.NonExistentIdentifer;
+				var response = instance.GetRelatedBlogPostsWithHttpInfo(id);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.Forbidden, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
+		}
+
 		/// <summary>
 		/// Test GetVideoContent
 		/// </summary>
@@ -196,13 +282,26 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			var response = instance.GetVideoContentWithHttpInfo(id);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<ContentVideoV3Response>(response.Data);
-			Assert.Equal(response.Data?.Id, id);
+			Assert.Equal(id, response.Data?.Id);
 
 			id = ApiTestSampleData.Video_Old;
 			response = instance.GetVideoContentWithHttpInfo(id);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<ContentVideoV3Response>(response.Data);
-			Assert.Equal(response.Data?.Id, id);
+			Assert.Equal(id, response.Data?.Id);
+		}
+
+		[Fact]
+		public void GetVideoContentNonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string id = ApiTestSampleData.NonExistentIdentifer;
+			var response = instance.GetVideoContentWithHttpInfo(id);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.Forbidden, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}
 
 		/// <summary>

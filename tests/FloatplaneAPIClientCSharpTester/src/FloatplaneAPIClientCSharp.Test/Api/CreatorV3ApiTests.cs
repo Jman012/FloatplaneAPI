@@ -62,7 +62,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			var response = instance.GetCreatorWithHttpInfo(id);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<CreatorModelV3>(response.Data);
-			Assert.Equal(response.Data?.Id, ApiTestSampleData.LttCreatorId);
+			Assert.Equal(ApiTestSampleData.LttCreatorId, response.Data?.Id);
 		}
 
 		/// <summary>

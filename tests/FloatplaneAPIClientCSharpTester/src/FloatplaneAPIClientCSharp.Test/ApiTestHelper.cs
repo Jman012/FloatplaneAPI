@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -112,8 +113,9 @@ namespace FloatplaneAPIClientCSharp.Test
 
 		public static void ValidateErrorModel(FloatplaneAPIClientCSharp.Model.ErrorModel errorModel)
 		{
-			Xunit.Assert.NotEmpty(errorModel.Message);
+			// Note: errorModel.Message may be null for HTTP 500 errors.
 			Xunit.Assert.NotEmpty(errorModel.Errors);
+			Xunit.Assert.NotEmpty(errorModel.Errors.First().Name);
 		}
 	}
 
