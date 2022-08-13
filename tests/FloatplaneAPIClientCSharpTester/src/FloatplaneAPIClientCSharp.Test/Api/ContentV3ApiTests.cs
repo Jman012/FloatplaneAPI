@@ -44,16 +44,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of ContentV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' ContentV3Api
-			//Assert.IsType<ContentV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test DislikeContent
 		/// </summary>
 		[Fact]

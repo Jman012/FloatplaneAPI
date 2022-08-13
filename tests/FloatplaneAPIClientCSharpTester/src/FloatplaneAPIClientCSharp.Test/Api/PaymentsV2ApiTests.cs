@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of PaymentsV2Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' PaymentsV2Api
-			//Assert.IsType<PaymentsV2Api>(instance);
-		}
-
-		/// <summary>
 		/// Test ListAddresses
 		/// </summary>
 		[Fact]

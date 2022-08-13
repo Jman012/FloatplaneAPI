@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of AuthV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' AuthV3Api
-			//Assert.IsType<AuthV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test GetCaptchaInfo
 		/// </summary>
 		[Fact]

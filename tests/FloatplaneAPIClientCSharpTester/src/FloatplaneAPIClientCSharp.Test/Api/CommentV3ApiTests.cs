@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of CommentV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' CommentV3Api
-			//Assert.IsType<CommentV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test DislikeComment
 		/// </summary>
 		[Fact]

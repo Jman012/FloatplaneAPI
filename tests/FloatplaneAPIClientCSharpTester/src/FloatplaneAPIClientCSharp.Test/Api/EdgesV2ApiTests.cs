@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of EdgesV2Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' EdgesV2Api
-			//Assert.IsType<EdgesV2Api>(instance);
-		}
-
-		/// <summary>
 		/// Test GetEdges
 		/// </summary>
 		[Fact]

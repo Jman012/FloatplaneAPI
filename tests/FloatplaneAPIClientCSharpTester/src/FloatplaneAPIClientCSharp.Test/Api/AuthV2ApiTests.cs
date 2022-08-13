@@ -44,16 +44,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of AuthV2Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' AuthV2Api
-			//Assert.IsType<AuthV2Api>(instance);
-		}
-
-		/// <summary>
 		/// Test CheckFor2faLogin
 		/// </summary>
 		[Fact]

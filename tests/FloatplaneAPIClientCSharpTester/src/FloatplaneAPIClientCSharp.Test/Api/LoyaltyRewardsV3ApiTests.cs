@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of LoyaltyRewardsV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' LoyaltyRewardsV3Api
-			//Assert.IsType<LoyaltyRewardsV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test ListCreatorLoyaltyReward
 		/// </summary>
 		[Fact]

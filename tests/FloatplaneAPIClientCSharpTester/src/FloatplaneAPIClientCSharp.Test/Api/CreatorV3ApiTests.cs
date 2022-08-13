@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of CreatorV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' CreatorV3Api
-			//Assert.IsType<CreatorV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test GetCreator
 		/// </summary>
 		[Fact]

@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of SocketV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' SocketV3Api
-			//Assert.IsType<SocketV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test DisconnectSocket
 		/// </summary>
 		[Fact]

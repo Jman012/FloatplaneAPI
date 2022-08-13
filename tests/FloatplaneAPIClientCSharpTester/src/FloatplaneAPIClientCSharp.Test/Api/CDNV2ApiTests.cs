@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of CDNV2Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' CDNV2Api
-			//Assert.IsType<CDNV2Api>(instance);
-		}
-
-		/// <summary>
 		/// Test GetDeliveryInfo - Vod
 		/// </summary>
 		[Fact]

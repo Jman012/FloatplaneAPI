@@ -44,16 +44,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of PollV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' PollV3Api
-			//Assert.IsType<PollV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test JoinLiveRoom
 		/// </summary>
 		[Fact]

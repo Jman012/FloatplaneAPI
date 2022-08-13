@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of FAQV2Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' FAQV2Api
-			//Assert.IsType<FAQV2Api>(instance);
-		}
-
-		/// <summary>
 		/// Test GetFaqSections
 		/// </summary>
 		[Fact]

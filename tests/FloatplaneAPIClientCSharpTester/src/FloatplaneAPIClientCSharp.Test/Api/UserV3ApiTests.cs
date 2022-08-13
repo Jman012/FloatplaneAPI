@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of UserV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' UserV3Api
-			//Assert.IsType<UserV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test GetActivityFeedV3
 		/// </summary>
 		[Fact]

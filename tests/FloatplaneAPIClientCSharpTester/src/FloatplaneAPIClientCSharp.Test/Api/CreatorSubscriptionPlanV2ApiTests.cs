@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of CreatorSubscriptionPlanV2Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' CreatorSubscriptionPlanV2Api
-			//Assert.IsType<CreatorSubscriptionPlanV2Api>(instance);
-		}
-
-		/// <summary>
 		/// Test GetCreatorSubInfoPublic
 		/// </summary>
 		[Fact]

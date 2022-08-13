@@ -44,16 +44,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of RedirectV3Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' RedirectV3Api
-			//Assert.IsType<RedirectV3Api>(instance);
-		}
-
-		/// <summary>
 		/// Test RedirectYTLatest
 		/// </summary>
 		[Fact]

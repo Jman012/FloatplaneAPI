@@ -43,16 +43,6 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		}
 
 		/// <summary>
-		/// Test an instance of ConnectedAccountsV2Api
-		/// </summary>
-		[Fact]
-		public void InstanceTest()
-		{
-			// TODO uncomment below to test 'IsType' ConnectedAccountsV2Api
-			//Assert.IsType<ConnectedAccountsV2Api>(instance);
-		}
-
-		/// <summary>
 		/// Test ListConnections
 		/// </summary>
 		[Fact]
