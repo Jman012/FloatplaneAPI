@@ -79,6 +79,20 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.True(response.Data?.Users.Any());
 		}
 
+		[Fact]
+		public void GetUserInfoNonExistentTest()
+		{
+			// We actually don't get an error. Just an empty list.
+			List<string> id = new List<string>()
+			{
+				ApiTestSampleData.NonExistentIdentifer,
+			};
+			var response = instance.GetUserInfoWithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<UserInfoV2Response>(response.Data);
+			Assert.Equal(0, response.Data?.Users.Count());
+		}
+
 		/// <summary>
 		/// Test GetUserInfoByName
 		/// </summary>
@@ -87,12 +101,26 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		{
 			List<string> username = new List<string>()
 			{
-				"jamamp",
+				ApiTestSampleData.SampleUserName,
 			};
 			var response = instance.GetUserInfoByNameWithHttpInfo(username);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<UserNamedV2Response>(response.Data);
 			Assert.True(response.Data?.Users.Any());
+		}
+
+		[Fact]
+		public void GetUserInfoByNameNonExistentTest()
+		{
+			// We actually don't get an error. Just an empty list.
+			List<string> username = new List<string>()
+			{
+				ApiTestSampleData.NonExistentIdentifer,
+			};
+			var response = instance.GetUserInfoByNameWithHttpInfo(username);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<UserNamedV2Response>(response.Data);
+			Assert.Equal(0, response.Data?.Users.Count());
 		}
 
 		/// <summary>
@@ -105,6 +133,16 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			var response = instance.UserCreatorBanStatusWithHttpInfo(creator);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<bool>(response.Data);
+		}
+
+		[Fact]
+		public void UserCreatorBanStatusNonExistentTest()
+		{
+			string creator = ApiTestSampleData.NonExistentIdentifer;
+			var response = instance.UserCreatorBanStatusWithHttpInfo(creator);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<bool>(response.Data);
+			Assert.Equal(false, response.Data);
 		}
 	}
 }

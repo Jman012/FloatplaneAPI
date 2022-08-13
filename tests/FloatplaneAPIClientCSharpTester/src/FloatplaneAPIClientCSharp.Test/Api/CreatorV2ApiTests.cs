@@ -68,6 +68,20 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.True(response.Data?.Any());
 		}
 
+		[Fact]
+		public void GetCreatorInfoByNameNonExistentTest()
+		{
+			// We actually don't get an error. Just an empty list.
+			List<string> creatorURL = new List<string>()
+			{
+				ApiTestSampleData.NonExistentIdentifer,
+			};
+			var response = instance.GetCreatorInfoByNameWithHttpInfo(creatorURL);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<List<CreatorModelV2Extended>>(response.Data);
+			Assert.Equal(0, response.Data?.Count());
+		}
+
 		/// <summary>
 		/// Test GetInfo
 		/// </summary>
@@ -82,6 +96,20 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.Null(response.ErrorText);
 			Assert.IsType<List<CreatorModelV2>>(response.Data);
 			Assert.True(response.Data?.Any());
+		}
+
+		[Fact]
+		public void GetInfoNonExistentTest()
+		{
+			// We actually don't get an error. Just an empty list.
+			List<string> creatorGUID = new List<string>()
+			{
+				ApiTestSampleData.NonExistentIdentifer,
+			};
+			var response = instance.GetInfoWithHttpInfo(creatorGUID);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<List<CreatorModelV2>>(response.Data);
+			Assert.Equal(0, response.Data?.Count());
 		}
 	}
 }

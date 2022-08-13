@@ -65,6 +65,19 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.Equal(ApiTestSampleData.LttCreatorId, response.Data?.Id);
 		}
 
+		[Fact]
+		public void GetCreatorNonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string id = ApiTestSampleData.NonExistentIdentifer;
+				var response = instance.GetCreatorWithHttpInfo(id);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
+		}
+
 		/// <summary>
 		/// Test GetCreators
 		/// </summary>
@@ -76,6 +89,17 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.Null(response.ErrorText);
 			Assert.IsType<List<CreatorModelV3>>(response.Data);
 			Assert.True(response.Data?.Any());
+		}
+
+		[Fact]
+		public void GetCreatorsNonExistentTest()
+		{
+			// We actually don't get an error. Just an empty list.
+			string search = ApiTestSampleData.NonExistentIdentifer;
+			var response = instance.GetCreatorsWithHttpInfo(search);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<List<CreatorModelV3>>(response.Data);
+			Assert.Equal(0, response.Data?.Count());
 		}
 	}
 }

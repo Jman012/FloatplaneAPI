@@ -65,6 +65,19 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.NotEmpty(response.Data?.Activity);
 		}
 
+		[Fact]
+		public void GetActivityFeedV3NonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string id = ApiTestSampleData.NonExistentIdentifer;
+				var response = instance.GetActivityFeedV3WithHttpInfo(id);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
+		}
+
 		/// <summary>
 		/// Test GetExternalLinksV3
 		/// </summary>
@@ -76,6 +89,16 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.Null(response.ErrorText);
 			Assert.IsType<Dictionary<string, UserLinksV3ResponseValue>>(response.Data);
 			Assert.NotEmpty(response.Data);
+		}
+
+		[Fact]
+		public void GetExternalLinksV3NonExistentTest()
+		{
+			string id = ApiTestSampleData.NonExistentIdentifer;
+			var response = instance.GetExternalLinksV3WithHttpInfo(id);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<Dictionary<string, UserLinksV3ResponseValue>>(response.Data);
+			Assert.Empty(response.Data);
 		}
 
 		/// <summary>

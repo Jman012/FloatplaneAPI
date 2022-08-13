@@ -63,5 +63,18 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.Null(response.ErrorText);
 			Assert.IsType<PlanInfoV2Response>(response.Data);
 		}
+
+		[Fact]
+		public void GetCreatorSubInfoPublicNonExistentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string creatorId = ApiTestSampleData.NonExistentIdentifer;
+				var response = instance.GetCreatorSubInfoPublicWithHttpInfo(creatorId);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
+		}
 	}
 }
