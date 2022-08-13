@@ -296,7 +296,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		{
 			var apiException = Assert.Throws<ApiException>(() => {
 				string id = ApiTestSampleData.NonExistentIdentifer;
-			var response = instance.GetVideoContentWithHttpInfo(id);
+				var response = instance.GetVideoContentWithHttpInfo(id);
 			});
 			Assert.NotNull(apiException.ErrorContent);
 			Assert.Equal((int)System.Net.HttpStatusCode.Forbidden, apiException.ErrorCode);

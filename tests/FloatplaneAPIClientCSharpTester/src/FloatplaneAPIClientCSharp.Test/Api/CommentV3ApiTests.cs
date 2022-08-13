@@ -80,6 +80,38 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			Assert.True(response.Data?.Any());
 		}
 
+		[Fact]
+		public void GetCommentRepliesNonExistentCommentTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string comment = ApiTestSampleData.NonExistentIdentifer;
+				string blogPost = "wM0UfP1R8g";
+				int limit = 3;
+				string rid = "62e3e9e68a798648e70499c8";
+				var response = instance.GetCommentRepliesWithHttpInfo(comment, blogPost, limit, rid);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.BadRequest, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
+		}
+
+		[Fact]
+		public void GetCommentRepliesNonExistentBlogPostTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string comment = "62e3cb806cc3ba2fd032a06a";
+				string blogPost = ApiTestSampleData.NonExistentIdentifer;
+				int limit = 3;
+				string rid = "62e3e9e68a798648e70499c8";
+				var response = instance.GetCommentRepliesWithHttpInfo(comment, blogPost, limit, rid);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.Forbidden, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
+		}
+
 		/// <summary>
 		/// Test GetComments
 		/// </summary>
@@ -103,6 +135,21 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 				Assert.IsType<List<CommentModel>>(response.Data);
 				Assert.True(response.Data?.Any());
 			}
+		}
+
+		[Fact]
+		public void GetCommentsNonExistentBlogPostTest()
+		{
+			var apiException = Assert.Throws<ApiException>(() => {
+				string blogPost = ApiTestSampleData.NonExistentIdentifer;
+				int limit = 20;
+				string? fetchAfter = null;
+				var response = instance.GetCommentsWithHttpInfo(blogPost, limit, fetchAfter);
+			});
+			Assert.NotNull(apiException.ErrorContent);
+			Assert.Equal((int)System.Net.HttpStatusCode.Forbidden, apiException.ErrorCode);
+
+			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}
 
 		/// <summary>
