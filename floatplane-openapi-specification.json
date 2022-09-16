@@ -2105,16 +2105,19 @@
 						"type": "string"
 					},
 					"price": {
-						"type": "string"
+						"type": "string",
+						"nullable": true
 					},
 					"priceYearly": {
-						"type": "string"
+						"type": "string",
+						"nullable": true
 					},
 					"currency": {
 						"type": "string"
 					},
 					"logo": {
-						"type": "string"
+						"type": "string",
+						"nullable": true
 					},
 					"interval": {
 						"type": "string"
@@ -2142,7 +2145,10 @@
 					"id",
 					"title",
 					"description",
+					"price",
+					"priceYearly",
 					"currency",
+					"logo",
 					"interval",
 					"featured",
 					"discordServers",
@@ -2920,61 +2926,7 @@
 						"type": "boolean"
 					},
 					"plan": {
-						"type": "object",
-						"properties": {
-							"id": {
-								"type": "string"
-							},
-							"title": {
-								"type": "string"
-							},
-							"description": {
-								"type": "string"
-							},
-							"price": {
-								"type": "string"
-							},
-							"priceYearly": {
-								"type": "string"
-							},
-							"currency": {
-								"type": "string"
-							},
-							"logo": {
-								"type": "string"
-							},
-							"interval": {
-								"type": "string"
-							},
-							"featured": {
-								"type": "boolean"
-							},
-							"allowGrandfatheredAccess": {
-								"type": "boolean"
-							},
-							"discordServers": {
-								"type": "array",
-								"items": {
-									"$ref": "#/components/schemas/DiscordServerModel"
-								}
-							},
-							"discordRoles": {
-								"type": "array",
-								"items": {
-									"$ref": "#/components/schemas/DiscordRoleModel"
-								}
-							}
-						},
-						"required": [
-							"id",
-							"title",
-							"description",
-							"currency",
-							"interval",
-							"featured",
-							"discordServers",
-							"discordRoles"
-						]
+						"$ref": "#/components/schemas/SubscriptionPlanModel"
 					},
 					"creator": {
 						"type": "string"
