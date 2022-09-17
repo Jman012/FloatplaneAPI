@@ -61,7 +61,8 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		{
 			List<string> id = new List<string>()
 			{
-				ApiTestSampleData.SampleUserId,
+				ApiTestSampleData.SampleUserJamamp.Id,
+				ApiTestSampleData.SampleUserBmlzootown.Id,
 			};
 			var response = instance.GetUserInfoWithHttpInfo(id);
 			Assert.Null(response.ErrorText);
@@ -91,7 +92,8 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		{
 			List<string> username = new List<string>()
 			{
-				ApiTestSampleData.SampleUserName,
+				ApiTestSampleData.SampleUserJamamp.Name,
+				ApiTestSampleData.SampleUserBmlzootown.Name,
 			};
 			var response = instance.GetUserInfoByNameWithHttpInfo(username);
 			Assert.Null(response.ErrorText);

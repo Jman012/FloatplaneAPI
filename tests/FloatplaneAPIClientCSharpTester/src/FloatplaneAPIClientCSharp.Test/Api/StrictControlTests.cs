@@ -72,7 +72,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 
 		internal class UserSelfV3ResponseWithExtraModelProperty : UserSelfV3Response
 		{
-			[DataMember(Name = "extraneousModelProperty", EmitDefaultValue = true)]
+			[DataMember(Name = "extraneousModelProperty", IsRequired = true, EmitDefaultValue = true)]
 			public string ExtraneousModelProperty { get; set; }
 		}
 

@@ -48,7 +48,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetActivityFeedV3Test()
 		{
-			string id = ApiTestSampleData.SampleUserId;
+			string id = ApiTestSampleData.SampleUserJamamp.Id;
 			var response = instance.GetActivityFeedV3WithHttpInfo(id);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<UserActivityV3Response>(response.Data);
@@ -74,7 +74,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		[Fact]
 		public void GetExternalLinksV3Test()
 		{
-			string id = ApiTestSampleData.SampleUserId;
+			string id = ApiTestSampleData.SampleUserJamamp.Id;
 			var response = instance.GetExternalLinksV3WithHttpInfo(id);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<Dictionary<string, UserLinksV3ResponseValue>>(response.Data);

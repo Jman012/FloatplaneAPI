@@ -6,8 +6,14 @@ namespace FloatplaneAPIClientCSharp
 {
 	internal class ApiTestSampleData
 	{
-		public static readonly string SampleUserId = "5fb69b4f8573b6cd8cc7f3b0"; // Jamamp
-		public static readonly string SampleUserName = "jamamp";
+		public static readonly SampleUser SampleUserJamamp = new SampleUser() {
+			Name = "jamamp",
+			Id = "5fb69b4f8573b6cd8cc7f3b0",
+		};
+		public static readonly SampleUser SampleUserBmlzootown = new SampleUser() {
+			Name = "bmlzootown",
+			Id = "5c3014455fb1a5617b77978e",
+		};
 		/// LinusTechTips. The account used for integration tests is assumed to have a subscription.
 		public static readonly string LttCreatorId = "59f94c0bdd241b70349eb72b";
 		/// LinusTechTips
@@ -181,5 +187,10 @@ namespace FloatplaneAPIClientCSharp
 			Picture_New,
 			Picture_Old,
 		}.Where(p => !string.IsNullOrEmpty(p)).ToList();
+	}
+
+	public record SampleUser {
+		public string Name { get; set; }
+		public string Id { get; set; }
 	}
 }

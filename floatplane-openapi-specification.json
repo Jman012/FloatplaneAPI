@@ -309,18 +309,21 @@
 					},
 					"captchaToken": {
 						"type": "string",
-						"description": "The Google Recaptcha v2/v3 token to verify the request. On web browsers, this is required. For mobile or TV applications, this is not required only if the User-Agent indicates so (e.g., if the User-Agent contains \"CFNetwork\" in its value). Otherwise, the application would have to supply a valid captcha token, which can be difficult to obtain dynamically in some scenarios."
+						"description": "The Google Recaptcha v2/v3 token to verify the request. On web browsers, this is required. For mobile or TV applications, this is not required only if the User-Agent indicates so (e.g., if the User-Agent contains \"CFNetwork\" in its value). Otherwise, the application would have to supply a valid captcha token, which can be difficult to obtain dynamically in some scenarios.",
+						"nullable": true
 					}
 				},
 				"required": [
 					"username",
-					"password"
+					"password",
+					"captchaToken"
 				]
 			},
 			"AuthLoginV2Response": {
 				"type": "object",
 				"properties": {
 					"user": {
+						"description": "Identifying information about the new-logged-in user upon success. May be undefined when `needs2FA` is `true`.",
 						"$ref": "#/components/schemas/UserModel"
 					},
 					"needs2FA": {
@@ -339,7 +342,10 @@
 						"type": "string",
 						"description": "The two-factor authentication token that the user inputs to complete the login process."
 					}
-				}
+				},
+				"required": [
+					"token"
+				]
 			},
 			"CdnDeliveryV2QualityLevelModel": {
 				"type": "object",
@@ -612,6 +618,7 @@
 								"subscriptions": {
 									"type": "array",
 									"description": "The subscriptions this invoice is in reference to.",
+									"nullable": true,
 									"items": {
 										"type": "object",
 										"properties": {
@@ -704,12 +711,14 @@
 								"attemptCount",
 								"currency",
 								"date",
+								"dateDue",
 								"periodStart",
 								"periodEnd",
 								"nextPaymentAttempt",
 								"paid",
 								"forgiven",
-								"refunded"
+								"refunded",
+								"subscriptions"
 							]
 						}
 					}
@@ -727,113 +736,69 @@
 					},
 					"totalIncome": {
 						"type": "string",
-						"description": "The total amount of monthly income for this creator. This field tends to always be $0 for regular users."
+						"description": "The total amount of monthly income for this creator. This field tends to always be $0 for regular users.",
+						"nullable": true
 					},
 					"plans": {
 						"type": "array",
 						"items": {
-							"type": "object",
-							"properties": {
-								"discordRoles": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/DiscordRoleModel"
+							"allOf": [
+								{
+									"$ref": "#/components/schemas/SubscriptionPlanModel"
+								},
+								{
+									"type": "object",
+									"properties": {
+										"createdAt": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"updatedAt": {
+											"type": "string",
+											"format": "date-time",
+											"nullable": true
+										},
+										"enabled": {
+											"type": "boolean"
+										},
+										"paymentID": {
+											"type": "integer"
+										},
+										"trialPeriod": {
+											"type": "number"
+										},
+										"creator": {
+											"type": "string"
+										},
+										"userIsSubscribed": {
+											"type": "boolean"
+										},
+										"userIsGrandfathered": {
+											"type": "boolean"
+										},
+										"enabledGlobal": {
+											"type": "boolean"
+										}
 									},
-									"description": "The available roles for the associated Discord servers that are available with this plan."
-								},
-								"createdAt": {
-									"type": "string",
-									"format": "date-time"
-								},
-								"updatedAt": {
-									"type": "string",
-									"format": "date-time",
-									"nullable": true
-								},
-								"id": {
-									"type": "string"
-								},
-								"title": {
-									"type": "string"
-								},
-								"enabled": {
-									"type": "boolean"
-								},
-								"featured": {
-									"type": "boolean"
-								},
-								"description": {
-									"type": "string"
-								},
-								"price": {
-									"type": "string"
-								},
-								"priceYearly": {
-									"type": "string"
-								},
-								"paymentID": {
-									"type": "integer"
-								},
-								"currency": {
-									"type": "string"
-								},
-								"trialPeriod": {
-									"type": "number"
-								},
-								"allowGrandfatheredAccess": {
-									"type": "boolean"
-								},
-								"logo": {
-									"type": "string"
-								},
-								"creator": {
-									"type": "string"
-								},
-								"discordServers": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/DiscordServerModel"
-									}
-								},
-								"userIsSubscribed": {
-									"type": "boolean"
-								},
-								"userIsGrandfathered": {
-									"type": "boolean"
-								},
-								"enabledGlobal": {
-									"type": "boolean"
-								},
-								"interval": {
-									"type": "string"
+									"required": [
+										"createdAt",
+										"updatedAt",
+										"enabled",
+										"paymentID",
+										"trialPeriod",
+										"creator",
+										"userIsSubscribed",
+										"userIsGrandfathered",
+										"enabledGlobal"
+									]
 								}
-							},
-							"required": [
-								"discordRoles",
-								"createdAt",
-								"updatedAt",
-								"id",
-								"title",
-								"enabled",
-								"featured",
-								"description",
-								"price",
-								"paymentID",
-								"currency",
-								"trialPeriod",
-								"logo",
-								"creator",
-								"discordServers",
-								"userIsSubscribed",
-								"userIsGrandfathered",
-								"enabledGlobal",
-								"interval"
 							]
 						}
 					}
 				},
 				"required": [
-					"totalSuscriberCount",
+					"totalSubscriberCount",
+					"totalIncome",
 					"plans"
 				]
 			},
@@ -882,7 +847,14 @@
 									"type": "string"
 								},
 								"user": {
-									"$ref": "#/components/schemas/UserSelfModel"
+									"oneOf": [
+										{
+											"$ref": "#/components/schemas/UserModel"
+										},
+										{
+											"$ref": "#/components/schemas/UserSelfModel"
+										}
+									]
 								}
 							},
 							"required": [
@@ -1046,7 +1018,8 @@
 					},
 					"blogPostId": {
 						"type": "string",
-						"description": "This may be returned as `null` if no blog posts for this creator appeared yet on this page of blog posts. However, Floatplane will complain if this is sent with a `null` value."
+						"description": "This may be returned as `null` if no blog posts for this creator appeared yet on this page of blog posts. However, Floatplane will complain if this is sent with a `null` value.",
+						"nullable": true
 					},
 					"moreFetchable": {
 						"type": "boolean"
@@ -1054,6 +1027,7 @@
 				},
 				"required": [
 					"creatorId",
+					"blogPostId",
 					"moreFetchable"
 				]
 			},
@@ -1071,7 +1045,7 @@
 					},
 					"text": {
 						"type": "string",
-						"description": "Text description of the post. May have HTML paragraph (`<p>`) tags surrounding it, along with other HTML.."
+						"description": "Text description of the post. May have HTML paragraph (`<p>`) tags surrounding it, along with other HTML."
 					},
 					"type": {
 						"type": "string",
@@ -1117,35 +1091,41 @@
 						"type": "boolean"
 					},
 					"thumbnail": {
-						"$ref": "#/components/schemas/ImageModel"
+						"$ref": "#/components/schemas/ImageModel",
+						"nullable": true
 					},
 					"isAccessible": {
 						"type": "boolean",
 						"description": "If false, the post should be marked as locked and not viewable by the user."
 					},
 					"userInteraction": {
-						"$ref": "#/components/schemas/UserInteractionModel"
+						"$ref": "#/components/schemas/UserInteractionModel",
+						"nullable": true
 					},
 					"videoAttachments": {
 						"type": "array",
+						"description": "May be undefined when the post is locked.",
 						"items": {
 							"$ref": "#/components/schemas/VideoAttachmentModel"
 						}
 					},
 					"audioAttachments": {
 						"type": "array",
+						"description": "May be undefined when the post is locked.",
 						"items": {
 							"$ref": "#/components/schemas/AudioAttachmentModel"
 						}
 					},
 					"pictureAttachments": {
 						"type": "array",
+						"description": "May be undefined when the post is locked.",
 						"items": {
 							"$ref": "#/components/schemas/PictureAttachmentModel"
 						}
 					},
 					"galleryAttachments": {
 						"type": "array",
+						"description": "May be undefined when the post is locked.",
 						"items": {}
 					}
 				},
@@ -1165,7 +1145,9 @@
 					"comments",
 					"creator",
 					"wasReleasedSilently",
-					"isAccessible"
+					"thumbnail",
+					"isAccessible",
+					"userInteraction"
 				]
 			},
 			"ContentVideoV3Response": {
@@ -1230,7 +1212,8 @@
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"userInteraction": {
-						"$ref": "#/components/schemas/UserInteractionModel"
+						"$ref": "#/components/schemas/UserInteractionModel",
+						"nullable": true
 					},
 					"levels": {
 						"type": "array",
@@ -1269,6 +1252,7 @@
 					"title",
 					"type",
 					"description",
+					"releaseDate",
 					"duration",
 					"creator",
 					"likes",
@@ -1280,6 +1264,7 @@
 					"isAccessible",
 					"blogPosts",
 					"timelineSprite",
+					"userInteraction",
 					"levels"
 				]
 			},
@@ -1320,7 +1305,8 @@
 						"type": "string"
 					},
 					"userInteraction": {
-						"$ref": "#/components/schemas/UserInteractionModel"
+						"$ref": "#/components/schemas/UserInteractionModel",
+						"nullable": true
 					},
 					"thumbnail": {
 						"$ref": "#/components/schemas/ImageModel"
@@ -1347,6 +1333,7 @@
 					"isProcessing",
 					"likes",
 					"primaryBlogPost",
+					"userInteraction",
 					"score",
 					"thumbnail",
 					"title",
@@ -1384,7 +1371,7 @@
 							"required": [
 								"time",
 								"comment",
-								"posttitle",
+								"postTitle",
 								"postId",
 								"creatorTitle",
 								"creatorUrl"
@@ -1425,9 +1412,18 @@
 									"type": "string",
 									"description": "The hostname that should be a part of the URL."
 								}
-							}
+							},
+							"required": [
+								"name",
+								"displayName",
+								"hostName"
+							]
 						}
-					}
+					},
+					"required": [
+						"url",
+						"type"
+					]
 				}
 			},
 			"UserNotificationUpdateV3PostRequest": {
@@ -1477,13 +1473,19 @@
 						"items": {}
 					},
 					"scheduledDeletionDate": {
-						"type": "string"
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
 					}
 				},
 				"required": [
 					"id",
 					"username",
-					"profileImage"
+					"profileImage",
+					"email",
+					"displayName",
+					"creators",
+					"scheduledDeletionDate"
 				]
 			},
 			"ContentLikeV3Request": {
@@ -1609,10 +1611,14 @@
 									"type": "string"
 								},
 								"message": {
-									"type": "string"
+									"type": "string",
+									"description": "May be undefined.",
+									"nullable": true
 								},
 								"data": {
 									"type": "object",
+									"description": "May be undefined.",
+									"nullable": true,
 									"additionalProperties": true
 								}
 							},
@@ -1623,7 +1629,8 @@
 						}
 					},
 					"message": {
-						"type": "string"
+						"type": "string",
+						"description": "May be undefined."
 					}
 				},
 				"required": [
@@ -1742,16 +1749,19 @@
 						"type": "string"
 					},
 					"cover": {
-						"$ref": "#/components/schemas/ImageModel"
+						"$ref": "#/components/schemas/ImageModel",
+						"nullable": true
 					},
 					"icon": {
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"liveStream": {
-						"$ref": "#/components/schemas/LiveStreamModel"
+						"$ref": "#/components/schemas/LiveStreamModel",
+						"nullable": true
 					},
 					"subscriptionPlans": {
 						"type": "array",
+						"nullable": true,
 						"items": {
 							"type": "object"
 						}
@@ -1774,7 +1784,10 @@
 					"description",
 					"about",
 					"category",
+					"cover",
 					"icon",
+					"liveStream",
+					"subscriptionPlans",
 					"discoverable",
 					"subscriberCountDisplay",
 					"incomeDisplay"
@@ -1838,16 +1851,19 @@
 						]
 					},
 					"cover": {
-						"$ref": "#/components/schemas/ImageModel"
+						"$ref": "#/components/schemas/ImageModel",
+						"nullable": true
 					},
 					"icon": {
 						"$ref": "#/components/schemas/ImageModel"
 					},
 					"liveStream": {
-						"$ref": "#/components/schemas/LiveStreamModel"
+						"$ref": "#/components/schemas/LiveStreamModel",
+						"nullable": true
 					},
 					"subscriptionPlans": {
 						"type": "array",
+						"nullable": true,
 						"items": {
 							"$ref": "#/components/schemas/SubscriptionPlanModel"
 						}
@@ -1875,6 +1891,7 @@
 					"category",
 					"cover",
 					"icon",
+					"liveStream",
 					"subscriptionPlans",
 					"discoverable",
 					"subscriberCountDisplay",
@@ -1974,7 +1991,10 @@
 									"title": {
 										"type": "string"
 									}
-								}
+								},
+								"required": [
+									"title"
+								]
 							},
 							"cover": {
 								"$ref": "#/components/schemas/ImageModel"
@@ -1983,7 +2003,8 @@
 								"$ref": "#/components/schemas/ImageModel"
 							},
 							"liveStream": {
-								"$ref": "#/components/schemas/LiveStreamModel"
+								"$ref": "#/components/schemas/LiveStreamModel",
+								"nullable": true
 							},
 							"subscriptionPlans": {
 								"type": "array",
@@ -2001,7 +2022,8 @@
 								"type": "boolean"
 							},
 							"card": {
-								"$ref": "#/components/schemas/ImageModel"
+								"$ref": "#/components/schemas/ImageModel",
+								"nullable": true
 							}
 						},
 						"required": [
@@ -2014,17 +2036,20 @@
 							"category",
 							"cover",
 							"icon",
+							"liveStream",
 							"subscriptionPlans",
 							"discoverable",
 							"subscriberCountDisplay",
-							"incomeDisplay"
+							"incomeDisplay",
+							"card"
 						]
 					},
 					"wasReleasedSilently": {
 						"type": "boolean"
 					},
 					"thumbnail": {
-						"$ref": "#/components/schemas/ImageModel"
+						"$ref": "#/components/schemas/ImageModel",
+						"nullable": true
 					},
 					"isAccessible": {
 						"type": "boolean",
@@ -2047,6 +2072,7 @@
 					"comments",
 					"creator",
 					"wasReleasedSilently",
+					"thumbnail",
 					"isAccessible"
 				]
 			},
@@ -2126,7 +2152,8 @@
 						"type": "boolean"
 					},
 					"allowGrandfatheredAccess": {
-						"type": "boolean"
+						"type": "boolean",
+						"nullable": true
 					},
 					"discordServers": {
 						"type": "array",
@@ -2151,6 +2178,7 @@
 					"logo",
 					"interval",
 					"featured",
+					"allowGrandfatheredAccess",
 					"discordServers",
 					"discordRoles"
 				]
@@ -2264,6 +2292,7 @@
 					"title",
 					"type",
 					"description",
+					"releaseDate",
 					"duration",
 					"creator",
 					"likes",
@@ -2437,6 +2466,7 @@
 					},
 					"childImages": {
 						"type": "array",
+						"nullable": true,
 						"items": {
 							"$ref": "#/components/schemas/ChildImageModel"
 						}
@@ -2445,7 +2475,8 @@
 				"required": [
 					"width",
 					"height",
-					"path"
+					"path",
+					"childImages"
 				]
 			},
 			"ChildImageModel": {
@@ -2505,7 +2536,8 @@
 						"type": "string"
 					},
 					"thumbnail": {
-						"$ref": "#/components/schemas/ImageModel"
+						"$ref": "#/components/schemas/ImageModel",
+						"nullable": true
 					},
 					"owner": {
 						"type": "string"
@@ -2525,13 +2557,19 @@
 							"thumbnail": {
 								"$ref": "#/components/schemas/ImageModel"
 							}
-						}
+						},
+						"required": [
+							"title",
+							"description",
+							"thumbnail"
+						]
 					}
 				},
 				"required": [
 					"id",
 					"title",
 					"description",
+					"thumbnail",
 					"owner",
 					"streamPath",
 					"offline"
@@ -2629,7 +2667,9 @@
 				"required": [
 					"id",
 					"username",
-					"profileImage"
+					"profileImage",
+					"email",
+					"displayName"
 				]
 			},
 			"ConnectedAccountModel": {
@@ -2668,7 +2708,10 @@
 									"canJoinGuilds": {
 										"type": "boolean"
 									}
-								}
+								},
+								"required": [
+									"canJoinGuilds"
+								]
 							}
 						},
 						"required": [
@@ -2744,7 +2787,11 @@
 							"dislike": {
 								"type": "integer"
 							}
-						}
+						},
+						"required": [
+							"like",
+							"dislike"
+						]
 					},
 					"totalReplies": {
 						"type": "integer"
@@ -2756,7 +2803,8 @@
 						}
 					},
 					"userInteraction": {
-						"$ref": "#/components/schemas/UserInteractionModel"
+						"$ref": "#/components/schemas/UserInteractionModel",
+						"nullable": true
 					}
 				},
 				"required": [
@@ -2774,7 +2822,8 @@
 					"score",
 					"interactionCounts",
 					"totalReplies",
-					"replies"
+					"replies",
+					"userInteraction"
 				]
 			},
 			"CommentReplyModel": {
@@ -2828,10 +2877,15 @@
 							"dislike": {
 								"type": "integer"
 							}
-						}
+						},
+						"required": [
+							"like",
+							"dislike"
+						]
 					},
 					"userInteraction": {
-						"$ref": "#/components/schemas/UserInteractionModel"
+						"$ref": "#/components/schemas/UserInteractionModel",
+						"nullable": true
 					}
 				},
 				"required": [
@@ -2847,7 +2901,8 @@
 					"likes",
 					"dislikes",
 					"score",
-					"interactionCounts"
+					"interactionCounts",
+					"userInteraction"
 				]
 			},
 			"UserNotificationModel": {
@@ -3060,7 +3115,11 @@
 						"type": "object",
 						"additionalProperties": true
 					}
-				}
+				},
+				"required": [
+					"edges",
+					"client"
+				]
 			},
 			"EdgeModel": {
 				"type": "object",
@@ -3096,9 +3155,23 @@
 							"longitude": {
 								"type": "number"
 							}
-						}
+						},
+						"required": [
+							"countryCode",
+							"regionCode",
+							"latitude",
+							"longitude"
+						]
 					}
-				}
+				},
+				"required": [
+					"hostname",
+					"queryPort",
+					"bandwidth",
+					"allowDownload",
+					"allowStreaming",
+					"datacenter"
+				]
 			}
 		},
 		"securitySchemes": {
@@ -19520,7 +19593,11 @@
 										"type": "integer",
 										"description": "The index of the options of the poll for which to vote. This should not be outside the bounds of the poll options."
 									}
-								}
+								},
+								"required": [
+									"pollId",
+									"optionIndex"
+								]
 							},
 							"example": {
 								"pollId": "62c8c1dd968bc0899bbb4b92",
@@ -19585,7 +19662,13 @@
 									"activeOnly": {
 										"type": "boolean"
 									}
-								}
+								},
+								"required": [
+									"creatorId",
+									"skip",
+									"limit",
+									"activeOnly"
+								]
 							},
 							"example": {
 								"creatorId": "59f94c0bdd241b70349eb72b",
@@ -19659,7 +19742,14 @@
 									"duration": {
 										"type": "string"
 									}
-								}
+								},
+								"required": [
+									"creatorId",
+									"type",
+									"title",
+									"options",
+									"duration"
+								]
 							}
 						}
 					}
@@ -19711,7 +19801,10 @@
 									"pollId": {
 										"type": "string"
 									}
-								}
+								},
+								"required": [
+									"pollId"
+								]
 							}
 						}
 					}
