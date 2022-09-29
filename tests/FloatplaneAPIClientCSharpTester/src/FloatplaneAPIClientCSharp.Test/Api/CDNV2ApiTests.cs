@@ -50,12 +50,12 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		{
 			string type = "vod";
 			string? guid = ApiTestSampleData.Video_New;
-			string? creator = ApiTestSampleData.LttCreatorId;
+			string? creator = null;
 			var response = instance.GetDeliveryInfoWithHttpInfo(type, guid, creator);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<CdnDeliveryV2Response>(response.Data);
-			Assert.IsType<CdnDeliveryV2VodResponse>(response.Data?.ActualInstance);
-			Assert.NotEmpty(response.Data.GetCdnDeliveryV2VodResponse().Cdn);
+			Assert.IsType<CdnDeliveryV2VodLivestreamResponse>(response.Data?.ActualInstance);
+			Assert.NotEmpty(response.Data.GetCdnDeliveryV2VodLivestreamResponse().Cdn);
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		{
 			string type = "download";
 			string? guid = ApiTestSampleData.Video_New;
-			string? creator = ApiTestSampleData.LttCreatorId;
+			string? creator = null;
 			var response = instance.GetDeliveryInfoWithHttpInfo(type, guid, creator);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<CdnDeliveryV2Response>(response.Data);
@@ -86,8 +86,8 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			var response = instance.GetDeliveryInfoWithHttpInfo(type, guid, creator);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<CdnDeliveryV2Response>(response.Data);
-			Assert.IsType<CdnDeliveryV2LivestreamResponse>(response.Data?.ActualInstance);
-			Assert.NotEmpty(response.Data.GetCdnDeliveryV2LivestreamResponse().Cdn);
+			Assert.IsType<CdnDeliveryV2VodLivestreamResponse>(response.Data?.ActualInstance);
+			Assert.NotEmpty(response.Data.GetCdnDeliveryV2VodLivestreamResponse().Cdn);
 		}
 	}
 }
