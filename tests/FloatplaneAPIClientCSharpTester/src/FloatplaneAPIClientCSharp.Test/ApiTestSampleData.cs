@@ -18,6 +18,8 @@ namespace FloatplaneAPIClientCSharp
 		public static readonly string LttCreatorId = "59f94c0bdd241b70349eb72b";
 		/// LinusTechTips
 		public static readonly string LttCreatorName = "linustechtips";
+		/// LinusTechTips Livestream
+		public static readonly string LttLivesreamId = "5c13f3c006f1be15e08e05c0";
 		/// Shank Mods. The account used for integration tests is assumed to NOT have a subscription. This is used for HTTP 403 triggers.
 		public static readonly string ShankModsCreatorId = "626ad21aa2ffab0c7d8f69ac";
 		/// Shank Mods. This is used for HTTP 403 triggers.

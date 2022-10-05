@@ -80,6 +80,10 @@
 			"description": "Content Delivery mechanisms for Floatplane media."
 		},
 		{
+			"name": "CDNV3",
+			"description": "Content Delivery mechanisms for Floatplane media."
+		},
+		{
 			"name": "ConnectedAccountsV2",
 			"description": "3rd party account management, such as Discord or LTT Forums."
 		},
@@ -480,6 +484,275 @@
 						"$ref": "#/components/schemas/CdnDeliveryV2DownloadResponse"
 					}
 				]
+			},
+			"CdnDeliveryV3Response": {
+				"type": "object",
+				"properties": {
+					"groups": {
+						"type": "array",
+						"description": "`groups` may consist of zero or more elements.",
+						"minItems": 0,
+						"items": {
+							"$ref": "#/components/schemas/CdnDeliveryV3Group"
+						}
+					}
+				},
+				"required": [
+					"groups"
+				]
+			},
+			"CdnDeliveryV3Group": {
+				"type": "object",
+				"description": "A group is a logical grouping/separation of variants. At this time, there are no examples of more than one group in a response.",
+				"properties": {
+					"origins": {
+						"type": "array",
+						"description": "If `origins` is present, it will consist of one or more elements.",
+						"minItems": 1,
+						"items": {
+							"$ref": "#/components/schemas/CdnDeliveryV3Origin"
+						}
+					},
+					"variants": {
+						"type": "array",
+						"description": "`variants` may consist of zero or more elements.",
+						"minItems": 0,
+						"items": {
+							"$ref": "#/components/schemas/CdnDeliveryV3Variant"
+						}
+					}
+				},
+				"required": [
+					"variants"
+				]
+			},
+			"CdnDeliveryV3Origin": {
+				"type": "object",
+				"description": "An `origin`, if present, is a choice of base URL or server from which to load a `variant`'s content. If origin(s) exists in a group or variant, then one must be chosen in combination with the variant's `url`.",
+				"properties": {
+					"url": {
+						"type": "string",
+						"format": "uri",
+						"description": "An absolute URL (possibly with trailing slash) which acts as the base of a delivery resource URI. This is always present."
+					},
+					"queryUrl": {
+						"type": "string",
+						"format": "uri",
+						"description": "An absolute URL (possibly with trailing slash) which the client can use to query if the origin is active/working. This field may not be present. Perform an HTTP GET on this URL and expect an HTTP 200 in order to trust this origin."
+					},
+					"datacenter": {
+						"$ref": "#/components/schemas/EdgeDataCenter"
+					}
+				},
+				"required": [
+					"url"
+				]
+			},
+			"CdnDeliveryV3Variant": {
+				"type": "object",
+				"description": "A `variant` represents one variant of a source of media. The most common differenitating factor between variants is video resolution, but there may be more variations based on `isHdr`, codecs, FPS, etc. It's possible that groups of variants may be divided into separate `groups` elements.",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "A programmatic name for this variant, for use with uniquely identifying this variant."
+					},
+					"label": {
+						"type": "string",
+						"description": "A display-friendly label for this variant, for use in the UI."
+					},
+					"url": {
+						"type": "string",
+						"description": "A relative *or* absolute URL containing resource information for this variant. Compared to the V2 API, this URL does not contain template information and will not need to be modified before use, other than optionally combining with an origin. This value may contain a trailing slash.\n\nIf this URL is absolute, it may be used as-is in order to load the media content. If this URL is relative, then it should be combined with an origin base URL. In order of preference: 1) use an origin from this variant object, 2) use an origin from this variant's group object, 3) use `https://floatplane.com`.\n\nDo not use an origin from a different group, or from a different variant, as this may result in errors. "
+					},
+					"origins": {
+						"type": "array",
+						"description": "If `origins` is present, it will consist of one or more elements.",
+						"minItems": 1,
+						"items": {
+							"$ref": "#/components/schemas/CdnDeliveryV3Origin"
+						}
+					},
+					"order": {
+						"type": "integer",
+						"format": "int64",
+						"description": "An optional field prescribing this variant's order in relation to other variants. No guarantees other than being greater than or less than the order of other variants within this group (e.g., order may not be consecutive)."
+					},
+					"enabled": {
+						"type": "boolean",
+						"description": "An optional field indicating if this variant is enabled. If this is not enabled, it may be visible to the user, but not selectable. If this field is not present, assume a default value of `false`, for safety."
+					},
+					"hidden": {
+						"type": "boolean",
+						"description": "An optional field indicating if this variant should be hidden. If hidden, it should not be shown to the user nor considered in any code logic. If this field is not present, assume a default value of `false`. Only truthy values should hide a variant."
+					},
+					"meta": {
+						"$ref": "#/components/schemas/CdnDeliveryV3Meta"
+					},
+					"mimeType": {
+						"type": "string",
+						"description": "An optional string describing the MIME Type of this media source."
+					}
+				},
+				"required": [
+					"name",
+					"label",
+					"url"
+				]
+			},
+			"CdnDeliveryV3Meta": {
+				"type": "object",
+				"description": "Metadata information for this variant. Note that most/all child and grandchild properties are not required on purpose.",
+				"properties": {
+					"common": {
+						"type": "object",
+						"properties": {
+							"size": {
+								"type": "number",
+								"description": "Size of the corresponding media file, measured in bytes."
+							},
+							"access": {
+								"type": "object",
+								"properties": {
+									"deniedReason": {
+										"type": "string",
+										"enum": [
+											"isMissingPermission",
+											"isProcessing",
+											"isBroken"
+										],
+										"description": "- `isMissingPermission`: Indicates that the requester is lacking a required plan or other form of permission entitling on to access the corresponding resource.\n- `isProcessing`: Indicates that the corresponding resource is processing. Clients may choose to periodically refetch an asset's info when it has reported this state.\n- `isBroken`: Indicates that the corresponding resource is defective in some manner which has rendered it currently inaccessible. It is possible that the asset will be repaired at some later point in time. Clients may choose to periodically refetch an asset's info when it has reported this state."
+									},
+									"deniedMessage": {
+										"type": "string",
+										"description": "Message describing in human-readable terms why access has been witheld for a resource."
+									}
+								}
+							}
+						}
+					},
+					"video": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CdnDeliveryV3MediaIdentityCharacteristics"
+							},
+							{
+								"$ref": "#/components/schemas/CdnDeliveryV3ImagePresentationCharacteristics"
+							},
+							{
+								"type": "object",
+								"properties": {
+									"fps": {
+										"type": "number",
+										"description": "Maximum count of frames presented per second for the video."
+									}
+								}
+							},
+							{
+								"$ref": "#/components/schemas/CdnDeliveryV3MediaBitrateInfo"
+							}
+						]
+					},
+					"audio": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CdnDeliveryV3MediaIdentityCharacteristics"
+							},
+							{
+								"type": "object",
+								"properties": {
+									"channelCount": {
+										"type": "integer",
+										"description": "Count of channels carried by the audio stream."
+									},
+									"samplerate": {
+										"type": "integer",
+										"description": "Count of samples recorded per second."
+									}
+								}
+							},
+							{
+								"$ref": "#/components/schemas/CdnDeliveryV3MediaBitrateInfo"
+							}
+						]
+					},
+					"image": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CdnDeliveryV3MediaIdentityCharacteristics"
+							},
+							{
+								"$ref": "#/components/schemas/CdnDeliveryV3ImagePresentationCharacteristics"
+							}
+						]
+					},
+					"live": {
+						"type": "object",
+						"properties": {
+							"lowLatencyExtension": {
+								"type": "string",
+								"enum": [
+									"llhls",
+									"clhls",
+									"ivshls",
+									"lldash"
+								],
+								"description": "- `llhls`: \ud83c\udf4e-backed low-latency HLS extension.\n- `clhls`: Community-backed low-latency HLS extension.\n- `ivshls`: IVS custom low-latency HLS extension.\n- `lldash`: DASH-IF-backed low-Latency DASH extension."
+							}
+						}
+					}
+				}
+			},
+			"CdnDeliveryV3MediaIdentityCharacteristics": {
+				"type": "object",
+				"properties": {
+					"codec": {
+						"type": "string",
+						"description": "RFC 6381 codec string indicating stream data chunk format."
+					},
+					"codecSimple": {
+						"type": "string",
+						"description": "RFC 6381 codec string indicating stream format on the most basic level, without the addition of profile/level/etc. information."
+					},
+					"mimeType": {
+						"type": "string",
+						"description": "MIME-type for individual stream data chunks (as opposed to a containing playlist)."
+					}
+				}
+			},
+			"CdnDeliveryV3ImagePresentationCharacteristics": {
+				"type": "object",
+				"properties": {
+					"width": {
+						"type": "integer",
+						"description": "Count of horizontal pixels presented."
+					},
+					"height": {
+						"type": "integer",
+						"description": "Count of vertical pixels presented."
+					},
+					"isHdr": {
+						"type": "boolean",
+						"description": "Whether or not this data stream carries HDR content."
+					}
+				}
+			},
+			"CdnDeliveryV3MediaBitrateInfo": {
+				"type": "object",
+				"properties": {
+					"bitrate": {
+						"type": "object",
+						"properties": {
+							"maximum": {
+								"type": "number",
+								"description": "Maximum bitrate observed for the data stream."
+							},
+							"average": {
+								"type": "number",
+								"description": "Average bitrate observed for the data stream."
+							}
+						}
+					}
+				}
 			},
 			"PaymentInvoiceListV2Response": {
 				"type": "object",
@@ -3086,27 +3359,7 @@
 						"type": "boolean"
 					},
 					"datacenter": {
-						"type": "object",
-						"properties": {
-							"countryCode": {
-								"type": "string"
-							},
-							"regionCode": {
-								"type": "string"
-							},
-							"latitude": {
-								"type": "number"
-							},
-							"longitude": {
-								"type": "number"
-							}
-						},
-						"required": [
-							"countryCode",
-							"regionCode",
-							"latitude",
-							"longitude"
-						]
+						"$ref": "#/components/schemas/EdgeDataCenter"
 					}
 				},
 				"required": [
@@ -3116,6 +3369,30 @@
 					"allowDownload",
 					"allowStreaming",
 					"datacenter"
+				]
+			},
+			"EdgeDataCenter": {
+				"type": "object",
+				"description": "Location information for a datacenter. Not required.",
+				"properties": {
+					"countryCode": {
+						"type": "string"
+					},
+					"regionCode": {
+						"type": "string"
+					},
+					"latitude": {
+						"type": "number"
+					},
+					"longitude": {
+						"type": "number"
+					}
+				},
+				"required": [
+					"countryCode",
+					"regionCode",
+					"latitude",
+					"longitude"
 				]
 			}
 		},
@@ -6392,6 +6669,487 @@
 													"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNzb3VyY2VQYXRoIjoiL1ZpZGVvcy9UVmlHemt1SWljLzEwODAubXA0L2NodW5rLm0zdTgiLCJ1c2VySWQiOiIwMTIzNDU2Nzg5YWJjZGVmMDEyMzQ1NjciLCJpYXQiOjE2MzM3OTczMTEsImV4cCI6MTYzMzgxODkxMX0.E-bw_gnUzKUpYeL2l-kTmj5CbwmDb519ohjf5LlLyQg"
 												}
 											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/400BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/401Unauthenticated"
+					},
+					"403": {
+						"$ref": "#/components/responses/403Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/404NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/Unexpected"
+					}
+				}
+			}
+		},
+		"/api/v3/delivery/info": {
+			"get": {
+				"operationId": "getDeliveryInfoV3",
+				"summary": "Get Delivery Info",
+				"description": "Given an video/audio attachment or livestream identifier, retrieves the information necessary to play, download, or livestream the media at various quality levels.",
+				"tags": [
+					"CDNV3"
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "scenario",
+						"schema": {
+							"type": "string",
+							"enum": [
+								"onDemand",
+								"download",
+								"live"
+							]
+						},
+						"required": true,
+						"description": "Used to determine the scenario in which to consume the media.\n\n- `onDemand` = stream a Video/Audio On Demand\n- `download` = Download the content for the user to play later.\n- `live` = Livestream the content"
+					},
+					{
+						"in": "query",
+						"name": "entityId",
+						"schema": {
+							"type": "string"
+						},
+						"required": true,
+						"description": "The attachment or livestream identifier for the requested media. For video and audio, this would be from the `videoAttachments` or `audioAttachments` objects. For livestreams, this is the `liveStream.id` from the creator object."
+					},
+					{
+						"in": "query",
+						"name": "outputKind",
+						"schema": {
+							"type": "string",
+							"enum": [
+								"hls.mpegts",
+								"hls.fmp4",
+								"dash.mpegts",
+								"dash.m4s",
+								"flat"
+							]
+						},
+						"required": false,
+						"description": "Use `outputKind` to ensure the right vehicle is used for your client, e.g. `outputKind=hls.fmp4` is optimal for tvOS 10+."
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK - Information on how to stream or download the requested video from the CDN in various levels of quality.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CdnDeliveryV3Response"
+								},
+								"examples": {
+									"onDemand": {
+										"summary": "Example for `onDemand`",
+										"description": "https://www.floatplane.com/api/v3/delivery/info?entityId=Lug14XXgLx&scenario=onDemand \n\nNote that tokens are JWT tokens, but have been replaced with `<token>` in the examples below.",
+										"value": {
+											"groups": [
+												{
+													"origins": [
+														{
+															"url": "https://cdn-vod-drm2.floatplane.com"
+														}
+													],
+													"variants": [
+														{
+															"name": "360-avc1",
+															"label": "360p",
+															"url": "/Videos/Lug14XXgLx/360.mp4/chunk.m3u8?token=<token>",
+															"mimeType": "application/x-mpegURL",
+															"order": 11016384,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.64001e",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 255886
+																	},
+																	"width": 640,
+																	"height": 320,
+																	"isHdr": false,
+																	"fps": 29.97,
+																	"mimeType": "video/MP2T"
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000,
+																	"mimeType": "video/MP2T"
+																}
+															}
+														},
+														{
+															"name": "480-avc1",
+															"label": "480p",
+															"url": "/Videos/Lug14XXgLx/480.mp4/chunk.m3u8?token=<token>",
+															"mimeType": "application/x-mpegURL",
+															"order": 19339456,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.64001f",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 395615
+																	},
+																	"width": 848,
+																	"height": 424,
+																	"isHdr": false,
+																	"fps": 29.97,
+																	"mimeType": "video/MP2T"
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000,
+																	"mimeType": "video/MP2T"
+																}
+															}
+														},
+														{
+															"name": "720-avc1",
+															"label": "720p",
+															"url": "/Videos/Lug14XXgLx/720.mp4/chunk.m3u8?token=<token>",
+															"mimeType": "application/x-mpegURL",
+															"order": 44112064,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.640020",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 736634
+																	},
+																	"width": 1280,
+																	"height": 640,
+																	"isHdr": false,
+																	"fps": 29.97,
+																	"mimeType": "video/MP2T"
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000,
+																	"mimeType": "video/MP2T"
+																}
+															}
+														},
+														{
+															"name": "1080-avc1",
+															"label": "1080p",
+															"url": "/Videos/Lug14XXgLx/1080.mp4/chunk.m3u8?token=<token>",
+															"mimeType": "application/x-mpegURL",
+															"order": 99293376,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.64002a",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 1448573
+																	},
+																	"width": 1920,
+																	"height": 960,
+																	"isHdr": false,
+																	"fps": 29.97,
+																	"mimeType": "video/MP2T"
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000,
+																	"mimeType": "video/MP2T"
+																}
+															}
+														},
+														{
+															"name": "2160-avc1",
+															"label": "4K",
+															"url": "/Videos/Lug14XXgLx/2160.mp4/chunk.m3u8?token=<token>",
+															"mimeType": "application/x-mpegURL",
+															"order": 397351104,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.640034",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 5904212
+																	},
+																	"width": 3840,
+																	"height": 1920,
+																	"isHdr": false,
+																	"fps": 29.97,
+																	"mimeType": "video/MP2T"
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000,
+																	"mimeType": "video/MP2T"
+																}
+															}
+														}
+													]
+												}
+											]
+										}
+									},
+									"download": {
+										"summary": "Example for `download`",
+										"description": "https://www.floatplane.com/api/v3/delivery/info?entityId=Lug14XXgLx&scenario=download \n\nNote that tokens are JWT tokens, but have been replaced with `<token>` in the examples below.",
+										"value": {
+											"groups": [
+												{
+													"origins": [
+														{
+															"url": "https://edge01-na.floatplane.com",
+															"queryUrl": "https://edge01-na-query.floatplane.com",
+															"datacenter": {
+																"latitude": 45.3168,
+																"longitude": -73.8659,
+																"countryCode": "CA",
+																"regionCode": "QC"
+															}
+														},
+														{
+															"url": "https://edge02-na.floatplane.com",
+															"queryUrl": "https://edge02-na-query.floatplane.com",
+															"datacenter": {
+																"latitude": 45.3168,
+																"longitude": -73.8659,
+																"countryCode": "CA",
+																"regionCode": "QC"
+															}
+														}
+													],
+													"variants": [
+														{
+															"name": "360-avc1",
+															"label": "360p",
+															"url": "/Videos/Lug14XXgLx/360.mp4?token=<token>",
+															"mimeType": "video/mp4",
+															"order": 11016384,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.64001e",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 255886
+																	},
+																	"width": 640,
+																	"height": 320,
+																	"isHdr": false,
+																	"fps": 29.97
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000
+																}
+															}
+														},
+														{
+															"name": "480-avc1",
+															"label": "480p",
+															"url": "/Videos/Lug14XXgLx/480.mp4?token=<token>",
+															"mimeType": "video/mp4",
+															"order": 19339456,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.64001f",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 395615
+																	},
+																	"width": 848,
+																	"height": 424,
+																	"isHdr": false,
+																	"fps": 29.97
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000
+																}
+															}
+														},
+														{
+															"name": "720-avc1",
+															"label": "720p",
+															"url": "/Videos/Lug14XXgLx/720.mp4?token=<token>",
+															"mimeType": "video/mp4",
+															"order": 44112064,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.640020",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 736634
+																	},
+																	"width": 1280,
+																	"height": 640,
+																	"isHdr": false,
+																	"fps": 29.97
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000
+																}
+															}
+														},
+														{
+															"name": "1080-avc1",
+															"label": "1080p",
+															"url": "/Videos/Lug14XXgLx/1080.mp4?token=<token>",
+															"mimeType": "video/mp4",
+															"order": 99293376,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.64002a",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 1448573
+																	},
+																	"width": 1920,
+																	"height": 960,
+																	"isHdr": false,
+																	"fps": 29.97
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000
+																}
+															}
+														},
+														{
+															"name": "2160-avc1",
+															"label": "4K",
+															"url": "/Videos/Lug14XXgLx/2160.mp4?token=<token>",
+															"mimeType": "video/mp4",
+															"order": 397351104,
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"video": {
+																	"codec": "avc1.640034",
+																	"codecSimple": "avc1",
+																	"bitrate": {
+																		"average": 5904212
+																	},
+																	"width": 3840,
+																	"height": 1920,
+																	"isHdr": false,
+																	"fps": 29.97
+																},
+																"audio": {
+																	"codec": "mp4a.40.2",
+																	"bitrate": {
+																		"average": 93340,
+																		"maximum": 93340
+																	},
+																	"channelCount": 2,
+																	"samplerate": 48000
+																}
+															}
+														}
+													]
+												}
+											]
+										}
+									},
+									"live": {
+										"summary": "Example for `live`",
+										"description": "https://www.floatplane.com/api/v3/delivery/info?entityId=5c13f3c006f1be15e08e05c0&scenario=live \n\nNote that tokens are JWT tokens, but have been replaced with `<token>` in the examples below.",
+										"value": {
+											"groups": [
+												{
+													"origins": [
+														{
+															"url": "https://de488bcb61af.us-east-1.playback.live-video.net"
+														}
+													],
+													"variants": [
+														{
+															"name": "live-abr",
+															"label": "Auto",
+															"url": "/api/video/v1/us-east-1.758417551536.channel.yKkxur4ukc0B.m3u8?allow_source=false&token=<token>",
+															"mimeType": "application/x-mpegURL",
+															"hidden": false,
+															"enabled": true,
+															"meta": {
+																"live": {
+																	"lowLatencyExtension": "ivshls"
+																}
+															}
+														}
+													]
+												}
+											]
 										}
 									}
 								}
