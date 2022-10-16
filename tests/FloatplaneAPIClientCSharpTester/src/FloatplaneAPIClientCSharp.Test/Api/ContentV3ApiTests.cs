@@ -305,5 +305,35 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			//var response = instance.LikeContent(contentLikeV3Request);
 			//Assert.IsType<List<string>>(response);
 		}
+
+		[Fact]
+		public void UpdateProgressTest()
+		{
+			var updateProgressRequest = new UpdateProgressRequest(
+				id: ApiTestSampleData.Video_New,
+				contentType: UpdateProgressRequest.ContentTypeEnum.Video,
+				progress: 10
+			);
+			var response = instance.UpdateProgressWithHttpInfo(updateProgressRequest);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<string>(response.Data);
+			Assert.Equal("OK", response.Data);
+		}
+
+		[Fact]
+		public void GetProgressTest()
+		{
+			var getProgressRequest = new GetProgressRequest(
+				ids: new List<string>
+				{
+					ApiTestSampleData.Post_Video_New,
+				},
+				contentType: GetProgressRequest.ContentTypeEnum.BlogPost
+			);
+			var response = instance.GetProgressWithHttpInfo(getProgressRequest);
+			Assert.Null(response.ErrorText);
+			Assert.IsType<List<GetProgressResponseInner>>(response.Data);
+			Assert.Equal(1, response.Data?.Count());
+		}
 	}
 }
