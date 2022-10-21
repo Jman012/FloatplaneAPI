@@ -17634,6 +17634,154 @@
 				}
 			}
 		},
+		"/api/v3/comment/edit": {
+			"post": {
+				"operationId": "editComment",
+				"summary": "Edit Comment",
+				"description": "TODO",
+				"tags": [
+					"CommentV3"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {},
+								"example": {}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/400BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/401Unauthenticated"
+					},
+					"403": {
+						"$ref": "#/components/responses/403Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/404NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/Unexpected"
+					}
+				}
+			}
+		},
+		"/api/v3/comment/delete": {
+			"post": {
+				"operationId": "deleteComment",
+				"summary": "Delete Comment",
+				"description": "TODO",
+				"tags": [
+					"CommentV3"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {},
+								"example": {}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/400BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/401Unauthenticated"
+					},
+					"403": {
+						"$ref": "#/components/responses/403Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/404NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/Unexpected"
+					}
+				}
+			}
+		},
+		"/api/v3/comment/pin": {
+			"post": {
+				"operationId": "pinComment",
+				"summary": "Pin Comment",
+				"description": "TODO",
+				"tags": [
+					"CommentV3"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {},
+								"example": {}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/400BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/401Unauthenticated"
+					},
+					"403": {
+						"$ref": "#/components/responses/403Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/404NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/Unexpected"
+					}
+				}
+			}
+		},
+		"/api/v3/comment/history": {
+			"post": {
+				"operationId": "getCommentHistory",
+				"summary": "Get Comment History",
+				"description": "TODO",
+				"tags": [
+					"CommentV3"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {},
+								"example": {}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/400BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/401Unauthenticated"
+					},
+					"403": {
+						"$ref": "#/components/responses/403Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/404NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/Unexpected"
+					}
+				}
+			}
+		},
 		"/api/v3/content/creator": {
 			"get": {
 				"operationId": "getCreatorBlogPosts",
