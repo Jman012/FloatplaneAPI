@@ -81,7 +81,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 				var response = instance.GetCommentRepliesWithHttpInfo(comment, blogPost, limit, rid);
 			});
 			Assert.NotNull(apiException.ErrorContent);
-			Assert.Equal((int)System.Net.HttpStatusCode.BadRequest, apiException.ErrorCode);
+			Assert.Equal((int)System.Net.HttpStatusCode.NotFound, apiException.ErrorCode);
 
 			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}
