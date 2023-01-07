@@ -1,6 +1,6 @@
 #!/bin/sh
 
-$(npm bin)/openapi-generator-cli generate \
+openapi-generator-cli generate \
  -i ../floatplane-openapi-specification-trimmed.json \
  -o FloatplaneAPIClientCSharpTester \
  -g csharp-netcore \
