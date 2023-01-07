@@ -3183,7 +3183,8 @@
 				"properties": {
 					"startDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date-time",
+						"nullable": true
 					},
 					"endDate": {
 						"type": "string",
