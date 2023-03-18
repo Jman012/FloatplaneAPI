@@ -63,7 +63,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 				var response = instance.GetCreatorWithHttpInfo(id);
 			});
 			Assert.NotNull(apiException.ErrorContent);
-			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+			Assert.Equal((int)System.Net.HttpStatusCode.NotFound, apiException.ErrorCode);
 
 			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}

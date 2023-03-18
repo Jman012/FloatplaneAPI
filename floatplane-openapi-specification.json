@@ -1247,6 +1247,9 @@
 							"blogPost"
 						]
 					},
+					"channel": {
+						"$ref": "#/components/schemas/ChannelModel"
+					},
 					"tags": {
 						"type": "array",
 						"items": {
@@ -1332,6 +1335,7 @@
 					"title",
 					"text",
 					"type",
+					"channel",
 					"tags",
 					"attachmentOrder",
 					"metadata",
@@ -1936,7 +1940,8 @@
 						"type": "string"
 					},
 					"urlname": {
-						"type": "string"
+						"type": "string",
+						"description": "Shown in the browser URL, and used in `/creator/named` queries."
 					},
 					"description": {
 						"type": "string"
@@ -1981,6 +1986,9 @@
 					},
 					"incomeDisplay": {
 						"type": "boolean"
+					},
+					"defaultChannel": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -2032,13 +2040,30 @@
 						"type": "string"
 					},
 					"owner": {
-						"type": "string"
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"id": {
+										"type": "string"
+									},
+									"username": {
+										"type": "string"
+									}
+								}
+							}
+						]
 					},
 					"title": {
 						"type": "string"
 					},
 					"urlname": {
-						"type": "string"
+						"type": "string",
+						"description": "Shown in the browser URL, and used in `/creator/named` queries."
 					},
 					"description": {
 						"type": "string"
@@ -2049,11 +2074,15 @@
 					"category": {
 						"type": "object",
 						"properties": {
+							"id": {
+								"type": "string"
+							},
 							"title": {
 								"type": "string"
 							}
 						},
 						"required": [
+							"id",
 							"title"
 						]
 					},
@@ -2092,8 +2121,27 @@
 					"incomeDisplay": {
 						"type": "boolean"
 					},
+					"defaultChannel": {
+						"type": "string"
+					},
 					"socialLinks": {
 						"$ref": "#/components/schemas/SocialLinksModel"
+					},
+					"channels": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ChannelModel"
+						}
+					},
+					"discordServers": {
+						"type": "array",
+						"description": "Present in `/creator/named` queries",
+						"items": {
+							"$ref": "#/components/schemas/DiscordServerModel"
+						}
+					},
+					"card": {
+						"$ref": "#/components/schemas/ImageModel"
 					}
 				},
 				"required": [
@@ -2111,7 +2159,66 @@
 					"discoverable",
 					"subscriberCountDisplay",
 					"incomeDisplay",
-					"socialLinks"
+					"defaultChannel",
+					"socialLinks",
+					"channels"
+				]
+			},
+			"ChannelModel": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"creator": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"urlname": {
+						"type": "string",
+						"description": "Shown in the browser URL."
+					},
+					"about": {
+						"type": "string"
+					},
+					"order": {
+						"type": "integer"
+					},
+					"cover": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ImageModel"
+							}
+						],
+						"nullable": true
+					},
+					"card": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ImageModel"
+							}
+						],
+						"nullable": true
+					},
+					"icon": {
+						"$ref": "#/components/schemas/ImageModel"
+					},
+					"socialLinks": {
+						"$ref": "#/components/schemas/SocialLinksModel"
+					}
+				},
+				"required": [
+					"id",
+					"creator",
+					"title",
+					"urlname",
+					"about",
+					"order",
+					"cover",
+					"card",
+					"icon"
 				]
 			},
 			"BlogPostModelV3": {
@@ -2135,6 +2242,9 @@
 						"enum": [
 							"blogPost"
 						]
+					},
+					"channel": {
+						"$ref": "#/components/schemas/ChannelModel"
 					},
 					"tags": {
 						"type": "array",
@@ -2192,7 +2302,8 @@
 								"type": "string"
 							},
 							"urlname": {
-								"type": "string"
+								"type": "string",
+								"description": "Shown in the browser URL, and used in `/creator/named` queries."
 							},
 							"description": {
 								"type": "string"
@@ -2203,11 +2314,15 @@
 							"category": {
 								"type": "object",
 								"properties": {
+									"id": {
+										"type": "string"
+									},
 									"title": {
 										"type": "string"
 									}
 								},
 								"required": [
+									"id",
 									"title"
 								]
 							},
@@ -2239,6 +2354,15 @@
 							},
 							"incomeDisplay": {
 								"type": "boolean"
+							},
+							"defaultChannel": {
+								"type": "string"
+							},
+							"channels": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
 							},
 							"card": {
 								"allOf": [
@@ -2317,6 +2441,7 @@
 					"title",
 					"text",
 					"type",
+					"channel",
 					"tags",
 					"attachmentOrder",
 					"metadata",
@@ -2757,6 +2882,10 @@
 					"owner": {
 						"type": "string"
 					},
+					"channel": {
+						"type": "string",
+						"description": "The creator channel this livestream belongs to."
+					},
 					"streamPath": {
 						"type": "string"
 					},
@@ -2977,13 +3106,22 @@
 						"type": "string"
 					},
 					"replying": {
-						"type": "string"
+						"type": "string",
+						"nullable": true
 					},
 					"postDate": {
-						"type": "string"
+						"type": "string",
+						"format": "date-time"
 					},
 					"editDate": {
-						"type": "string"
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"pinDate": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
 					},
 					"editCount": {
 						"type": "integer"
@@ -3020,89 +3158,10 @@
 					},
 					"replies": {
 						"type": "array",
+						"description": "This is present (but possibly empty) for top-level comments. This is never present for reply comments.",
 						"items": {
-							"$ref": "#/components/schemas/CommentReplyModel"
+							"$ref": "#/components/schemas/CommentModel"
 						}
-					},
-					"userInteraction": {
-						"$ref": "#/components/schemas/UserInteractionModel"
-					}
-				},
-				"required": [
-					"id",
-					"blogPost",
-					"user",
-					"text",
-					"replying",
-					"postDate",
-					"editDate",
-					"editCount",
-					"isEdited",
-					"likes",
-					"dislikes",
-					"score",
-					"interactionCounts",
-					"totalReplies",
-					"replies",
-					"userInteraction"
-				]
-			},
-			"CommentReplyModel": {
-				"type": "object",
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"blogPost": {
-						"type": "string"
-					},
-					"user": {
-						"$ref": "#/components/schemas/UserModel"
-					},
-					"text": {
-						"type": "string"
-					},
-					"replying": {
-						"type": "string"
-					},
-					"postDate": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"editDate": {
-						"type": "string",
-						"format": "date-time",
-						"nullable": true
-					},
-					"editCount": {
-						"type": "integer"
-					},
-					"isEdited": {
-						"type": "boolean"
-					},
-					"likes": {
-						"type": "integer"
-					},
-					"dislikes": {
-						"type": "integer"
-					},
-					"score": {
-						"type": "integer"
-					},
-					"interactionCounts": {
-						"type": "object",
-						"properties": {
-							"like": {
-								"type": "integer"
-							},
-							"dislike": {
-								"type": "integer"
-							}
-						},
-						"required": [
-							"like",
-							"dislike"
-						]
 					},
 					"userInteraction": {
 						"$ref": "#/components/schemas/UserInteractionModel"
@@ -9005,18 +9064,390 @@
 			"get": {
 				"operationId": "getCreatorByName",
 				"summary": "Get Creator By Name",
-				"description": "TODO",
+				"description": "Retrieve detailed information on one or more creators on Floatplane.",
 				"tags": [
 					"CreatorV3"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "creatorURL",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"minItems": 1
+							}
+						},
+						"required": true,
+						"description": "The `urlname`(s) of the creator(s) to be retrieved. See `CreatorModelV3`.",
+						"style": "form",
+						"explode": true
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK",
 						"content": {
 							"application/json": {
-								"schema": {},
-								"example": {}
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/CreatorModelV3"
+									}
+								},
+								"example": [
+									{
+										"id": "59f94c0bdd241b70349eb72b",
+										"owner": "59f94c0bdd241b70349eb723",
+										"title": "LinusTechTips",
+										"urlname": "linustechtips",
+										"description": "We make entertaining videos about technology, including tech reviews, showcases and other content.",
+										"about": "# We're LinusTechTips\nWe make videos and stuff, cool eh?",
+										"category": {
+											"id": "59f94c0bdd241b70349eb727",
+											"title": "Technology"
+										},
+										"cover": {
+											"width": 1990,
+											"height": 519,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/696951209272749_1521668313867.jpeg",
+											"childImages": [
+												{
+													"width": 1245,
+													"height": 325,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/696951209272749_1521668313867_1245x325.jpeg"
+												}
+											]
+										},
+										"icon": {
+											"width": 600,
+											"height": 600,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205.jpeg",
+											"childImages": [
+												{
+													"width": 250,
+													"height": 250,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205_250x250.jpeg"
+												},
+												{
+													"width": 100,
+													"height": 100,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205_100x100.jpeg"
+												}
+											]
+										},
+										"liveStream": {
+											"id": "5c13f3c006f1be15e08e05c0",
+											"title": "I Am Hard... [REDACTED] - WAN Show March 17, 2023",
+											"description": "<p>Get a 15-day free trial for unlimited backup at<a href=\"https://www.backblaze.com/landing/podcast-wan.html\" rel=\"noopener noreferrer\" target=\"_blank\"> https://www.backblaze.com/landing/podcast-wan.html</a></p><p>Try Zoho One free for 30 days with no credit card required here:<a href=\"https://www.zoho.com/one/lp/linus.html\" rel=\"noopener noreferrer\" target=\"_blank\"> https://www.zoho.com/one/lp/linus.html</a></p><p>Save 15% with our offer code WANSHOW at <a href=\"https://vessi.com/WANSHOW\" rel=\"noopener noreferrer\" target=\"_blank\">https://vessi.com/WANSHOW</a></p><p><br></p><p>Podcast Download: TBD</p>",
+											"thumbnail": {
+												"width": 1920,
+												"height": 1080,
+												"path": "https://pbs.floatplane.com/stream_thumbnails/5c13f3c006f1be15e08e05c0/754645543818842_1679099143677.jpeg",
+												"childImages": [
+													{
+														"width": 400,
+														"height": 225,
+														"path": "https://pbs.floatplane.com/stream_thumbnails/5c13f3c006f1be15e08e05c0/754645543818842_1679099143677_400x225.jpeg"
+													},
+													{
+														"width": 1200,
+														"height": 675,
+														"path": "https://pbs.floatplane.com/stream_thumbnails/5c13f3c006f1be15e08e05c0/754645543818842_1679099143677_1200x675.jpeg"
+													}
+												]
+											},
+											"owner": "59f94c0bdd241b70349eb72b",
+											"channel": "63fe42c309e691e4e36de93d",
+											"streamPath": "/api/video/v1/us-east-1.758417551536.channel.yKkxur4ukc0B.m3u8",
+											"offline": {
+												"title": "Offline",
+												"description": "We're offline for now – please check back later!",
+												"thumbnail": {
+													"width": 1920,
+													"height": 1080,
+													"path": "https://pbs.floatplane.com/stream_thumbnails/5c13f3c006f1be15e08e05c0/894654974252956_1549059179026.jpeg",
+													"childImages": [
+														{
+															"width": 400,
+															"height": 225,
+															"path": "https://pbs.floatplane.com/stream_thumbnails/5c13f3c006f1be15e08e05c0/894654974252956_1549059179026_400x225.jpeg"
+														},
+														{
+															"width": 1200,
+															"height": 675,
+															"path": "https://pbs.floatplane.com/stream_thumbnails/5c13f3c006f1be15e08e05c0/894654974252956_1549059179026_1200x675.jpeg"
+														}
+													]
+												}
+											}
+										},
+										"subscriptionPlans": [
+											{
+												"id": "5d48d0306825b5780db93d07",
+												"title": "LTT Supporter",
+												"description": "- 2 Exclusives Per Week (Meet the Team, Extras, Behind the Scenes) \n- Exclusive livestreams\n- Save $10 by purchasing an annual subscription\n- Our gratitude for your support",
+												"price": "5.00",
+												"priceYearly": "50.00",
+												"currency": "usd",
+												"logo": null,
+												"interval": "month",
+												"featured": true,
+												"allowGrandfatheredAccess": false,
+												"discordServers": [],
+												"discordRoles": []
+											},
+											{
+												"id": "5e0ba6ac14e2590f760a0f0f",
+												"title": "LTT Supporter Plus",
+												"description": "- 4K Bitrate Streaming\n- 2 Exclusives Per Week (Meet the Team, Extras, Behind the Scenes) \n- Exclusive livestreams\n- Save $20 by purchasing an annual subscription\n- Our gratitude for your support",
+												"price": "10.00",
+												"priceYearly": "100.00",
+												"currency": "usd",
+												"logo": null,
+												"interval": "month",
+												"featured": true,
+												"allowGrandfatheredAccess": false,
+												"discordServers": [],
+												"discordRoles": []
+											}
+										],
+										"discoverable": true,
+										"subscriberCountDisplay": "total",
+										"incomeDisplay": false,
+										"defaultChannel": "63fe42c309e691e4e36de93d",
+										"socialLinks": {
+											"instagram": "https://www.instagram.com/linustech",
+											"website": "https://linustechtips.com",
+											"facebook": "https://www.facebook.com/LinusTech",
+											"youtube": "https://www.youtube.com/user/LinusTechTips",
+											"twitter": "https://twitter.com/linustech"
+										},
+										"channels": [
+											{
+												"id": "63fe42c309e691e4e36de93d",
+												"creator": "59f94c0bdd241b70349eb72b",
+												"title": "Linus Tech Tips",
+												"urlname": "main",
+												"about": "# We're LinusTechTips\nWe make videos and stuff, cool eh?",
+												"order": 0,
+												"cover": {
+													"width": 1990,
+													"height": 519,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/696951209272749_1521668313867.jpeg",
+													"childImages": [
+														{
+															"width": 1245,
+															"height": 325,
+															"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/696951209272749_1521668313867_1245x325.jpeg"
+														}
+													]
+												},
+												"card": null,
+												"icon": {
+													"width": 600,
+													"height": 600,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205.jpeg",
+													"childImages": [
+														{
+															"width": 250,
+															"height": 250,
+															"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205_250x250.jpeg"
+														},
+														{
+															"width": 100,
+															"height": 100,
+															"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205_100x100.jpeg"
+														}
+													]
+												},
+												"socialLinks": {}
+											},
+											{
+												"id": "6413534d88c13c181c3e2809",
+												"creator": "59f94c0bdd241b70349eb72b",
+												"title": "TechLinked",
+												"urlname": "techlinked",
+												"about": "News about tech + gaming culture, delivered thrice weekly.\n\nWe're also doing long-form video essays now, apparently. \n\nThe TalkLinked talk show/podcast will probably come back at some point, too!\n\nWriters: Riley Murdock, Jon Martin, James Strieb",
+												"order": 2,
+												"cover": {
+													"width": 1080,
+													"height": 282,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/6413534d88c13c181c3e2809/231100243161134_1678988109632.jpeg",
+													"childImages": []
+												},
+												"card": null,
+												"icon": {
+													"width": 88,
+													"height": 88,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/6413534d88c13c181c3e2809/955526950207988_1678988110287.jpeg",
+													"childImages": []
+												},
+												"socialLinks": {}
+											},
+											{
+												"id": "64135da7ce81077a8480c679",
+												"creator": "59f94c0bdd241b70349eb72b",
+												"title": "ShortCircuit",
+												"urlname": "shortcircuit",
+												"about": "What's in the box? Let's find out!\n\nOfficial channel under Linus Media Group.",
+												"order": 3,
+												"cover": {
+													"width": 1084,
+													"height": 283,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135da7ce81077a8480c679/745715133852622_1678990806332.jpeg",
+													"childImages": []
+												},
+												"card": null,
+												"icon": {
+													"width": 88,
+													"height": 88,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135da7ce81077a8480c679/470304051261927_1678990806883.jpeg",
+													"childImages": []
+												},
+												"socialLinks": {}
+											},
+											{
+												"id": "64135e27c773b27ff22c97eb",
+												"creator": "59f94c0bdd241b70349eb72b",
+												"title": "Techquickie",
+												"urlname": "techquickie",
+												"about": "Ever wanted to learn more about your favorite gadgets or a trending topic in tech? \n\nWith a mix of humor, cynicism, and insight, Techquickie brings you the answers to all your tech questions every Tuesday and Friday.",
+												"order": 5,
+												"cover": {
+													"width": 1080,
+													"height": 282,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135e27c773b27ff22c97eb/721553790654237_1678990887992.jpeg",
+													"childImages": []
+												},
+												"card": null,
+												"icon": {
+													"width": 88,
+													"height": 88,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135e27c773b27ff22c97eb/666841640245092_1678990909616.jpeg",
+													"childImages": []
+												},
+												"socialLinks": {}
+											},
+											{
+												"id": "64135e901ebaee42e258eb0b",
+												"creator": "59f94c0bdd241b70349eb72b",
+												"title": "Mac Address",
+												"urlname": "macaddress",
+												"about": "The exploration of all things Apple, from iPhones underwater to full iClouds in the sky. We want to be the channel that you come to first for an unexpected viewpoint about the devices you love.",
+												"order": 4,
+												"cover": {
+													"width": 1080,
+													"height": 282,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135e901ebaee42e258eb0b/254417940627493_1678990992632.jpeg",
+													"childImages": []
+												},
+												"card": null,
+												"icon": {
+													"width": 88,
+													"height": 88,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135e901ebaee42e258eb0b/979475909700348_1678990993114.jpeg",
+													"childImages": []
+												},
+												"socialLinks": {}
+											},
+											{
+												"id": "64135ed078d6262f717341b7",
+												"creator": "59f94c0bdd241b70349eb72b",
+												"title": "Channel Super Fun",
+												"urlname": "channelsuperfun",
+												"about": "Channel Super Fun is all about the name. Games, toys, and challenges. Expect to find them all here!",
+												"order": 6,
+												"cover": {
+													"width": 1080,
+													"height": 282,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135ed078d6262f717341b7/881886551214964_1678991123807.jpeg",
+													"childImages": []
+												},
+												"card": null,
+												"icon": {
+													"width": 88,
+													"height": 88,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135ed078d6262f717341b7/317924815973639_1678991124672.jpeg",
+													"childImages": []
+												},
+												"socialLinks": {}
+											},
+											{
+												"id": "64135f82fc76ab7f9fbdc876",
+												"creator": "59f94c0bdd241b70349eb72b",
+												"title": "They're Just Movies",
+												"urlname": "tajm",
+												"about": "Each week our small group of nerds sits down for a not-so-serious, SPOILER-FILLED, chat about the movies you love.\n\nFormerly known as Carpool Critics, we're part of Linus Media Group!",
+												"order": 7,
+												"cover": {
+													"width": 1080,
+													"height": 282,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135f82fc76ab7f9fbdc876/190277198232475_1678991235439.jpeg",
+													"childImages": []
+												},
+												"card": null,
+												"icon": {
+													"width": 88,
+													"height": 88,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135f82fc76ab7f9fbdc876/570806971094170_1678991236419.jpeg",
+													"childImages": []
+												},
+												"socialLinks": {}
+											},
+											{
+												"id": "6413623f5b12cca228a28e78",
+												"creator": "59f94c0bdd241b70349eb72b",
+												"title": "FP Exclusive",
+												"urlname": "fpexclusive",
+												"about": "wow... so empty",
+												"order": 1,
+												"cover": {
+													"width": 1200,
+													"height": 313,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/072932633007415_1678991935461.jpeg",
+													"childImages": []
+												},
+												"card": null,
+												"icon": {
+													"width": 720,
+													"height": 720,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/069457536750544_1678991936484.jpeg",
+													"childImages": [
+														{
+															"width": 100,
+															"height": 100,
+															"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/069457536750544_1678991936484_100x100.jpeg"
+														},
+														{
+															"width": 250,
+															"height": 250,
+															"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/069457536750544_1678991936484_250x250.jpeg"
+														}
+													]
+												},
+												"socialLinks": {}
+											}
+										],
+										"discordServers": [
+											{
+												"id": "5baa8838d9f3aa0a83acd429",
+												"guildName": "Linus Tech Tips",
+												"guildIcon": "803d5f745b30aba3edba719bac671660",
+												"inviteLink": "https://discord.gg/LTT",
+												"inviteMode": "link"
+											},
+											{
+												"id": "5e34cd9a9dbb744872192895",
+												"guildName": "LTT Minecraft Network",
+												"guildIcon": "4f7f812b49196b1646bdcdb84b948c84",
+												"inviteLink": "https://discord.gg/VVpwBPXrMc",
+												"inviteMode": "link"
+											}
+										]
+									}
+								]
 							}
 						}
 					},
@@ -9054,6 +9485,326 @@
 							"application/json": {
 								"schema": {},
 								"example": {}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/400BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/401Unauthenticated"
+					},
+					"403": {
+						"$ref": "#/components/responses/403Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/404NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/Unexpected"
+					}
+				}
+			}
+		},
+		"/api/v3/creator/channels/list": {
+			"get": {
+				"operationId": "listCreatorChannelsV3",
+				"summary": "List Creator Channels",
+				"description": "Retrieves a list of channels within the given creator(s).",
+				"tags": [
+					"CreatorV3"
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "ids",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"minItems": 1
+							}
+						},
+						"required": true,
+						"description": "The ids of the creator(s) from which to search for channels.",
+						"style": "form",
+						"explode": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/ChannelModel"
+									}
+								},
+								"example": [
+									{
+										"id": "63fe42c309e691e4e36de93d",
+										"creator": "59f94c0bdd241b70349eb72b",
+										"title": "Linus Tech Tips",
+										"urlname": "main",
+										"about": "# We're LinusTechTips\nWe make videos and stuff, cool eh?",
+										"order": 0,
+										"cover": {
+											"width": 1990,
+											"height": 519,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/696951209272749_1521668313867.jpeg",
+											"childImages": [
+												{
+													"width": 1245,
+													"height": 325,
+													"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/696951209272749_1521668313867_1245x325.jpeg"
+												}
+											]
+										},
+										"card": {
+											"width": 375,
+											"height": 500,
+											"path": "https://pbs.floatplane.com/creator_card/59f94c0bdd241b70349eb72b/281467946609369_1551250329871.jpeg",
+											"childImages": [
+												{
+													"width": 300,
+													"height": 400,
+													"path": "https://pbs.floatplane.com/creator_card/59f94c0bdd241b70349eb72b/281467946609369_1551250329871_300x400.jpeg"
+												}
+											]
+										},
+										"icon": {
+											"width": 600,
+											"height": 600,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205.jpeg",
+											"childImages": [
+												{
+													"width": 250,
+													"height": 250,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205_250x250.jpeg"
+												},
+												{
+													"width": 100,
+													"height": 100,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/770551996990709_1551249357205_100x100.jpeg"
+												}
+											]
+										},
+										"socialLinks": {}
+									},
+									{
+										"id": "6413534d88c13c181c3e2809",
+										"creator": "59f94c0bdd241b70349eb72b",
+										"title": "TechLinked",
+										"urlname": "techlinked",
+										"about": "News about tech + gaming culture, delivered thrice weekly.\n\nWe're also doing long-form video essays now, apparently. \n\nThe TalkLinked talk show/podcast will probably come back at some point, too!\n\nWriters: Riley Murdock, Jon Martin, James Strieb",
+										"order": 2,
+										"cover": {
+											"width": 1080,
+											"height": 282,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/6413534d88c13c181c3e2809/231100243161134_1678988109632.jpeg",
+											"childImages": []
+										},
+										"card": {
+											"width": 66,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/6413534d88c13c181c3e2809/953298867250186_1678988110714.jpeg",
+											"childImages": []
+										},
+										"icon": {
+											"width": 88,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/6413534d88c13c181c3e2809/955526950207988_1678988110287.jpeg",
+											"childImages": []
+										},
+										"socialLinks": {}
+									},
+									{
+										"id": "64135da7ce81077a8480c679",
+										"creator": "59f94c0bdd241b70349eb72b",
+										"title": "ShortCircuit",
+										"urlname": "shortcircuit",
+										"about": "What's in the box? Let's find out!\n\nOfficial channel under Linus Media Group.",
+										"order": 3,
+										"cover": {
+											"width": 1084,
+											"height": 283,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135da7ce81077a8480c679/745715133852622_1678990806332.jpeg",
+											"childImages": []
+										},
+										"card": {
+											"width": 66,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/64135da7ce81077a8480c679/939790311068913_1678990807440.jpeg",
+											"childImages": []
+										},
+										"icon": {
+											"width": 88,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135da7ce81077a8480c679/470304051261927_1678990806883.jpeg",
+											"childImages": []
+										},
+										"socialLinks": {}
+									},
+									{
+										"id": "64135e27c773b27ff22c97eb",
+										"creator": "59f94c0bdd241b70349eb72b",
+										"title": "Techquickie",
+										"urlname": "techquickie",
+										"about": "Ever wanted to learn more about your favorite gadgets or a trending topic in tech? \n\nWith a mix of humor, cynicism, and insight, Techquickie brings you the answers to all your tech questions every Tuesday and Friday.",
+										"order": 5,
+										"cover": {
+											"width": 1080,
+											"height": 282,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135e27c773b27ff22c97eb/721553790654237_1678990887992.jpeg",
+											"childImages": []
+										},
+										"card": {
+											"width": 66,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/64135e27c773b27ff22c97eb/962826906389296_1678990910103.jpeg",
+											"childImages": []
+										},
+										"icon": {
+											"width": 88,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135e27c773b27ff22c97eb/666841640245092_1678990909616.jpeg",
+											"childImages": []
+										},
+										"socialLinks": {}
+									},
+									{
+										"id": "64135e901ebaee42e258eb0b",
+										"creator": "59f94c0bdd241b70349eb72b",
+										"title": "Mac Address",
+										"urlname": "macaddress",
+										"about": "The exploration of all things Apple, from iPhones underwater to full iClouds in the sky. We want to be the channel that you come to first for an unexpected viewpoint about the devices you love.",
+										"order": 4,
+										"cover": {
+											"width": 1080,
+											"height": 282,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135e901ebaee42e258eb0b/254417940627493_1678990992632.jpeg",
+											"childImages": []
+										},
+										"card": {
+											"width": 66,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/64135e901ebaee42e258eb0b/493604923555386_1678990993708.jpeg",
+											"childImages": []
+										},
+										"icon": {
+											"width": 88,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135e901ebaee42e258eb0b/979475909700348_1678990993114.jpeg",
+											"childImages": []
+										},
+										"socialLinks": {}
+									},
+									{
+										"id": "64135ed078d6262f717341b7",
+										"creator": "59f94c0bdd241b70349eb72b",
+										"title": "Channel Super Fun",
+										"urlname": "channelsuperfun",
+										"about": "Channel Super Fun is all about the name. Games, toys, and challenges. Expect to find them all here!",
+										"order": 6,
+										"cover": {
+											"width": 1080,
+											"height": 282,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135ed078d6262f717341b7/881886551214964_1678991123807.jpeg",
+											"childImages": []
+										},
+										"card": {
+											"width": 66,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/64135ed078d6262f717341b7/953601834319296_1678991125167.jpeg",
+											"childImages": []
+										},
+										"icon": {
+											"width": 88,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135ed078d6262f717341b7/317924815973639_1678991124672.jpeg",
+											"childImages": []
+										},
+										"socialLinks": {}
+									},
+									{
+										"id": "64135f82fc76ab7f9fbdc876",
+										"creator": "59f94c0bdd241b70349eb72b",
+										"title": "They're Just Movies",
+										"urlname": "tajm",
+										"about": "Each week our small group of nerds sits down for a not-so-serious, SPOILER-FILLED, chat about the movies you love.\n\nFormerly known as Carpool Critics, we're part of Linus Media Group!",
+										"order": 7,
+										"cover": {
+											"width": 1080,
+											"height": 282,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/64135f82fc76ab7f9fbdc876/190277198232475_1678991235439.jpeg",
+											"childImages": []
+										},
+										"card": {
+											"width": 66,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/64135f82fc76ab7f9fbdc876/863827491957963_1678991237126.jpeg",
+											"childImages": []
+										},
+										"icon": {
+											"width": 88,
+											"height": 88,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/64135f82fc76ab7f9fbdc876/570806971094170_1678991236419.jpeg",
+											"childImages": []
+										},
+										"socialLinks": {}
+									},
+									{
+										"id": "6413623f5b12cca228a28e78",
+										"creator": "59f94c0bdd241b70349eb72b",
+										"title": "FP Exclusive",
+										"urlname": "fpexclusive",
+										"about": "wow... so empty",
+										"order": 1,
+										"cover": {
+											"width": 1200,
+											"height": 313,
+											"path": "https://pbs.floatplane.com/cover_images/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/072932633007415_1678991935461.jpeg",
+											"childImages": []
+										},
+										"card": {
+											"width": 750,
+											"height": 1000,
+											"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/717727609968419_1678991937240.jpeg",
+											"childImages": [
+												{
+													"width": 375,
+													"height": 500,
+													"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/717727609968419_1678991937240_375x500.jpeg"
+												},
+												{
+													"width": 300,
+													"height": 400,
+													"path": "https://pbs.floatplane.com/creator_cards/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/717727609968419_1678991937240_300x400.jpeg"
+												}
+											]
+										},
+										"icon": {
+											"width": 720,
+											"height": 720,
+											"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/069457536750544_1678991936484.jpeg",
+											"childImages": [
+												{
+													"width": 100,
+													"height": 100,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/069457536750544_1678991936484_100x100.jpeg"
+												},
+												{
+													"width": 250,
+													"height": 250,
+													"path": "https://pbs.floatplane.com/creator_icons/59f94c0bdd241b70349eb72b/6413623f5b12cca228a28e78/069457536750544_1678991936484_250x250.jpeg"
+												}
+											]
+										},
+										"socialLinks": {}
+									}
+								]
 							}
 						}
 					},
@@ -17468,7 +18219,7 @@
 								"schema": {
 									"type": "array",
 									"items": {
-										"$ref": "#/components/schemas/CommentReplyModel"
+										"$ref": "#/components/schemas/CommentModel"
 									}
 								},
 								"example": [
@@ -17797,6 +18548,15 @@
 						},
 						"required": true,
 						"description": "The GUID of the creator to retrieve posts from."
+					},
+					{
+						"in": "query",
+						"name": "channel",
+						"schema": {
+							"type": "string"
+						},
+						"required": false,
+						"description": "The id of a creator's specific channel from which to retrieve posts."
 					},
 					{
 						"in": "query",

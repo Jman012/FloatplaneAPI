@@ -123,6 +123,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		public void GetCreatorBlogPostsTest()
 		{
 			string id = ApiTestSampleData.LttCreatorId;
+			string? channel = null;
 			int? limit = null;
 			int? fetchAfter = null;
 			string? search = null;
@@ -136,7 +137,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			int? toDuration = null;
 			DateTimeOffset? fromDate = null;
 			DateTimeOffset? toDate = null;
-			var response = instance.GetCreatorBlogPostsWithHttpInfo(id, limit, fetchAfter, search, tags, hasVideo, hasAudio, hasPicture, hasText, sort, fromDuration, toDuration, fromDate, toDate);
+			var response = instance.GetCreatorBlogPostsWithHttpInfo(id, channel, limit, fetchAfter, search, tags, hasVideo, hasAudio, hasPicture, hasText, sort, fromDuration, toDuration, fromDate, toDate);
 			Assert.Null(response.ErrorText);
 			Assert.IsType<List<BlogPostModelV3>>(response.Data);
 			Assert.True(response.Data?.Any());
@@ -147,6 +148,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 		{
 			var apiException = Assert.Throws<ApiException>(() => {
 				string id = ApiTestSampleData.NonExistentIdentifer;
+				string? channel = null;
 				int? limit = null;
 				int? fetchAfter = null;
 				string? search = null;
@@ -160,10 +162,10 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 				int? toDuration = null;
 				DateTimeOffset? fromDate = null;
 				DateTimeOffset? toDate = null;
-				var response = instance.GetCreatorBlogPostsWithHttpInfo(id, limit, fetchAfter, search, tags, hasVideo, hasAudio, hasPicture, hasText, sort, fromDuration, toDuration, fromDate, toDate);
+				var response = instance.GetCreatorBlogPostsWithHttpInfo(id, channel, limit, fetchAfter, search, tags, hasVideo, hasAudio, hasPicture, hasText, sort, fromDuration, toDuration, fromDate, toDate);
 			});
 			Assert.NotNull(apiException.ErrorContent);
-			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+			Assert.Equal((int)System.Net.HttpStatusCode.NotFound, apiException.ErrorCode);
 
 			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}
@@ -199,7 +201,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 				var response = instance.GetMultiCreatorBlogPostsWithHttpInfo(ids, limit, fetchAfter);
 			});
 			Assert.NotNull(apiException.ErrorContent);
-			Assert.Equal((int)System.Net.HttpStatusCode.InternalServerError, apiException.ErrorCode);
+			Assert.Equal((int)System.Net.HttpStatusCode.NotFound, apiException.ErrorCode);
 
 			ApiTestHelper.ValidateErrorModel(ApiTestHelper.GetErrorModel(apiException));
 		}

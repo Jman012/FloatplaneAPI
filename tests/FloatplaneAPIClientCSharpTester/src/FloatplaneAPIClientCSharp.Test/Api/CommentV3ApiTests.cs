@@ -66,7 +66,7 @@ namespace FloatplaneAPIClientCSharp.Test.Api
 			string rid = "62e3e9e68a798648e70499c8";
 			var response = instance.GetCommentRepliesWithHttpInfo(comment, blogPost, limit, rid);
 			Assert.Null(response.ErrorText);
-			Assert.IsType<List<CommentReplyModel>>(response.Data);
+			Assert.IsType<List<CommentModel>>(response.Data);
 			Assert.True(response.Data?.Any());
 		}
 
