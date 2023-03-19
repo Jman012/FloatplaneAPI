@@ -925,10 +925,11 @@
 				"properties": {
 					"totalSubscriberCount": {
 						"type": "integer",
-						"description": "The total number of subscribers for this creator."
+						"description": "The total number of subscribers for this creator.",
+						"nullable": true
 					},
 					"totalIncome": {
-						"type": "string",
+						"type": "integer",
 						"description": "The total amount of monthly income for this creator. This field tends to always be $0 for regular users.",
 						"nullable": true
 					},
@@ -982,7 +983,6 @@
 										"trialPeriod",
 										"creator",
 										"userIsSubscribed",
-										"userIsGrandfathered",
 										"enabledGlobal"
 									]
 								}
@@ -2215,7 +2215,6 @@
 					"title",
 					"urlname",
 					"about",
-					"order",
 					"cover",
 					"card",
 					"icon"
@@ -2516,7 +2515,6 @@
 					"logo",
 					"interval",
 					"featured",
-					"allowGrandfatheredAccess",
 					"discordServers",
 					"discordRoles"
 				]
@@ -2947,7 +2945,8 @@
 					},
 					"inviteLink": {
 						"type": "string",
-						"format": "uri"
+						"format": "uri",
+						"nullable": true
 					},
 					"inviteMode": {
 						"type": "string"
@@ -20562,43 +20561,6 @@
 										}
 									]
 								}
-							}
-						}
-					},
-					"400": {
-						"$ref": "#/components/responses/400BadRequest"
-					},
-					"401": {
-						"$ref": "#/components/responses/401Unauthenticated"
-					},
-					"403": {
-						"$ref": "#/components/responses/403Forbidden"
-					},
-					"404": {
-						"$ref": "#/components/responses/404NotFound"
-					},
-					"default": {
-						"$ref": "#/components/responses/Unexpected"
-					}
-				}
-			}
-		},
-		"/api/v3/content/gallery": {
-			"get": {
-				"operationId": "getGalleryContent",
-				"summary": "Get Gallery Content",
-				"description": "TODO",
-				"tags": [
-					"ContentV3"
-				],
-				"parameters": [],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {},
-								"example": {}
 							}
 						}
 					},

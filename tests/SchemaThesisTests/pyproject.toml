@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "schemathesistests"
+version = "0.1.0"
+description = ""
+authors = ["James Linnell <james.n.linnell@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+schemathesis = "^3.18.5"
+pytest-dependency = "^0.5.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
