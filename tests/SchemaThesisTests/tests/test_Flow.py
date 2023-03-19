@@ -25,8 +25,9 @@ class TestFPAPIFlow():
 	creatorIds: set[str] = set()
 	creatorUrlNames: set[str] = set()
 	creatorOwnerIds: set[str] = set()
+	# creatorChannels: set[(str, str)] = set()
 
-	def getValidateAndAssert(self, path: str, status: int, params: dict = None) -> requests.Response:
+	def getValidateAndAssert(self, path: str, status: int = requests.codes.ok, params: dict = None) -> requests.Response:
 		response = self.session.get(path, params=params)
 		print("Request GET " + path + " " + str(params) + ": " + str(response.status_code) +  " and " + str(len(response.content)) + " bytes")
 		# print("Response text: " + response.text)
@@ -35,18 +36,58 @@ class TestFPAPIFlow():
 		return response
 
 	@pytest.mark.dependency()
-	def test_FlowStart(self):
-
-		response = self.getValidateAndAssert("/api/v3/user/subscriptions", requests.codes.ok)
+	def test_LoadCreators(self):
+		print()
+		print("V3 List User Subscriptions")
+		response = self.getValidateAndAssert("/api/v3/user/subscriptions")
 		self.creatorIds.update([sub["creator"] for sub in response.json()])
 
-		response = self.getValidateAndAssert("/api/v3/creator/list", requests.codes.ok)
+		print("V3 Get Creators")
+		response = self.getValidateAndAssert("/api/v3/creator/list")
 		self.creatorIds.update([creator["id"] for creator in response.json()])
 		self.creatorUrlNames.update([creator["urlname"] for creator in response.json()])
 		self.creatorOwnerIds.update([creator["owner"] for creator in response.json()])
 
-	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_FlowStart"])
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
 	def test_CreatorSubscriptionPlans(self):
+		print()
 		for creatorId in self.creatorIds:
-			response = self.getValidateAndAssert("/api/v2/plan/info", requests.codes.ok, params={"creatorId": creatorId})
+			response = self.getValidateAndAssert("/api/v2/plan/info", params={"creatorId": creatorId})
 
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	def test_CreatorV2GetInfo(self):
+		print()
+		print("V2 Get Info")
+		for creatorId in self.creatorIds:
+			response = self.getValidateAndAssert("/api/v2/creator/info", params={"creatorGUID[0]": creatorId})
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	def test_CreatorV2GetInfoByName(self):
+		print()
+		print("V2 Get Info By Name")
+		for creatorUrlName in self.creatorUrlNames:
+			response = self.getValidateAndAssert("/api/v2/creator/named", params={"creatorURL[0]": creatorUrlName})
+			assert len(response.json()) > 0
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	def test_CreatorV3GetCreator(self):
+		print()
+		print("V3 Get Creator")
+		for creatorId in self.creatorIds:
+			response = self.getValidateAndAssert("/api/v3/creator/info", params={"id": creatorId})
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	def test_CreatorV3GetCreatoryName(self):
+		print()
+		print("V3 Get Creator by Name")
+		for creatorUrlName in self.creatorUrlNames:
+			response = self.getValidateAndAssert("/api/v3/creator/named", params={"creatorURL[0]": creatorUrlName})
+			assert len(response.json()) > 0
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	def test_CreatorV3ListCreatorChannels(self):
+		print()
+		print("V3 List Creator Channels")
+		for creatorId in self.creatorIds:
+			response = self.getValidateAndAssert("/api/v3/creator/channels/list", params={"ids[0]": creatorId})
+			assert len(response.json()) > 0
