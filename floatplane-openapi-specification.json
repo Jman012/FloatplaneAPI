@@ -3062,6 +3062,7 @@
 							},
 							"data": {
 								"type": "object",
+								"nullable": true,
 								"properties": {
 									"canJoinGuilds": {
 										"type": "boolean"

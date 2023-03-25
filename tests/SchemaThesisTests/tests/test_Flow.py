@@ -3,6 +3,7 @@ import schemathesis
 from urllib.parse import urljoin
 import os
 import pytest
+import time
 
 # https://stackoverflow.com/a/51026159/464870
 class FPSession(requests.Session):
@@ -82,7 +83,7 @@ class TestFPAPIFlow():
 	@pytest.mark.dependency()
 	def test_ConnectedAccountsV2(self):
 		print()
-		print("ConnectedAccountsV2 Get Edges")
+		print("ConnectedAccountsV2 List Connections")
 		response = self.getValidateAndAssert("/api/v2/connect/list")
 
 	"""
@@ -164,9 +165,62 @@ class TestFPAPIFlow():
 	Dependencies: Content ids
 	Retrieves: Content information, content comments
 	"""
+	videoAttachmentIds: set[(str, str, str)] = set()
+	audioAttachmentIds: set[(str, str, str)] = set()
+	pictureAttachmentIds: set[(str, str, str)] = set()
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_ContentV3GetCreatorBlogPosts"])
+	def test_ContentV3GetBlogPost(self):
+		print()
+		print("V3 Get Blog Post")
+		for (creatorId, blogPostId) in self.blogPostIds:
+			response = self.getValidateAndAssert("/api/v3/content/post", params={"id": blogPostId})
+			self.videoAttachmentIds.update([(creatorId, blogPostId, x["id"]) for x in response.json()["videoAttachments"]])
+			self.audioAttachmentIds.update([(creatorId, blogPostId, x["id"]) for x in response.json()["audioAttachments"]])
+			self.pictureAttachmentIds.update([(creatorId, blogPostId, x["id"]) for x in response.json()["pictureAttachments"]])
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_ContentV3GetCreatorBlogPosts"])
+	def test_ContentV3GetRelatedBlogPosts(self):
+		print()
+		print("V3 Get Related Blog Posts")
+		for (creatorId, blogPostId) in self.blogPostIds:
+			response = self.getValidateAndAssert("/api/v3/content/post", params={"id": blogPostId})
 
 	"""
-	Fifth level of tests.
+	Fourth level of tests.
+	Dependencies: Content ids
+	Retrieves: Attachment information
+	"""
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_ContentV3GetBlogPost"])
+	def test_ContentV3GetVideoContent(self):
+		print()
+		print("V3 Get Video Content")
+		for (creator, blogPostId, videoAttachmentId) in self.videoAttachmentIds:
+			response = self.getValidateAndAssert("/api/v3/content/video", params={"id": videoAttachmentId})
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_ContentV3GetBlogPost"])
+	def test_ContentV3GetPictureContent(self):
+		print()
+		print("V3 Get Picture Content")
+		for (creator, blogPostId, pictureAttachmentId) in self.pictureAttachmentIds:
+			response = self.getValidateAndAssert("/api/v3/content/picture", params={"id": pictureAttachmentId})
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_ContentV3GetBlogPost"])
+	def test_DeliveryV3GetDeliveryInfo(self):
+		print()
+		print("V3 Get Delivery Info - On Demand")
+		for (creator, blogPostId, videoAttachmentId) in self.videoAttachmentIds:
+			response = self.getValidateAndAssert("/api/v3/delivery/info", params={"scenario": "onDemand", "entityId": videoAttachmentId})
+			time.sleep(1)
+
+		print("V3 Get Delivery Info - Download")
+		for (creator, blogPostId, videoAttachmentId) in self.videoAttachmentIds:
+			response = self.getValidateAndAssert("/api/v3/delivery/info", params={"scenario": "download", "entityId": videoAttachmentId})
+			time.sleep(1)
+
+	"""
+	Sixth level of tests.
 	Dependencies: User ids/names
 	Retrieves: User information
 	"""
