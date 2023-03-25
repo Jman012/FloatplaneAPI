@@ -10,6 +10,8 @@ This repository is an API specification of the video streaming service [Floatpla
 
 This repository serves as an open and central source specification for the Floatplane API by the community, for purposes of tinkering and creating custom clients for Floatplane. At the time of writing, Floatplane has its main website, along with both Android and iOS applications. The main use case envisioned in the creation of this repository is to make it easier to create TV-first applications for, e.g., tvOS, Roku, Google TV, etc.
 
+⚠️ NOTE ⚠️: **Please** set a custom `User-Agent` header in your library of choice that uniquely identifies *what* app the requests are coming from, and *what **version** of your app is sending the requests. This is very helpful to the Floatplane team, and is good practice to do in general.
+
 # Automatic Generation
 
 The main purpose of this repository is to enable automatic generation of documentation and client code libraries.
@@ -86,16 +88,16 @@ When a new version of the Floatplane frontend is released (which is done silentl
 
 1. Clone this repository
 2. Change directory into the `/src` folder: `cd src`
-3. Fetch the frontend files for the **previous** version: `./fp-frontend-fetch.sh <previous version number>`
-	1. E.g. `./fp-frontend-fetch.sh 3.5.1`
+3. Fetch the frontend files for the **previous** version: `./fp-frontend-fetch-2.sh <previous version number>`
+	1. E.g. `./fp-frontend-fetch-2.sh 4.0.12`
 	2. This assumes that `wget` is installed on the system
-4. Fetch the frontend files for the **current** version: `./fp-frontend-fetch.sh <previous version number>`
-	1. E.g. `./fp-frontend-fetch.sh 3.5.1-a`
-5. Un-minify the files: `prettier --write Frontend`
+4. Fetch the frontend files for the **current** version: `./fp-frontend-fetch-2.sh <previous version number>`
+	1. E.g. `./fp-frontend-fetch.sh 4.0.13`
+5. Un-minify the files: `prettier --write Frontend/4.0.12 && prettier --write Frontend/4.0.13`
 	1. This assumes that [Prettier](https://prettier.io/) is installed on the system
-6. Perform a quick diff to clean up the files and see which files differ: `./fp-frontend-diff.sh <previous version> <current version>`
-	1. E.g. `./fp-frontend-diff.sh 3.5.1 3.5.1-a`
-	2. The cleanup replaces references of the version numbers in, specifically, `app.js` with a common piece of text in order to avoid many false-positives in the resulting diffs.
+6. Perform a quick diff to clean up the files and see which files differ: `./fp-frontend-diff-2.sh <previous version> <current version>`
+	1. E.g. `./fp-frontend-diff.sh 4.0.12 4.0.13`
+	2. The cleanup replaces references of the version numbers in, specifically, `main.js` with a common piece of text in order to avoid many false-positives in the resulting diffs.
 7. Then, manually inspect the diff of the files listed to see what has changed.
 
 The file `fp-frontend-version.txt` is a collection of recent version changes that Floatplane has made, starting with `3.5.1`. This may be updated irregularly.
@@ -105,8 +107,8 @@ The file `fp-frontend-version.txt` is a collection of recent version changes tha
 After making changes to the `floatplane-openapi-specification.json`, run `npm run test` in order to run integration tests with the Floatplane API. This ensures that the specification and its models are aligned with the API correctly.
 
 Integration test run requirements:
-- The environment variable "sailssid" needs to be set to the value of the `sails.sid` HTTP Cookie for authentication in order for integration tests to run.
-- The .NET 6.0 SDK will need to be installed on the system in order for integration tests to run (`dotnet build` and `dotnet test`).
+- The environment variable "sails.sid" needs to be set to the value of the `sails.sid` HTTP Cookie for authentication in order for integration tests to run.
+- Python 3 must be installed.
 
 Integration tests will test for:
 - Expected HTTP 200 responses for valid requests
@@ -118,15 +120,7 @@ Integration tests will test for:
 	- No extraneous properties in schema (if a property isn't in the FP response then it shouldn't be in the schema)
 	- Exact type matching (a string with a number in it should not be equivalent to a number)
 
-Write integration/unit tests in the `tests/FloatplaneAPIClientCSharpTester` C# project.
-
-#### Structure
-
-All integration test code is in `tests/`. The trimmed specification is generated and validated. A C# (csharp) client is generated with OpenAPI Generator with strict settings (see `tests/generate-csharp.sh`) into the git-ignored `tests/FloatplaneAPIClientCSharp` folder with a static project GUID. This contains all of the Models and APIs in normal code generation. The unit test project resides in VCS in `tests/FloatplaneAPIClientCSharpTester` and already links to the client project in the other folder.
-
-The FloatplaneAPIClientCSharpTester was generated using `tests/regenerate-csharp-test-library.sh` file. This also uses the OpenAPI Generator to generate the skeleton with API unit tests (no Model unit tests). It then removes the client library and re-links project references to the main client in `tests/FloatplaneAPIClientCSharp`. After this, it can be built tests can be run. 
-
-Note that re-generating this unit test project will wipe out existing unit tests. This will be useful to add new endpoint API tests when new APIs are introduced by Floatplane, but you should use VCS change tracking to re-do the existing unit tests.
+Write integration/unit tests in the `tests/SchemaThesisTests` Python/Poetry project.
 
 ---
 
