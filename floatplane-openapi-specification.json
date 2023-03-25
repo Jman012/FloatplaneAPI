@@ -1975,7 +1975,7 @@
 						"type": "array",
 						"nullable": true,
 						"items": {
-							"type": "object"
+							"$ref": "#/components/schemas/SubscriptionPlanModel"
 						}
 					},
 					"discoverable": {
@@ -2243,7 +2243,15 @@
 						]
 					},
 					"channel": {
-						"$ref": "#/components/schemas/ChannelModel"
+						"oneOf": [
+							{
+								"$ref": "#/components/schemas/ChannelModel"
+							},
+							{
+								"type": "string",
+								"description": "Channel identifier"
+							}
+						]
 					},
 					"tags": {
 						"type": "array",
@@ -2326,7 +2334,12 @@
 								]
 							},
 							"cover": {
-								"$ref": "#/components/schemas/ImageModel"
+								"allOf": [
+									{
+										"$ref": "#/components/schemas/ImageModel"
+									}
+								],
+								"nullable": true
 							},
 							"icon": {
 								"$ref": "#/components/schemas/ImageModel"
@@ -2386,8 +2399,7 @@
 							"subscriptionPlans",
 							"discoverable",
 							"subscriberCountDisplay",
-							"incomeDisplay",
-							"card"
+							"incomeDisplay"
 						]
 					},
 					"wasReleasedSilently": {
@@ -2451,7 +2463,6 @@
 					"comments",
 					"creator",
 					"wasReleasedSilently",
-					"thumbnail",
 					"isAccessible"
 				]
 			},
@@ -2558,13 +2569,10 @@
 				},
 				"required": [
 					"hasVideo",
-					"videoCount",
 					"videoDuration",
 					"hasAudio",
-					"audioCount",
 					"audioDuration",
 					"hasPicture",
-					"pictureCount",
 					"isFeatured"
 				]
 			},

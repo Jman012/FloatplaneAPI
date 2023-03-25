@@ -8,6 +8,7 @@ fi
 root="https://frontend.floatplane.com/"
 echo Downloading Floatplane frontend version $root$1 ...
 paths=("/runtime.js" "/polyfills.js" "/scripts.js" "/main.js")
+mkdir -p Frontend/$1
 for path in "${paths[@]}"; do
 	echo "$root$1$path"
 	wget "$root$1$path" -O "Frontend/$1$path" -q

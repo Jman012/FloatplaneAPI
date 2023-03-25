@@ -2,7 +2,7 @@
 
 if [ -z "$1" ] || [ -z "$2" ]
 then
-	echo "Usage: ./fp-frontend-unminify-diff.sh <version1> <version2>"
+	echo "Usage: ./fp-frontend-diff.sh <version1> <version2>"
 	exit 1
 fi
 

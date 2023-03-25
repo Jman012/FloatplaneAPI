@@ -10,7 +10,7 @@ class FPSession(requests.Session):
 		super().__init__()
 		self.base_url = base_url
 		self.headers.update({
-			"User-Agent": "Floatplane API Docs Integration and Regression Tests v0.1.0, CFNetwork",
+			"User-Agent": "Floatplane API Docs Integration and Regression Automated Tests v0.1.0, CFNetwork",
 		})
 		self.cookies.set("sails.sid", os.environ["sails.sid"])
 
@@ -22,11 +22,6 @@ class TestFPAPIFlow():
 	schema = schemathesis.from_path("../../floatplane-openapi-specification-trimmed.json", base_url="https://floatplane.com")
 	session = FPSession("https://floatplane.com")
 
-	creatorIds: set[str] = set()
-	creatorUrlNames: set[str] = set()
-	creatorOwnerIds: set[str] = set()
-	# creatorChannels: set[(str, str)] = set()
-
 	def getValidateAndAssert(self, path: str, status: int = requests.codes.ok, params: dict = None) -> requests.Response:
 		response = self.session.get(path, params=params)
 		print("Request GET " + path + " " + str(params) + ": " + str(response.status_code) +  " and " + str(len(response.content)) + " bytes")
@@ -35,59 +30,143 @@ class TestFPAPIFlow():
 		assert response.status_code == status, response.text
 		return response
 
+	"""
+	First level of tests.
+	Dependencies: None
+	Retrieves: Subscriptions, top-level lists (list of creators), user information, etc.
+	"""
+	creatorIds: set[str] = set() # Populated by test_LoadCreators
+	creatorUrlNames: set[str] = set() # Populated by test_LoadCreators
+	creatorOwnerIds: set[str] = set() # Populated by test_LoadCreators
+
 	@pytest.mark.dependency()
-	def test_LoadCreators(self):
+	def test_CreatorSubscriptionPlanV2(self):
 		print()
-		print("V3 List User Subscriptions")
+		print("SubscriptionsV3 List User Subscriptions")
 		response = self.getValidateAndAssert("/api/v3/user/subscriptions")
 		self.creatorIds.update([sub["creator"] for sub in response.json()])
 
-		print("V3 Get Creators")
+	@pytest.mark.dependency()
+	def test_LoadCreators(self):
+		print()
+		print("CreatorV3 Get Creators")
 		response = self.getValidateAndAssert("/api/v3/creator/list")
 		self.creatorIds.update([creator["id"] for creator in response.json()])
 		self.creatorUrlNames.update([creator["urlname"] for creator in response.json()])
 		self.creatorOwnerIds.update([creator["owner"] for creator in response.json()])
 
-	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	@pytest.mark.dependency()
+	def test_EdgesV2(self):
+		print()
+		print("EdgesV2 Get Edges")
+		response = self.getValidateAndAssert("/api/v2/edges")
+
+	@pytest.mark.dependency()
+	def test_PaymentsV2(self):
+		print()
+		print("PaymentsV2 List Payment Methods")
+		response = self.getValidateAndAssert("/api/v2/payment/method/list")
+
+		print("PaymentsV2 List Address")
+		response = self.getValidateAndAssert("/api/v2/payment/address/list")
+
+		print("PaymentsV2 List Invoices")
+		response = self.getValidateAndAssert("/api/v2/payment/invoice/list")
+
+	@pytest.mark.dependency()
+	def test_FAQV2(self):
+		print()
+		print("FAQV2 Get FAQs")
+		response = self.getValidateAndAssert("/api/v2/faq/list")
+
+	@pytest.mark.dependency()
+	def test_ConnectedAccountsV2(self):
+		print()
+		print("ConnectedAccountsV2 Get Edges")
+		response = self.getValidateAndAssert("/api/v2/connect/list")
+
+	"""
+	Second level of tests.
+	Dependencies: Creator names/ids
+	Retrieves: Creator information, Subscription Plan information
+	"""
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
 	def test_CreatorSubscriptionPlans(self):
 		print()
+		print("CreatorSubscriptionPlanV2 Get Creator Sub Info Public")
 		for creatorId in self.creatorIds:
 			response = self.getValidateAndAssert("/api/v2/plan/info", params={"creatorId": creatorId})
 
-	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
 	def test_CreatorV2GetInfo(self):
 		print()
-		print("V2 Get Info")
+		print("CreatorV2 Get Info")
 		for creatorId in self.creatorIds:
 			response = self.getValidateAndAssert("/api/v2/creator/info", params={"creatorGUID[0]": creatorId})
 
-	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
 	def test_CreatorV2GetInfoByName(self):
 		print()
-		print("V2 Get Info By Name")
+		print("CreatorV2 Get Info By Name")
 		for creatorUrlName in self.creatorUrlNames:
 			response = self.getValidateAndAssert("/api/v2/creator/named", params={"creatorURL[0]": creatorUrlName})
 			assert len(response.json()) > 0
 
-	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
 	def test_CreatorV3GetCreator(self):
 		print()
-		print("V3 Get Creator")
+		print("CreatorV3 Get Creator")
 		for creatorId in self.creatorIds:
 			response = self.getValidateAndAssert("/api/v3/creator/info", params={"id": creatorId})
 
-	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
 	def test_CreatorV3GetCreatoryName(self):
 		print()
-		print("V3 Get Creator by Name")
+		print("CreatorV3 Get Creator by Name")
 		for creatorUrlName in self.creatorUrlNames:
 			response = self.getValidateAndAssert("/api/v3/creator/named", params={"creatorURL[0]": creatorUrlName})
 			assert len(response.json()) > 0
 
-	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators"])
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
 	def test_CreatorV3ListCreatorChannels(self):
 		print()
-		print("V3 List Creator Channels")
+		print("CreatorV3 List Creator Channels")
 		for creatorId in self.creatorIds:
 			response = self.getValidateAndAssert("/api/v3/creator/channels/list", params={"ids[0]": creatorId})
 			assert len(response.json()) > 0
+
+	"""
+	Third level of tests.
+	Dependencies: Creator names/ids
+	Retrieves: Content Lists
+	"""
+	blogPostIds: set[(str, str)] = set()
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
+	def test_ContentV3GetCreatorBlogPosts(self):
+		print()
+		print("V3 Get Creator Blog Posts")
+		limit = 5 # Get 5 per page
+		for creatorId in self.creatorIds:
+			# Get latest and earliest
+			for sort in ["DESC", "ASC"]:
+				# Get various post type combinations
+				for type in [{}, {"hasVideo": True}, {"hasAudio": True}, {"hasPicture": True}, {"hasText": True}, {"hasVideo": True, "hasAudio": True}, {"hasVideo": True, "hasPicture": True}, {"hasAudio": True, "hasPicture": True}, {"hasVideo": True, "hasAudio": True, "hasPicture": True}]:
+					# Get posts
+					print(dict({"id": creatorId, "limit": limit, "sort": sort}, **type))
+					params = dict({"id": creatorId, "limit": limit, "sort": sort}, **type)
+					response = self.getValidateAndAssert("/api/v3/content/creator", params=params)
+					self.blogPostIds.update([(creatorId, blogPost["id"]) for blogPost in response.json()])
+
+	"""
+	Fourth level of tests.
+	Dependencies: Content ids
+	Retrieves: Content information, content comments
+	"""
+
+	"""
+	Fifth level of tests.
+	Dependencies: User ids/names
+	Retrieves: User information
+	"""
