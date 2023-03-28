@@ -4,6 +4,8 @@ from urllib.parse import urljoin
 import os
 import pytest
 import time
+import random
+import json
 
 # https://stackoverflow.com/a/51026159/464870
 class FPSession(requests.Session):
@@ -38,6 +40,7 @@ class TestFPAPIFlow():
 	Retrieves: Subscriptions, top-level lists (list of creators), user information, etc.
 	"""
 	subscribedCreatorIds: set[str] = set()
+	subscribedLivestreamIds: set[str] = set()
 	creatorIds: set[str] = set()
 	creatorUrlNames: set[str] = set()
 	creatorOwnerIds: set[str] = set()
@@ -57,6 +60,7 @@ class TestFPAPIFlow():
 		self.creatorIds.update([creator["id"] for creator in response.json()])
 		self.creatorUrlNames.update([creator["urlname"] for creator in response.json()])
 		self.creatorOwnerIds.update([creator["owner"] for creator in response.json()])
+		self.subscribedLivestreamIds.update([creator["liveStream"]["id"] for creator in response.json() if creator["id"] in self.subscribedCreatorIds])
 
 	@pytest.mark.dependency()
 	def test_EdgesV2(self):
@@ -87,6 +91,13 @@ class TestFPAPIFlow():
 		print()
 		print("ConnectedAccountsV2 List Connections")
 		response = self.getValidateAndAssert("/api/v2/connect/list")
+
+	@pytest.mark.dependency()
+	def test_UserV2BanStatus(self):
+		print()
+		print("V2 Get User Creator Ban Status")
+		for creatorId in self.subscribedCreatorIds:
+			response = self.getValidateAndAssert("/api/v2/user/ban/status", params={"creator": creatorId})
 
 	"""
 	Second level of tests.
@@ -139,6 +150,13 @@ class TestFPAPIFlow():
 			response = self.getValidateAndAssert("/api/v3/creator/channels/list", params={"ids[0]": creatorId})
 			assert len(response.json()) > 0
 
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
+	def test_ContentV3GetContentTags(self):
+		print()
+		print("V3 Get Content Tags")
+		for creatorId in self.creatorIds:
+			response = self.getValidateAndAssert("/api/v3/content/tags", params={"creatorIds[0]": creatorId})
+
 	"""
 	Third level of tests.
 	Dependencies: Creator names/ids
@@ -160,6 +178,18 @@ class TestFPAPIFlow():
 					params = dict({"id": creatorId, "limit": limit, "sort": sort}, **type)
 					response = self.getValidateAndAssert("/api/v3/content/creator", params=params)
 					self.blogPostIds.update([(creatorId, blogPost["id"]) for blogPost in response.json()])
+
+	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_LoadCreators", "TestFPAPIFlow::test_CreatorSubscriptionPlanV2"])
+	def test_ContentV3GetMultiCreatorBlogPosts(self):
+		print()
+		print("V3 Get Multi Creator Blog Posts")
+		params = dict()
+		for (i, creatorId) in enumerate(self.subscribedCreatorIds):
+			params["ids[" + str(i) + "]"] = creatorId
+		response = self.getValidateAndAssert("/api/v3/content/creator/list", params=params)
+
+		params["fetchAfter"] = json.dumps(response.json()["lastElements"])
+		response = self.getValidateAndAssert("/api/v3/content/creator/list", params=params)
 
 	"""
 	Fourth level of tests.
@@ -219,21 +249,60 @@ class TestFPAPIFlow():
 	def test_DeliveryV3GetDeliveryInfo(self):
 		print()
 		print("V3 Get Delivery Info - On Demand")
-		for (creatorId, blogPostId, videoAttachmentId) in self.videoAttachmentIds:
+		limit = 1
+		sleepDuration = 35 # 35 seconds inbetween each. Current rate limit is 2 req per min
+		for (creatorId, blogPostId, videoAttachmentId) in random.sample(list(self.videoAttachmentIds), limit):
 			if creatorId not in self.subscribedCreatorIds:
 				continue
 			response = self.getValidateAndAssert("/api/v3/delivery/info", params={"scenario": "onDemand", "entityId": videoAttachmentId})
-			time.sleep(1)
+			time.sleep(sleepDuration)
 
 		print("V3 Get Delivery Info - Download")
-		for (creatorId, blogPostId, videoAttachmentId) in self.videoAttachmentIds:
+		for (creatorId, blogPostId, videoAttachmentId) in random.sample(list(self.videoAttachmentIds), limit):
 			if creatorId not in self.subscribedCreatorIds:
 				continue
 			response = self.getValidateAndAssert("/api/v3/delivery/info", params={"scenario": "download", "entityId": videoAttachmentId})
-			time.sleep(1)
+			time.sleep(sleepDuration)
+
+		print("V3 Get Delivery Info - Livestream")
+		for liveStreamId in self.subscribedLivestreamIds:
+			response = self.getValidateAndAssert("/api/v3/delivery/info", params={"scenario": "live", "entityId": liveStreamId})
+			time.sleep(sleepDuration)
 
 	"""
 	Sixth level of tests.
 	Dependencies: User ids/names
 	Retrieves: User information
 	"""
+
+	@pytest.mark.dependency(depends=[""])
+	def test_UserV2V3GetSelf(self):
+		print()
+		print("V3 Get Self")
+		response = self.getValidateAndAssert("/api/v3/user/self")
+		id = response.json()["id"]
+		name = response.json()["username"]
+
+		print()
+		print("V3 Get User Notification List")
+		response = self.getValidateAndAssert("/api/v3/user/notification/list")
+
+		print()
+		print("V3 Get External Links")
+		response = self.getValidateAndAssert("/api/v3/user/links", params={"id": id})
+
+		print()
+		print("V3 Get External Activity")
+		response = self.getValidateAndAssert("/api/v3/user/activity", params={"id": id})
+
+		print()
+		print("V2 Get User Info")
+		response = self.getValidateAndAssert("/api/v2/user/info", params={"id": id})
+
+		print()
+		print("V2 Get User Info By Name")
+		response = self.getValidateAndAssert("/api/v2/user/named", params={"id": id})
+
+		print()
+		print("V2 Get User Security")
+		response = self.getValidateAndAssert("/api/v2/user/security")
