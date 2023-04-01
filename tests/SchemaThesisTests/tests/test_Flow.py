@@ -15,7 +15,7 @@ class FPSession(requests.Session):
 		self.headers.update({
 			"User-Agent": "Floatplane API Docs Integration and Regression Automated Tests v0.1.0, CFNetwork",
 		})
-		self.cookies.set("sails.sid", os.environ["sails.sid"])
+		self.cookies.set("sails.sid", os.environ["SAILS_SID"])
 
 	def request(self, method, url, *args, **kwargs):
 		joined_url = urljoin(self.base_url, url)

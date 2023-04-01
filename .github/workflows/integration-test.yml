@@ -33,5 +33,5 @@ jobs:
       run: poetry install
     - name: Run Integration Tests
       env:
-        sails.sid: ${{ secrets.INTEGRATION_TEST_SAILS_SID }}
+        SAILS_SID: ${{ secrets.INTEGRATION_TEST_SAILS_SID }}
       run: npm run test
