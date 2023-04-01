@@ -19,7 +19,7 @@
     "validate": "openapi-generator-cli validate -i floatplane-openapi-specification.json",
     "validate-trimmed": "openapi-generator-cli validate -i floatplane-openapi-specification-trimmed.json",
     "yaml": "npm run validate && npm run trim && npm run validate-trimmed && mkdir -p Docs && json2yaml floatplane-openapi-specification.json > Docs/floatplane-openapi-specification.yaml && json2yaml floatplane-openapi-specification-trimmed.json > Docs/floatplane-openapi-specification-trimmed.yaml && openapi-generator-cli validate -i Docs/floatplane-openapi-specification.yaml && openapi-generator-cli validate -i Docs/floatplane-openapi-specification-trimmed.yaml",
-    "test": "npm run validate && npm run trim && cd tests/SchemaThesisTests && poetry run pytest -v -s -k 'test_LoadCreators' && cd ../..",
+    "test": "npm run validate && npm run trim && cd tests/SchemaThesisTests && poetry run pytest -v -s && cd ../..",
     "docs-all": "npm run validate && npm run clean && mkdir -p Docs && cp ./static/index.html ./Docs/index.html && npm run docs-trimmed && npm run docs-full && npm run docs-async && npm run docs-copy && npm run yaml",
     "docs-copy": "cp ./floatplane-openapi-specification.json ./floatplane-openapi-specification-trimmed.json Docs/ && cp ./floatplane-asyncapi-frontend-specification.json Docs/ && cp ./floatplane-asyncapi-chat-specification.json Docs/",
     "docs-trimmed": "npm run trim && npm run validate-trimmed && npm run docs-oag-html2 && npm run docs-oag-dynamic-html && npm run docs-redoc && npm run docs-rapidoc && npm run docs-reslate && npm run docs-postman && npm run docs-swaggerui",
