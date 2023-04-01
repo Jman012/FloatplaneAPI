@@ -4,7 +4,9 @@
 name: Floatplane API Integration Test
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger
+  schedule:
+    - cron: '0 7 * * *' # Daily at midnight PST (7AM UTC)
 
 jobs:
   integration_test:
