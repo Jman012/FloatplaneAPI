@@ -3001,7 +3001,8 @@
 					"id",
 					"username",
 					"profileImage"
-				]
+				],
+				"additionalProperties": false
 			},
 			"UserSelfModel": {
 				"type": "object",
@@ -3050,6 +3051,7 @@
 					},
 					"connectedAccount": {
 						"type": "object",
+						"nullable": true,
 						"properties": {
 							"id": {
 								"type": "string"
