@@ -3232,9 +3232,6 @@
 							}
 						},
 						"required": [
-							"createdAt",
-							"updatedAt",
-							"id",
 							"contentEmail",
 							"contentFirebase",
 							"creatorMessageEmail",

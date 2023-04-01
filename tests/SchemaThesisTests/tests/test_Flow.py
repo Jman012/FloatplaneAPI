@@ -209,7 +209,7 @@ class TestFPAPIFlow():
 		for (creatorId, blogPostId) in self.blogPostIds:
 			if creatorId not in self.subscribedCreatorIds:
 				continue
-			response = self.getValidateAndAssert("/api/v3/content/post", status=[requests.codes.ok, requests.code.forbidden], params={"id": blogPostId})
+			response = self.getValidateAndAssert("/api/v3/content/post", status=[requests.codes.ok, requests.codes.forbidden], params={"id": blogPostId})
 			self.videoAttachmentIds.update([(creatorId, blogPostId, x["id"]) for x in response.json()["videoAttachments"]])
 			self.audioAttachmentIds.update([(creatorId, blogPostId, x["id"]) for x in response.json()["audioAttachments"]])
 			self.pictureAttachmentIds.update([(creatorId, blogPostId, x["id"]) for x in response.json()["pictureAttachments"]])
@@ -221,7 +221,7 @@ class TestFPAPIFlow():
 		for (creatorId, blogPostId) in self.blogPostIds:
 			if creatorId not in self.subscribedCreatorIds:
 				continue
-			response = self.getValidateAndAssert("/api/v3/content/related", status=[requests.codes.ok, requests.code.forbidden], params={"id": blogPostId})
+			response = self.getValidateAndAssert("/api/v3/content/related", status=[requests.codes.ok, requests.codes.forbidden], params={"id": blogPostId})
 
 	"""
 	Fourth level of tests.
@@ -236,7 +236,7 @@ class TestFPAPIFlow():
 		for (creatorId, blogPostId, videoAttachmentId) in self.videoAttachmentIds:
 			if creatorId not in self.subscribedCreatorIds:
 				continue
-			response = self.getValidateAndAssert("/api/v3/content/video", status=[requests.codes.ok, requests.code.forbidden], params={"id": videoAttachmentId})
+			response = self.getValidateAndAssert("/api/v3/content/video", status=[requests.codes.ok, requests.codes.forbidden], params={"id": videoAttachmentId})
 
 	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_ContentV3GetBlogPost"])
 	def test_ContentV3GetPictureContent(self):
@@ -245,7 +245,7 @@ class TestFPAPIFlow():
 		for (creatorId, blogPostId, pictureAttachmentId) in self.pictureAttachmentIds:
 			if creatorId not in self.subscribedCreatorIds:
 				continue
-			response = self.getValidateAndAssert("/api/v3/content/picture", status=[requests.codes.ok, requests.code.forbidden], params={"id": pictureAttachmentId})
+			response = self.getValidateAndAssert("/api/v3/content/picture", status=[requests.codes.ok, requests.codes.forbidden], params={"id": pictureAttachmentId})
 
 	@pytest.mark.dependency(depends=["TestFPAPIFlow::test_ContentV3GetBlogPost"])
 	def test_DeliveryV3GetDeliveryInfo(self):
@@ -256,19 +256,19 @@ class TestFPAPIFlow():
 		for (creatorId, blogPostId, videoAttachmentId) in random.sample(list(self.videoAttachmentIds), limit):
 			if creatorId not in self.subscribedCreatorIds:
 				continue
-			response = self.getValidateAndAssert("/api/v3/delivery/info", status=[requests.codes.ok, requests.code.forbidden], params={"scenario": "onDemand", "entityId": videoAttachmentId})
+			response = self.getValidateAndAssert("/api/v3/delivery/info", status=[requests.codes.ok, requests.codes.forbidden], params={"scenario": "onDemand", "entityId": videoAttachmentId})
 			time.sleep(sleepDuration)
 
 		print("V3 Get Delivery Info - Download")
 		for (creatorId, blogPostId, videoAttachmentId) in random.sample(list(self.videoAttachmentIds), limit):
 			if creatorId not in self.subscribedCreatorIds:
 				continue
-			response = self.getValidateAndAssert("/api/v3/delivery/info", status=[requests.codes.ok, requests.code.forbidden], params={"scenario": "download", "entityId": videoAttachmentId})
+			response = self.getValidateAndAssert("/api/v3/delivery/info", status=[requests.codes.ok, requests.codes.forbidden], params={"scenario": "download", "entityId": videoAttachmentId})
 			time.sleep(sleepDuration)
 
 		print("V3 Get Delivery Info - Livestream")
 		for liveStreamId in self.subscribedLivestreamIds:
-			response = self.getValidateAndAssert("/api/v3/delivery/info", status=[requests.codes.ok, requests.code.forbidden], params={"scenario": "live", "entityId": liveStreamId})
+			response = self.getValidateAndAssert("/api/v3/delivery/info", status=[requests.codes.ok, requests.codes.forbidden], params={"scenario": "live", "entityId": liveStreamId})
 			time.sleep(sleepDuration)
 
 	"""
