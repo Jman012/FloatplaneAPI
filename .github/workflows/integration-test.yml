@@ -32,5 +32,4 @@ jobs:
     - name: View poetry --help
       env:
         sails.sid: ${{ secrets.INTEGRATION_TEST_SAILS_SID }}
-      working-directory: tests/SchemaThesisTests
-      run: poetry run pytest -v -s -k 'test_LoadCreators'
+      run: npm run test
