@@ -27,8 +27,10 @@ jobs:
       with:
         poetry-version: ${{ matrix.poetry-version }}
     - name: Install dependencies
+      working-directory: ./test/SchemaThesisTests
       run: poetry install
     - name: View poetry --help
       env:
         sails.sid: ${{ secrets.INTEGRATION_TEST_SAILS_SID }}
+      working-directory: ./test/SchemaThesisTests
       run: poetry run pytest -v -s -k 'test_LoadCreators'
