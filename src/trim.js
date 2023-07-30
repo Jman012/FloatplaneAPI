@@ -1,10 +1,12 @@
 const fs = require("fs");
 
 // Nothing to trim for either Frontend nor Chat AsyncAPI files.
+let fromFile = process.argv[2];
+let toFile = process.argv[3];
 
-fs.readFile("../floatplane-openapi-specification.json", "utf8", (err, data) => {
+fs.readFile(fromFile, "utf8", (err, data) => {
 	if (err) {
-		console.log("Could not read ../floatplane-openapi-specification.json");
+		console.log("Could not read " + fromFile);
 	} else {
 		const spec = JSON.parse(data);
 
@@ -34,9 +36,9 @@ fs.readFile("../floatplane-openapi-specification.json", "utf8", (err, data) => {
 			spec.tags = spec.tags.filter(tag => tag.name != tagToRemove);
 		}
 
-		fs.writeFile("../floatplane-openapi-specification-trimmed.json", JSON.stringify(spec, null, 4), "utf8", (err) => {
+		fs.writeFile(toFile, JSON.stringify(spec, null, 4), "utf8", (err) => {
 			if (err) {
-				console.log("Cound not write to ../floatplane-openapi-specification-trimmed.json");
+				console.log("Cound not write to " + toFile);
 			} else {
 				console.log("Done");
 			}
