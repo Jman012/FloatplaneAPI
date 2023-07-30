@@ -1,5 +1,5 @@
 {
-	"asyncapi": "2.4.0",
+	"asyncapi": "2.6.0",
 	"info": {
 		"title": "Floatplane Async Chat API",
 		"version": "4.0.13",
