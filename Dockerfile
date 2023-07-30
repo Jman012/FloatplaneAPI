@@ -7,7 +7,7 @@ WORKDIR /
 RUN npm ci && npm cache clean --force
 
 COPY ./ /
-RUN npm run docs-all
+RUN make docs-all
 
 #Copy static files to Nginx
 FROM nginx:alpine

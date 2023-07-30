@@ -22,7 +22,7 @@ class FPSession(requests.Session):
 		return super().request(method, joined_url, *args, **kwargs)
 
 class TestFPAPIFlow():
-	schema = schemathesis.from_path("../../floatplane-openapi-specification-trimmed.json", base_url="https://floatplane.com")
+	schema = schemathesis.from_path("../../src/floatplane-openapi-specification-trimmed.json", base_url="https://floatplane.com")
 	session = FPSession("https://floatplane.com")
 
 	def getValidateAndAssert(self, path: str, status: list[int] = [requests.codes.ok], params: dict = None) -> requests.Response:

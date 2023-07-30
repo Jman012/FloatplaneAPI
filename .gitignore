@@ -1,8 +1,7 @@
 /node_modules
 /Docs
 /tools/Frontend
-/floatplane-openapi-specification-trimmed.json
+/src/floatplane-openapi-specification-trimmed.json
 **/.DS_Store
-/tests/FloatplaneAPIClientCSharp
 
 .hypothesis/
