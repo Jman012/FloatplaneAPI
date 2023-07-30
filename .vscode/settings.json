@@ -11,7 +11,7 @@
 				"/floatplane-asyncapi-chat-specification.json",
 				"/floatplane-asyncapi-frontend-specification.json"
 			],
-			"url": "https://raw.githubusercontent.com/asyncapi/spec-json-schemas/master/schemas/2.4.0.json"
+			"url": "https://raw.githubusercontent.com/asyncapi/spec-json-schemas/master/schemas/2.6.0.json"
 		}
 	]
 }

@@ -4,8 +4,8 @@
   "description": "Floatplane API Specification",
   "main": "floatplane-openapi-specification.json",
   "devDependencies": {
-    "@asyncapi/generator": "^1.9.5",
-    "@asyncapi/html-template": "^0.24.9",
+    "@asyncapi/generator": "^1.10.10",
+    "@asyncapi/html-template": "^0.28.3",
     "@openapitools/openapi-generator-cli": "^2.5.2",
     "json2yaml": "^1.1.0",
     "openapi-to-postmanv2": "2.12.0",

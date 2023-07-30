@@ -15,7 +15,7 @@
 	},
 	"servers": {
 		"website": {
-			"url": "www.floatplane.com/socket.io/?__sails_io_sdk_version={sailsVersion}&__sails_io_sdk_platform={sailsPlatform}&__sails_io_sdk_language={sailsVersion}&EIO=3&transport=websocket",
+			"url": "www.floatplane.com/socket.io/?__sails_io_sdk_version={sailsVersion}&__sails_io_sdk_platform={sailsPlatform}&__sails_io_sdk_language={sailsLanguage}&EIO=3&transport=websocket",
 			"protocol": "wss",
 			"description": "A client connects to Floatplane's asynchronous API via WebSockets with TLS (wss). The socket it connects to is goeverned by Sails, which requires specifying which version of Sails to use, as well as other parameters like the platform and language. The purpose of the `EIO` query parameter is unknown. If using a proper Sails client library, the parameters should be auto-filled for you, and simply connecting to `www.floatplane.com/socket.io/` should suffice.",
 			"variables": {
