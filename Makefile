@@ -15,7 +15,7 @@ clean:
 	rm -rf ./Docs
 	rm -f floatplane-openapi-specification-trimmed.json
 trim:
-	node src/trim.js floatplane-openapi-specification.json floatplane-openapi-specification-trimmed.json
+	node tools/trim.js floatplane-openapi-specification.json floatplane-openapi-specification-trimmed.json
 validate:
 	npx openapi-generator-cli validate -i floatplane-openapi-specification.json
 validate-trimmed: trim

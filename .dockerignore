@@ -1,5 +1,5 @@
 node_modules
 Docs
 openapitools.json
-src/Frontend
+tools/Frontend
 floatplane-openapi-specification-trimmed.json

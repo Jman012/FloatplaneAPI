@@ -1,6 +1,6 @@
 /node_modules
 /Docs
-/src/Frontend
+/tools/Frontend
 /floatplane-openapi-specification-trimmed.json
 **/.DS_Store
 /tests/FloatplaneAPIClientCSharp
