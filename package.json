@@ -8,8 +8,8 @@
     "@asyncapi/html-template": "^0.28.3",
     "@openapitools/openapi-generator-cli": "^2.5.2",
     "json2yaml": "^1.1.0",
-    "openapi-to-postmanv2": "2.12.0",
-    "redoc-cli": "0.13.0",
+    "openapi-to-postmanv2": "^2.14.1",
+    "redoc-cli": "^0.13.21",
     "reslate": "3.0.0-5",
     "widdershins": "4.0.1"
   },
