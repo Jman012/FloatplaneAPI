@@ -39,7 +39,7 @@ docs-oag-dynamic-html: docs-skeleton validate-trimmed
 	npx openapi-generator-cli generate -i src/floatplane-openapi-specification-trimmed.json -o Docs/OAG-dynamic-html/ -g dynamic-html
 docs-redoc: docs-skeleton validate-trimmed
 	mkdir -p Docs/Redoc
-	npx redoc-cli bundle -o Docs/Redoc/redoc-static.html src/floatplane-openapi-specification-trimmed.json
+	npx redocly build-docs -o Docs/Redoc/redoc-static.html src/floatplane-openapi-specification-trimmed.json
 docs-rapidoc: docs-skeleton validate-trimmed
 	mkdir -p Docs/Rapidoc
 	cp ./static/rapidoc.html ./Docs/Rapidoc/rapidoc.html
@@ -68,7 +68,7 @@ docs-oag-dynamic-html-full:
 	npx openapi-generator-cli generate -i src/floatplane-openapi-specification.json -o Docs/OAG-dynamic-html-full/ -g dynamic-html
 docs-redoc-full: docs-skeleton
 	mkdir -p Docs/Redoc-full
-	npx redoc-cli bundle -o Docs/Redoc-full/redoc-static.html src/floatplane-openapi-specification.json
+	npx redocly build-docs -o Docs/Redoc-full/redoc-static.html src/floatplane-openapi-specification.json
 docs-rapidoc-full: docs-skeleton
 	mkdir -p Docs/Rapidoc-full
 	cp ./static/rapidoc-full.html ./Docs/Rapidoc-full/rapidoc-full.html
