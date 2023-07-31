@@ -6,7 +6,7 @@
 # the @-sign tells Make to not output the command before running it
 help:
 	@echo 'Available commands:'
-	@echo "clean validate test testdocs-all"
+	@echo "clean validate test docs-all"
 	@echo "docs-trimmed docs-full docs-async"
 
 # Section: Helpers and structural
