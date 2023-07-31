@@ -1,6 +1,8 @@
 FROM node:16 as build
-RUN apt-get update && apt-get -y install openjdk-11-jre-headless
+RUN apt-get update && apt-get -y install openjdk-11-jre-headless chromium
 
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium
 
 COPY ./package.json ./package-lock.json* /
 WORKDIR /
