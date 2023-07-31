@@ -100,7 +100,7 @@ docs-async: docs-async-frontend docs-async-chat
 # Section: Final docs
 
 docs-schemas: trim docs-skeleton
-	cp ./src/floatplane-openapi-specification.json ./src/floatplane-openapi-specification-trimmed.json ./src/schemas.json Docs/
+	cp ./src/floatplane-openapi-specification.json ./src/floatplane-openapi-specification-trimmed.json Docs/
 	cp ./src/floatplane-asyncapi-frontend-specification.json Docs/
 	cp ./src/floatplane-asyncapi-chat-specification.json Docs/
 docs-all: clean validate docs-skeleton docs-trimmed docs-full docs-async docs-schemas yaml
