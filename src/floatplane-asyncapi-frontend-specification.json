@@ -1,5 +1,8 @@
 {
 	"asyncapi": "2.6.0",
+	"id": "https://github.com/Jman012/FloatplaneAPIDocs",
+	"defaultContentType": "application/json",
+	"tags": [],
 	"info": {
 		"title": "Floatplane Async Frontend API",
 		"version": "4.0.13",
@@ -10,7 +13,8 @@
 		},
 		"contact": {
 			"name": "James Linnell",
-			"url": "https://github.com/Jman012/FloatplaneAPI/"
+			"url": "https://github.com/Jman012/FloatplaneAPI/",
+			"email": "james.n.linnell@gmail.com"
 		}
 	},
 	"servers": {
@@ -48,6 +52,7 @@
 		"/": {
 			"description": "Socket.IO and Sails groups messages and events into different namespaces, with `/` being the default namespace. Multiple kinds of messages can be sent in a single namespace, with Socket.IO having its own mechanisms to differentiate message types. Floatplane only uses the root Socket.IO namespace (`/`).",
 			"publish": {
+				"operationId": "rootPublish",
 				"message": {
 					"oneOf": [
 						{
@@ -57,6 +62,7 @@
 				}
 			},
 			"subscribe": {
+				"operationId": "rootSubscribe",
 				"message": {
 					"oneOf": [
 						{
@@ -94,6 +100,7 @@
 	"components": {
 		"messages": {
 			"SailsPost": {
+				"messageId": "post",
 				"name": "post",
 				"title": "Sails HTTP POST",
 				"summary": "HTTP POST via Sails socket connection",
@@ -198,6 +205,7 @@
 				}
 			},
 			"SyncEvent": {
+				"messageId": "syncEvent",
 				"name": "syncEvent",
 				"title": "Floatplane Sync Event",
 				"summary": "A sync event arrives from the Floatplane server after registrating with the connect event (`/api/v3/socket/connect`).",
@@ -371,6 +379,7 @@
 				]
 			},
 			"PollOpen": {
+				"messageId": "pollOpen",
 				"name": "pollOpen",
 				"title": "Poll Opened",
 				"summary": "A `pollOpen` event arrives when a creator has started a new poll for users to vote on.",
@@ -412,6 +421,7 @@
 				]
 			},
 			"PollClose": {
+				"messageId": "pollClose",
 				"name": "pollClose",
 				"title": "Poll Closed",
 				"summary": "A `pollClose` event arrives when a creator has ended a poll earlier than the expected `endDate`. Sometimes this happens right before starting a new poll, as it appears only one poll can be active at a time, per-creator. This payload will include the same details as the PollOpen event, but with an actual `endDate` as well as the final results of the tally.",
@@ -451,6 +461,7 @@
 				]
 			},
 			"PollUpdateTally": {
+				"messageId": "pollUpdateTally",
 				"name": "pollUpdateTally",
 				"title": "Poll Tally Updated",
 				"summary": "A `pollUpdateTally` even will arrive upon every vote on the poll by a user.",

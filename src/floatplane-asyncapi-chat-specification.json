@@ -1,5 +1,8 @@
 {
 	"asyncapi": "2.6.0",
+	"id": "https://github.com/Jman012/FloatplaneAPIDocs",
+	"defaultContentType": "application/json",
+	"tags": [],
 	"info": {
 		"title": "Floatplane Async Chat API",
 		"version": "4.0.13",
@@ -10,7 +13,8 @@
 		},
 		"contact": {
 			"name": "James Linnell",
-			"url": "https://github.com/Jman012/FloatplaneAPI/"
+			"url": "https://github.com/Jman012/FloatplaneAPI/",
+			"email": "james.n.linnell@gmail.com"
 		}
 	},
 	"servers": {
@@ -48,6 +52,7 @@
 		"/": {
 			"description": "Socket.IO and Sails groups messages and events into different namespaces, with `/` being the default namespace. Multiple kinds of messages can be sent in a single namespace, with Socket.IO having its own mechanisms to differentiate message types. Floatplane only uses the root Socket.IO namespace (`/`).",
 			"publish": {
+				"operationId": "rootPublish",
 				"message": {
 					"oneOf": [
 						{
@@ -60,6 +65,7 @@
 				}
 			},
 			"subscribe": {
+				"operationId": "rootSubscribe",
 				"message": {
 					"oneOf": [
 						{
@@ -88,6 +94,7 @@
 	"components": {
 		"messages": {
 			"SailsGet": {
+				"messageId": "get",
 				"name": "get",
 				"title": "Sails HTTP GET",
 				"summary": "HTTP GET via Sails socket connection",
@@ -185,6 +192,7 @@
 				}
 			},
 			"SailsPost": {
+				"messageId": "post",
 				"name": "post",
 				"title": "Sails HTTP POST",
 				"summary": "HTTP POST via Sails socket connection",
@@ -271,6 +279,7 @@
 				}
 			},
 			"RadioChatter": {
+				"messageId": "radioChatter",
 				"name": "radioChatter",
 				"title": "Floatplane Livestream Radio Chatter",
 				"summary": "A radio chatter event arrives from Floatplane after joining a livestream via `/RadioMessage/joinLivestreamRadioFrequency`.",
