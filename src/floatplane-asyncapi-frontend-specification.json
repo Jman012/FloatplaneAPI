@@ -109,13 +109,13 @@
 				"payload": {
 					"oneOf": [
 						{
-							"$ref": "#/components/schemas/SailsConnect"
+							"$ref": "async-schemas.json#/definitions/SailsConnect"
 						},
 						{
-							"$ref": "#/components/schemas/JoinLiveRoom"
+							"$ref": "async-schemas.json#/definitions/JoinLiveRoom"
 						},
 						{
-							"$ref": "#/components/schemas/LeaveLiveRoom"
+							"$ref": "async-schemas.json#/definitions/LeaveLiveRoom"
 						}
 					]
 				},
@@ -159,13 +159,13 @@
 					"args": {
 						"oneOf": [
 							{
-								"$ref": "#/components/schemas/SailsConnected"
+								"$ref": "async-schemas.json#/definitions/SailsConnected"
 							},
 							{
-								"$ref": "#/components/schemas/JoinedLiveRoom"
+								"$ref": "async-schemas.json#/definitions/JoinedLiveRoom"
 							},
 							{
-								"$ref": "#/components/schemas/LeftLiveRoom"
+								"$ref": "async-schemas.json#/definitions/LeftLiveRoom"
 							}
 						]
 					},
@@ -214,13 +214,13 @@
 				"payload": {
 					"oneOf": [
 						{
-							"$ref": "#/components/schemas/CreatorNotification"
+							"$ref": "async-schemas.json#/definitions/CreatorNotification"
 						},
 						{
-							"$ref": "#/components/schemas/PostRelease"
+							"$ref": "async-schemas.json#/definitions/PostRelease"
 						},
 						{
-							"$ref": "#/components/schemas/CreatorMenuUpdate"
+							"$ref": "async-schemas.json#/definitions/CreatorMenuUpdate"
 						}
 					]
 				},
@@ -386,7 +386,7 @@
 				"description": "This provides options for the user to choose from, when the poll opened, and when it will automatically close. If the `endDate` is reached, the UI should show the conclusion and hide the poll as there will be no corresponding PollClose event. The `startDate` and `endDate` can be used to show a timer in the UI. In most polls, only a single option is permitted to be voted on, and the user is only allowed one chance at a vote.\n\nIn order to vote on a poll, perform an HTTP POST to `/api/v3/poll/vote`. Look at the OpenAPI specification document for more information.",
 				"contentType": "application/json",
 				"payload": {
-					"$ref": "#/components/schemas/PollOpenClose"
+					"$ref": "async-schemas.json#/definitions/PollOpenClose"
 				},
 				"examples": [
 					{
@@ -428,7 +428,7 @@
 				"description": "",
 				"contentType": "application/json",
 				"payload": {
-					"$ref": "#/components/schemas/PollOpenClose"
+					"$ref": "async-schemas.json#/definitions/PollOpenClose"
 				},
 				"examples": [
 					{
@@ -468,7 +468,7 @@
 				"description": "The `tick` value will increment by one for each event, and one of the option counters should increment by one due to each vote. ",
 				"contentType": "application/json",
 				"payload": {
-					"$ref": "#/components/schemas/PollUpdateTally"
+					"$ref": "async-schemas.json#/definitions/PollUpdateTally"
 				},
 				"examples": [
 					{
@@ -484,548 +484,6 @@
 							"pollId": "62c8c1dd968bc0899bbb4b92"
 						}
 					}
-				]
-			}
-		},
-		"schemas": {
-			"SailsHeaders": {
-				"type": "object",
-				"description": "Headers by Sails are not being used by Floatplane. Not much is known of this structure at this time.",
-				"additionalProperties": true
-			},
-			"SailsStatusCode": {
-				"type": "integer",
-				"description": "These are the same as HTTP response status codes.",
-				"minimum": 200,
-				"maximum": 599
-			},
-			"SailsConnect": {
-				"type": "object",
-				"description": "Connect to Floatplane (after a socket connection has been made) in order to receive sync events, such as new post notifications.",
-				"properties": {
-					"method": {
-						"const": "post",
-						"description": "This endpoint expects a POST."
-					},
-					"headers": {
-						"$ref": "#/components/schemas/SailsHeaders"
-					},
-					"data": {
-						"type": "object",
-						"description": "No payload necessary.",
-						"additionalProperties": false
-					},
-					"url": {
-						"const": "/api/v3/socket/connect",
-						"description": "The required endpoint for this event."
-					}
-				},
-				"additionalProperties": false
-			},
-			"SailsConnected": {
-				"type": "object",
-				"description": "The response received from connecting to Floatplane for sync events. Once this is successfully received, sync events may appear on the socket asynchronously.",
-				"properties": {
-					"body": {
-						"type": "object",
-						"properties": {
-							"message": {
-								"type": "string"
-							}
-						}
-					},
-					"headers": {
-						"$ref": "#/components/schemas/SailsHeaders"
-					},
-					"statusCode": {
-						"$ref": "#/components/schemas/SailsStatusCode"
-					}
-				}
-			},
-			"JoinLiveRoom": {
-				"type": "object",
-				"description": "Connect to a creator's live poll room (after a socket connection has been made) in order to receive poll events, such as new polls, poll tally updates, and closed polls. While not on the chat socket, this should typically be connected to while watching a livestream, and disconnected when leaving a livestream.",
-				"properties": {
-					"method": {
-						"const": "post",
-						"description": "This endpoint expects a POST."
-					},
-					"headers": {
-						"$ref": "#/components/schemas/SailsHeaders"
-					},
-					"data": {
-						"type": "object",
-						"properties": {
-							"creatorId": {
-								"type": "string",
-								"description": "The id of the creator for which to join the live poll room."
-							}
-						}
-					},
-					"url": {
-						"const": "/api/v3/poll/live/joinroom",
-						"description": "The required endpoint for this event."
-					}
-				},
-				"additionalProperties": false
-			},
-			"JoinedLiveRoom": {
-				"type": "object",
-				"description": "",
-				"properties": {
-					"body": {
-						"type": "object",
-						"properties": {
-							"activePolls": {
-								"type": "array",
-								"items": {
-									"$ref": "#/components/schemas/PollOpenClose"
-								}
-							}
-						}
-					},
-					"headers": {
-						"$ref": "#/components/schemas/SailsHeaders"
-					},
-					"statusCode": {
-						"$ref": "#/components/schemas/SailsStatusCode"
-					}
-				}
-			},
-			"LeaveLiveRoom": {
-				"type": "object",
-				"description": "Leave a live poll room and no longer receive poll events from the creator on this socket connection.",
-				"properties": {
-					"method": {
-						"const": "post",
-						"description": "This endpoint expects a POST."
-					},
-					"headers": {
-						"$ref": "#/components/schemas/SailsHeaders"
-					},
-					"data": {
-						"type": "object",
-						"properties": {
-							"creatorId": {
-								"type": "string",
-								"description": "The id of the creator from which to leave the live poll room."
-							}
-						}
-					},
-					"url": {
-						"const": "/api/v3/poll/live/leaveroom",
-						"description": "The required endpoint for this event."
-					}
-				},
-				"additionalProperties": false
-			},
-			"LeftLiveRoom": {
-				"type": "object",
-				"description": "Indicates that leaving the live poll room was successful.",
-				"properties": {
-					"body": {
-						"type": "boolean"
-					},
-					"headers": {
-						"$ref": "#/components/schemas/SailsHeaders"
-					},
-					"statusCode": {
-						"$ref": "#/components/schemas/SailsStatusCode"
-					}
-				}
-			},
-			"CreatorNotification": {
-				"type": "object",
-				"description": "This event is sent usually for new post notifications, where `eventType` is `CONTENT_POST_RELEASE`, along with information on which creator released a new post, and information on the post itself.",
-				"properties": {
-					"event": {
-						"const": "creatorNotification"
-					},
-					"data": {
-						"$ref": "#/components/schemas/NotificationData"
-					}
-				}
-			},
-			"PostRelease": {
-				"type": "object",
-				"description": "This event is sent usually for new post notifications, where `eventType` is `CONTENT_POST_RELEASE`, along with information on which creator released a new post, and information on the post itself. This sync event type seems to be deprecated, as the Floatplane website uses the above `creatorNotification` instead of this `postRelease`. For `CONTENT_POST_RELEASE`, these two have the same schema.",
-				"properties": {
-					"event": {
-						"const": "postRelease"
-					},
-					"data": {
-						"$ref": "#/components/schemas/NotificationData"
-					}
-				}
-			},
-			"NotificationData": {
-				"type": "object",
-				"description": "Contains data necessary to both show the notifiction in a user interface as well as technical details on what is being notified. Currently, this is used for notifying about new posts being released and the beginning of livestreams. Not all fields are present for all kinds of event types (for instance, livestream notifications do not have `video` or `content` objects, among others.",
-				"properties": {
-					"id": {
-						"type": "string",
-						"description": "Usually of the format `{eventType}:{content}`."
-					},
-					"eventType": {
-						"type": "string",
-						"enum": [
-							"CONTENT_POST_RELEASE",
-							"CONTENT_LIVESTREAM_START"
-						],
-						"description": "The `CONTENT_POST_RELEASE` enumeration indicates a new post has been released. The `CONTENT_LIVESTREAM_START` enumeration indicates that a livestream has been started by the creator. Other enumerations are unknown at this time."
-					},
-					"title": {
-						"type": "string",
-						"description": "Notification title."
-					},
-					"message": {
-						"type": "string",
-						"description": "Notification message/body."
-					},
-					"creator": {
-						"type": "string",
-						"description": "The identifier of the creator the notification is from."
-					},
-					"content": {
-						"type": "string",
-						"description": "Usually the id of the blog post, when `eventType` is `CONTENT_POST_RELEASE`."
-					},
-					"icon": {
-						"type": "string",
-						"format": "uri"
-					},
-					"thumbnail": {
-						"type": "string",
-						"format": "uri"
-					},
-					"target": {
-						"type": "object",
-						"description": "If the `target.matchPortion` of the browser's current href matches the `target.match` variable via the `target.matchScheme`, and if `target.foregroundDiscardOnMatch`, then do not show this notification because the user has already seen it.",
-						"properties": {
-							"url": {
-								"type": "string",
-								"description": "Unused in Floatplane code."
-							},
-							"matchScheme": {
-								"type": "string",
-								"description": "This is usually `contains`.",
-								"enum": [
-									"contains",
-									"startsWith",
-									"endsWith",
-									"equals"
-								]
-							},
-							"match": {
-								"type": "string"
-							},
-							"foregroundDiscardOnMatch": {
-								"type": "boolean"
-							},
-							"matchPortion": {
-								"type": "string",
-								"description": "This is usually `path` instead of `url`.",
-								"default": "path",
-								"enum": [
-									"path",
-									"url"
-								]
-							}
-						},
-						"required": [
-							"url",
-							"matchScheme",
-							"match",
-							"foregroundDiscardOnMatch",
-							"matchPortion"
-						]
-					},
-					"foregroundVisible": {
-						"type": "string",
-						"enum": [
-							"yes",
-							"no"
-						]
-					},
-					"video": {
-						"type": "object",
-						"properties": {
-							"creator": {
-								"type": "string"
-							},
-							"guid": {
-								"type": "string"
-							}
-						},
-						"required": [
-							"creator",
-							"guid"
-						]
-					},
-					"post": {
-						"type": "object",
-						"properties": {
-							"creator": {
-								"type": "string"
-							},
-							"guid": {
-								"type": "string"
-							},
-							"id": {
-								"type": "string"
-							},
-							"text": {
-								"type": "string"
-							},
-							"title": {
-								"type": "string"
-							}
-						}
-					}
-				},
-				"required": [
-					"id",
-					"eventType",
-					"creator"
-				]
-			},
-			"CreatorMenuUpdate": {
-				"type": "object",
-				"description": "Does not appear to be used in Floatplane code. This model is similar to ContentPostV3Response in the REST API, but without attachment details. Its purpose is to help dynamically insert a single post into the list of posts on the screen, instead of making the client re-pull the 20 latest posts.",
-				"properties": {
-					"event": {
-						"const": "creatorMenuUpdate"
-					},
-					"data": {
-						"type": "object",
-						"properties": {
-							"id": {
-								"type": "string"
-							},
-							"guid": {
-								"type": "string"
-							},
-							"title": {
-								"type": "string"
-							},
-							"text": {
-								"type": "string"
-							},
-							"type": {
-								"type": "string"
-							},
-							"tags": {
-								"type": "array",
-								"items": {}
-							},
-							"attachmentOrder": {
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							},
-							"metadata": {
-								"type": "object",
-								"properties": {
-									"hasVideo": {
-										"type": "boolean"
-									},
-									"videoCount": {
-										"type": "integer"
-									},
-									"videoDuration": {
-										"type": "integer"
-									},
-									"hasAudio": {
-										"type": "boolean"
-									},
-									"audioCount": {
-										"type": "integer"
-									},
-									"audioDuration": {
-										"type": "integer"
-									},
-									"hasPicture": {
-										"type": "boolean"
-									},
-									"pictureCount": {
-										"type": "integer"
-									},
-									"hasGallery": {
-										"type": "boolean"
-									},
-									"galleryCount": {
-										"type": "integer"
-									},
-									"isFeatured": {
-										"type": "boolean"
-									}
-								}
-							},
-							"releaseDate": {
-								"type": "string",
-								"format": "date-time"
-							},
-							"likes": {
-								"type": "integer"
-							},
-							"dislikes": {
-								"type": "integer"
-							},
-							"score": {
-								"type": "integer"
-							},
-							"comments": {
-								"type": "integer"
-							},
-							"creator": {
-								"type": "string"
-							},
-							"wasReleasedSilently": {
-								"type": "boolean"
-							},
-							"thumbnail": {
-								"$ref": "#/components/schemas/ImageModel"
-							}
-						}
-					}
-				}
-			},
-			"PollOpenClose": {
-				"type": "object",
-				"description": "This schema is used for both PollOpen and PollClose.",
-				"properties": {
-					"poll": {
-						"type": "object",
-						"properties": {
-							"id": {
-								"type": "string",
-								"description": "A unique identifier for the poll that is being opened or closed. Subsequent pollUpdateTally events will correspond to this id."
-							},
-							"type": {
-								"type": "string",
-								"description": "The type of poll that is being shown. So far, only `simple` is known as a type here."
-							},
-							"creator": {
-								"type": "string",
-								"description": "The id of the creator that is opening the poll. Useful if multiple livestreams are happening at the same time, so the UI knows which poll to show."
-							},
-							"title": {
-								"type": "string",
-								"description": "The main question of the poll being presented to the user."
-							},
-							"options": {
-								"type": "array",
-								"description": "The options that the user can select in the poll.",
-								"items": {
-									"type": "string"
-								}
-							},
-							"startDate": {
-								"type": "string",
-								"format": "date-time",
-								"description": "When the poll was first opened."
-							},
-							"endDate": {
-								"type": "string",
-								"format": "date-time",
-								"description": "For PollOpen events, this is the time in which the poll should automatically close. This is usually 60 seconds after `startDate`. For PollClose events which close a poll early, this is the time in which it was closed by the creator, and is usually before the `endDate` from the corresponding PollOpen event."
-							},
-							"finalTallyApproximate": {
-								"type": "null",
-								"description": "Unknown so far."
-							},
-							"finalTallyReal": {
-								"type": "null",
-								"description": "Unknown so far."
-							},
-							"runningTally": {
-								"type": "object",
-								"properties": {
-									"tick": {
-										"type": "integer",
-										"description": "A consecutively incrementing integer specifying the timeline of poll updates. Use the latest event by `tick` to show latest results. For PollOpen, this is always 0. For PollClose, this is the same tick as the latest PollUpdateTally event."
-									},
-									"counts": {
-										"type": "array",
-										"description": "A list of poll vote counts for each poll option. The order of these matches the order of `options` in the initial PollOpen event. For PollOpen, these are always 0. For PollClose, these reflect the same values as the latest PollUpdateTally event.",
-										"items": {
-											"type": "integer"
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"PollUpdateTally": {
-				"type": "object",
-				"properties": {
-					"tick": {
-						"type": "integer",
-						"description": "A consecutively incrementing integer specifying the timeline of poll updates. Use the latest event by `tick` to show latest results."
-					},
-					"counts": {
-						"type": "array",
-						"description": "A list of poll vote counts for each poll option. The order of these matches the order of `options` in the initial PollOpen event.",
-						"items": {
-							"type": "integer"
-						}
-					},
-					"pollId": {
-						"type": "string",
-						"description": "Which poll this update corresponds to."
-					}
-				}
-			},
-			"ImageModel": {
-				"type": "object",
-				"properties": {
-					"width": {
-						"type": "integer"
-					},
-					"height": {
-						"type": "integer"
-					},
-					"path": {
-						"type": "string",
-						"format": "uri"
-					},
-					"size": {
-						"type": "integer"
-					},
-					"childImages": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/ChildImageModel"
-						}
-					}
-				},
-				"required": [
-					"width",
-					"height",
-					"path"
-				]
-			},
-			"ChildImageModel": {
-				"type": "object",
-				"properties": {
-					"width": {
-						"type": "integer"
-					},
-					"height": {
-						"type": "integer"
-					},
-					"path": {
-						"type": "string",
-						"format": "uri"
-					}
-				},
-				"required": [
-					"width",
-					"height",
-					"path"
 				]
 			}
 		}

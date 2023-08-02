@@ -103,5 +103,6 @@ docs-schemas: trim docs-skeleton
 	cp ./src/floatplane-openapi-specification.json ./src/floatplane-openapi-specification-trimmed.json Docs/
 	cp ./src/floatplane-asyncapi-frontend-specification.json Docs/
 	cp ./src/floatplane-asyncapi-chat-specification.json Docs/
+	cp ./src/async-schemas.json Docs/
 docs-all: clean validate docs-skeleton docs-trimmed docs-full docs-async docs-schemas yaml
 	@echo "docs-all complete!"
