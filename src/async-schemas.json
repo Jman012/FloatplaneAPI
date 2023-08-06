@@ -128,7 +128,13 @@
 					"description": "The required endpoint for this event."
 				}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"method",
+				"headers",
+				"data",
+				"url"
+			]
 		},
 		"JoinedLivestreamRadioFrequency": {
 			"type": "object",
@@ -155,7 +161,13 @@
 				"statusCode": {
 					"$ref": "#/definitions/SailsStatusCode"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"body",
+				"headers",
+				"statusCode"
+			]
 		},
 		"LeaveLivestreamRadioFrequency": {
 			"type": "object",
@@ -182,7 +194,8 @@
 					},
 					"additionalProperties": false,
 					"required": [
-						"channel"
+						"channel",
+						"message"
 					]
 				},
 				"url": {
@@ -190,7 +203,13 @@
 					"description": "The required endpoint for this event."
 				}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"method",
+				"headers",
+				"data",
+				"url"
+			]
 		},
 		"LeftLivestreamRadioFrequency": {
 			"type": "object",
@@ -204,7 +223,13 @@
 				"statusCode": {
 					"$ref": "#/definitions/SailsStatusCode"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"body",
+				"headers",
+				"statusCode"
+			]
 		},
 		"GetChatUserList": {
 			"type": "object",
@@ -235,7 +260,13 @@
 					"description": "The required endpoint for this event."
 				}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"method",
+				"headers",
+				"data",
+				"url"
+			]
 		},
 		"ChatUserList": {
 			"type": "object",
@@ -259,6 +290,7 @@
 							}
 						}
 					},
+					"additionalProperties": false,
 					"required": [
 						"success",
 						"pilots",
@@ -271,7 +303,13 @@
 				"statusCode": {
 					"$ref": "#/definitions/SailsStatusCode"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"body",
+				"headers",
+				"statusCode"
+			]
 		},
 		"SendLivestreamRadioChatter": {
 			"type": "object",
@@ -307,7 +345,13 @@
 					"description": "The required endpoint for this event."
 				}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"method",
+				"headers",
+				"data",
+				"url"
+			]
 		},
 		"SentLivestreamRadioChatter": {
 			"type": "object",
@@ -321,7 +365,13 @@
 				"statusCode": {
 					"$ref": "#/definitions/SailsStatusCode"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"body",
+				"headers",
+				"statusCode"
+			]
 		},
 		"RadioChatter": {
 			"type": "object",
@@ -361,6 +411,7 @@
 					"description": "Included in `radioChatter` events and is usually `true`, but mainly useful in `SentLivestreamRadioChatter` responses to indicate if sending the message was successful. An example of why it might not work is using an invalid emote, or some system problem."
 				}
 			},
+			"additionalProperties": false,
 			"required": [
 				"id",
 				"userGUID",
@@ -374,6 +425,7 @@
 			"type": "array",
 			"description": "When the user types this `code` in their message, surrounded by two colons (`:`), that portion of the message should be replaced with the `image` property in the UI.",
 			"items": {
+				"title": "Emote",
 				"type": "object",
 				"properties": {
 					"code": {
@@ -410,7 +462,13 @@
 					"description": "The required endpoint for this event."
 				}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"method",
+				"headers",
+				"data",
+				"url"
+			]
 		},
 		"SailsConnected": {
 			"type": "object",
@@ -430,7 +488,13 @@
 				"statusCode": {
 					"$ref": "#/definitions/SailsStatusCode"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"body",
+				"headers",
+				"statusCode"
+			]
 		},
 		"JoinLiveRoom": {
 			"type": "object",
@@ -450,14 +514,24 @@
 							"type": "string",
 							"description": "The id of the creator for which to join the live poll room."
 						}
-					}
+					},
+					"additionalProperties": false,
+					"required": [
+						"creatorId"
+					]
 				},
 				"url": {
 					"const": "/api/v3/poll/live/joinroom",
 					"description": "The required endpoint for this event."
 				}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"method",
+				"headers",
+				"data",
+				"url"
+			]
 		},
 		"JoinedLiveRoom": {
 			"type": "object",
@@ -472,7 +546,11 @@
 								"$ref": "#/definitions/PollOpenClose"
 							}
 						}
-					}
+					},
+					"additionalProperties": false,
+					"required": [
+						"activePolls"
+					]
 				},
 				"headers": {
 					"$ref": "#/definitions/SailsHeaders"
@@ -480,7 +558,13 @@
 				"statusCode": {
 					"$ref": "#/definitions/SailsStatusCode"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"body",
+				"headers",
+				"statusCode"
+			]
 		},
 		"LeaveLiveRoom": {
 			"type": "object",
@@ -500,14 +584,24 @@
 							"type": "string",
 							"description": "The id of the creator from which to leave the live poll room."
 						}
-					}
+					},
+					"additionalProperties": false,
+					"required": [
+						"creatorId"
+					]
 				},
 				"url": {
 					"const": "/api/v3/poll/live/leaveroom",
 					"description": "The required endpoint for this event."
 				}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"method",
+				"headers",
+				"data",
+				"url"
+			]
 		},
 		"LeftLiveRoom": {
 			"type": "object",
@@ -522,7 +616,13 @@
 				"statusCode": {
 					"$ref": "#/definitions/SailsStatusCode"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"body",
+				"headers",
+				"statusCode"
+			]
 		},
 		"CreatorNotification": {
 			"type": "object",
@@ -534,7 +634,12 @@
 				"data": {
 					"$ref": "#/definitions/NotificationData"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"event",
+				"data"
+			]
 		},
 		"PostRelease": {
 			"type": "object",
@@ -546,7 +651,12 @@
 				"data": {
 					"$ref": "#/definitions/NotificationData"
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"event",
+				"data"
+			]
 		},
 		"NotificationData": {
 			"type": "object",
@@ -843,11 +953,33 @@
 										"type": "integer"
 									}
 								}
-							}
+							},
+							"additionalProperties": false,
+							"required": [
+								"tick",
+								"counts"
+							]
 						}
-					}
+					},
+					"additionalProperties": false,
+					"required": [
+						"id",
+						"type",
+						"creator",
+						"title",
+						"options",
+						"startDate",
+						"endDate",
+						"finalTallyApproximate",
+						"finalTallyReal",
+						"runningTally"
+					]
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"poll"
+			]
 		},
 		"PollUpdateTally": {
 			"type": "object",
@@ -867,7 +999,13 @@
 					"type": "string",
 					"description": "Which poll this update corresponds to."
 				}
-			}
+			},
+			"additionalProperties": false,
+			"required": [
+				"tick",
+				"counts",
+				"pollId"
+			]
 		},
 		"ImageModel": {
 			"type": "object",
