@@ -112,6 +112,9 @@
 							"$ref": "async-schemas.json#/definitions/SailsConnect"
 						},
 						{
+							"$ref": "async-schemas.json#/definitions/SailsDisconnect"
+						},
+						{
 							"$ref": "async-schemas.json#/definitions/JoinLiveRoom"
 						},
 						{
@@ -128,6 +131,16 @@
 							"headers": {},
 							"data": {},
 							"url": "/api/v3/socket/connect"
+						}
+					},
+					{
+						"name": "SailsDisconnect",
+						"summary": "Disconnect from Floatplane sync events via a Sails HTTP POST.",
+						"payload": {
+							"method": "post",
+							"headers": {},
+							"data": {},
+							"url": "/api/v3/socket/disconnect"
 						}
 					},
 					{
